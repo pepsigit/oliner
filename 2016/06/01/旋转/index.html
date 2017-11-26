@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [WebGL]旋转 |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[WebGL]旋转</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2016-06-01</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/WebGL/">WebGL</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <hr>
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/WebGL/2.gif" alt=""></p>
+<a id="more"></a>
+<blockquote>
+<p><strong>让三角形和矩形旋转, 需要每帧更改顶点位置信息和颜色信息数据, 然后进行绘制, 然后更新一下相关参数为下次绘制做准备.</strong></p>
+</blockquote>
+<hr>
+<ul>
+<li><strong><code>WebGLStart()</code></strong></li>
+</ul>
+<p><del>drawScene();</del></p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">function</span> <span class="selector-tag">WebGLStart</span>()</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="selector-tag">tick</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong><code>tick()</code></strong></li>
+</ul>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">tick</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    requestAnimationFrame( tick );</span><br><span class="line"></span><br><span class="line">    drawScene();</span><br><span class="line">    animate();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>requestAnimationFrame</code>: 这个方法原理其实也就跟setTimeout/setInterval差不多，通过递归调用同一方法来不断更新画面以达到动起来的效果，但它优于setTimeout/setInterval的地方在于它是由浏览器专门为动画提供的API，在运行时浏览器会自动优化方法的调用，并且如果页面不是激活状态下的话，动画会自动暂停，有效节省了CPU开销。</p>
+</blockquote>
+<ul>
+<li><strong><code>drawScene()</code></strong></li>
+</ul>
+<p><del>mvMatrix = okMat4Trans(-1.5, 0.0, -7.0);</del></p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">// 绘制</span><br><span class="line">function drawScene()</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    /<span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span> 2016.6.1 Add By Oliner</span><br><span class="line">     <span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span>/</span><br><span class="line">     </span><br><span class="line">    mvMatrix = new okMat4();</span><br><span class="line"></span><br><span class="line">    // 将当前模型视图矩阵入栈保存</span><br><span class="line">    mvPushMatrix();</span><br><span class="line">    </span><br><span class="line">    // 世界坐标系内移动</span><br><span class="line">    mvMatrix.translate( OAK.SPACE_WORLD, -1.5, 0.0, -7.0, true);</span><br><span class="line">    </span><br><span class="line">    // 本地坐标系内旋转</span><br><span class="line">    mvMatrix.rotY( OAK.SPACE_LOCAL, rTri, true );</span><br><span class="line"></span><br><span class="line">    // ... 绘制三角形 </span><br><span class="line"></span><br><span class="line">    // 恢复模型视图矩阵</span><br><span class="line">    mvPopMatrix();</span><br><span class="line"></span><br><span class="line">    /<span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span>/</span><br><span class="line"></span><br><span class="line">    mvMatrix = new okMat4();</span><br><span class="line"></span><br><span class="line">    mvPushMatrix();</span><br><span class="line">    </span><br><span class="line">    mvMatrix.translate( OAK.SPACE_WORLD, 1.5, 0.0, -7.0, true);</span><br><span class="line">    </span><br><span class="line">    mvMatrix.rotX( OAK.SPACE_LOCAL, rSquare, true );</span><br><span class="line"></span><br><span class="line">    // ... 绘制正方形</span><br><span class="line"></span><br><span class="line">    mvPopMatrix();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li><strong><code>animate()</code></strong></li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable"><span class="keyword">var</span> rTri</span> = <span class="number">0</span>;           <span class="comment">// 三角形旋转角度</span></span><br><span class="line"><span class="variable"><span class="keyword">var</span> rSquare</span> = <span class="number">0</span>;        <span class="comment">// 正方形旋转角度</span></span><br><span class="line"><span class="variable"><span class="keyword">var</span> lastTime</span> = <span class="number">0</span>;       <span class="comment">// 前一时刻</span></span><br><span class="line">            </span><br><span class="line"><span class="comment">// 更新旋转角度</span></span><br><span class="line">function animate()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="variable"><span class="keyword">var</span> timeNow</span> = Date.now();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>( <span class="number">0</span> != lastTime )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="variable"><span class="keyword">var</span> subTime</span> = timeNow - lastTime;</span><br><span class="line"></span><br><span class="line">        rTri += ( <span class="number">90.0</span> * subTime ) / <span class="number">1000.0</span>;</span><br><span class="line">        rSquare += ( <span class="number">75.0</span> * subTime ) / <span class="number">1000.0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    lastTime = timeNow;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>每帧调用 <code>tick()</code> 以后, 会更改 <code>rTri</code> 和 <code>rSquare</code> 数值, 在下一帧调用 <code>drawScene()</code> 时, 传入新的 <code>rTri</code> 和 <code>rSquare</code> 数值, 重新绘制图形.</strong></p>
+<hr>
+<ul>
+<li><strong>保证每次绘制一个物体时, 作为标准的模型-视图矩阵不变.</strong></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> mvMatrixStack = [];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 矩阵入栈保存</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mvPushMatrix</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> copy = <span class="keyword">new</span> okMat4();</span><br><span class="line">    mvMatrix.<span class="keyword">clone</span>( copy );</span><br><span class="line">    mvMatrixStack.push( copy );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 恢复初始矩阵</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mvPopMatrix</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> ( <span class="number">0</span> == mvMatrixStack.length )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="string">"Invalid popMatrix!"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    mvMatrix = mvMatrixStack.pop();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href="https://github.com/pepsigit/WebGL/blob/master/lesson_2.html" target="_blank" rel="external">源码</a></p>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2016/06/02/WebGL-三角锥和正方体/" class="prev" data-title="[WebGL]三角锥和正方体"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2016/06/01/WebGL-熟悉的三角形和正方形/" class="next" data-title="[WebGL]熟悉的三角形和正方形"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

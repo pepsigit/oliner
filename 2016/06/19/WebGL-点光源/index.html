@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [WebGL]点光源 |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[WebGL]点光源</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2016-06-19</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/WebGL/">WebGL</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/WebGL/11.gif" alt=""></p>
+<a id="more"></a>
+<font color="red"><br>点光源与平行光源之间的不同在于点光源中的光线来自场景中的一个点。这意味着，对于场景中的每一个点，每束光线射入的角度都是不同的。所以，处理它的最好方法就是计算每个顶点朝着光线所在位置的方向，接着进行我们对平行光线所做的同样的运算。<br></font>
+
+<hr>
+<ul>
+<li><strong><code>WebGLStart()</code></strong></li>
+</ul>
+<p><del>initTexture();</del></p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">function</span> <span class="selector-tag">WebGLStart</span>()</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 需要加载 2 张纹理</span></span><br><span class="line">    <span class="selector-tag">initTextures</span>();</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>其他变化都是参考于以前的代码。</strong></p>
+<hr>
+<ul>
+<li><strong><code>shader</code></strong></li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 顶点着色器 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">id</span>=<span class="string">"shader-vs"</span> <span class="attr">type</span>=<span class="string">"shader/vs"</span>&gt;</span><span class="actionscript"></span><br><span class="line">   </span><br><span class="line">    ... </span><br><span class="line"></span><br><span class="line">    <span class="comment">// 点光源位置</span></span><br><span class="line">    uniform vec3 uPointLightingPosition;</span><br><span class="line">    <span class="comment">// 点光源颜色</span></span><br><span class="line">    uniform vec3 uPointLightingColor;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    void main( <span class="keyword">void</span> )</span><br><span class="line">    &#123;</span><br><span class="line">    </span><br><span class="line">        vec4 mvPosition = uMVMatrix * vec4( aPosition, <span class="number">1.0</span> );</span><br><span class="line">        gl_Position = uPMatrix * mvPosition;</span><br><span class="line">                    </span><br><span class="line">        ...</span><br><span class="line">        </span><br><span class="line">        else</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 顶点位置指向光源位置方向的向量</span></span><br><span class="line">            vec3 lightingDirection = normalize( uPointLightingPosition - mvPosition.xyz );</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 根据法线矩阵, 计算经过变换后的法线</span></span><br><span class="line">            vec3 transformNormal = ( uNMatrix * vec4( aNormal, <span class="number">1.0</span> ) ).xyz;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 一条平行光反射权重</span></span><br><span class="line">            float directionalLightWeighting = max( dot( transformNormal, lightingDirection ), <span class="number">0.0</span> );</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 漫反射权重</span></span><br><span class="line">            vLightingWeighting = uAmbientColor + uPointLightingColor * directionalLightWeighting;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p><a href="https://github.com/pepsigit/WebGL/blob/master/lesson_11.html" target="_blank" rel="external">源码</a></p>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2016/06/22/WebGL-片元级光照与多个Program对象/" class="prev" data-title="[WebGL]片元级光照与多个Program对象"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2016/06/18/WebGL-球体、旋转矩阵和鼠标事件/" class="next" data-title="[WebGL]球体、旋转矩阵和鼠标事件"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

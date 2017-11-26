@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [Lua]使用弱引用检查内存泄漏 |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[Lua]使用弱引用检查内存泄漏</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2017-05-20</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Lua/">Lua</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <p><br></p>
+<ul>
+<li><h2 id="Lua内存泄漏的解释"><a href="#Lua内存泄漏的解释" class="headerlink" title="Lua内存泄漏的解释"></a><strong>Lua内存泄漏的解释</strong></h2><ul>
+<li><h3 id="Lua有自己的垃圾回收机制，这里的内存泄漏是指：已经没有被使用的对象，外部依然存在对此对象的引用。"><a href="#Lua有自己的垃圾回收机制，这里的内存泄漏是指：已经没有被使用的对象，外部依然存在对此对象的引用。" class="headerlink" title="Lua有自己的垃圾回收机制，这里的内存泄漏是指：已经没有被使用的对象，外部依然存在对此对象的引用。"></a><strong>Lua有自己的垃圾回收机制，这里的内存泄漏是指：<font color="red">已经没有被使用的对象，外部依然存在对此对象的引用。</font></strong></h3></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">t = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> <span class="function"><span class="keyword">function</span> <span class="title">test_function</span><span class="params">()</span></span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">local</span> _mt = &#123;&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="built_in">setmetatable</span>( t, _mt )</span><br><span class="line">	</span><br><span class="line">	<span class="comment">-- 当_mt生命周期结束时，就是函数调用完以后，_mt会被回收，而t一直存在GC中。</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p><br></p>
+<ul>
+<li><h2 id="metatable的-mode属性"><a href="#metatable的-mode属性" class="headerlink" title="metatable的__mode属性"></a><strong><code>metatable</code>的<code>__mode</code>属性</strong></h2><ul>
+<li><h3 id="特殊处理：-mode赋值为k、v或者kv，表示保存在它中的键或值或键值都是一种弱引用状态。若一个对象的所有引用都是弱引用了，那么这个对象也会被GC回收掉，所以对应的表中此对象的入口就没有了。"><a href="#特殊处理：-mode赋值为k、v或者kv，表示保存在它中的键或值或键值都是一种弱引用状态。若一个对象的所有引用都是弱引用了，那么这个对象也会被GC回收掉，所以对应的表中此对象的入口就没有了。" class="headerlink" title="特殊处理：__mode赋值为k、v或者kv，表示保存在它中的键或值或键值都是一种弱引用状态。若一个对象的所有引用都是弱引用了，那么这个对象也会被GC回收掉，所以对应的表中此对象的入口就没有了。"></a><strong>特殊处理：<code>__mode</code>赋值为<code>k</code>、<code>v</code>或者<code>kv</code>，表示保存在它中的键或值或键值都是一种弱引用状态。若一个对象的所有引用都是弱引用了，那么这个对象也会被GC回收掉，所以对应的表中此对象的入口就没有了。</strong></h3></li>
+<li><h3 id="k-键弱引用、v-值引用、kv-键值弱引用"><a href="#k-键弱引用、v-值引用、kv-键值弱引用" class="headerlink" title="k = 键弱引用、v = 值引用、kv = 键值弱引用"></a><code>k</code> = 键弱引用、<code>v</code> = 值引用、<code>kv</code> = 键值弱引用</h3></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">t = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">--setmetatable( t, &#123;__mode = "k"&#125; ) </span></span><br><span class="line"></span><br><span class="line">key_1 = &#123; name = <span class="string">"1"</span> &#125;</span><br><span class="line">key_2 = &#123; name = <span class="string">"2"</span> &#125;</span><br><span class="line"></span><br><span class="line">t[key_1] = <span class="string">"key_1"</span></span><br><span class="line">t[key_2] = <span class="string">"key_2"</span></span><br><span class="line"></span><br><span class="line">key_1 = <span class="keyword">nil</span></span><br><span class="line">key_2 = <span class="keyword">nil</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">collectgarbage</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> key, value <span class="keyword">in</span> <span class="built_in">pairs</span>(t) <span class="keyword">do</span> </span><br><span class="line">	<span class="built_in">print</span>( key.name .. <span class="string">" - "</span> .. value )</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-----------------------------------</span></span><br><span class="line">关闭<span class="built_in">setmetatable</span> ： </span><br><span class="line">	<span class="number">1</span> - key_1</span><br><span class="line">	<span class="number">2</span> - key_2</span><br><span class="line">	</span><br><span class="line">开启<span class="built_in">setmetatable</span> ：</span><br><span class="line">	无信息，不存在内存泄漏。</span><br></pre></td></tr></table></figure>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2017/06/25/Unity-NGUI-Label/" class="prev" data-title="[Unity]NGUI - Label"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2017/05/12/LeetCode-4-Median-of-Two-Sorted-Arrays/" class="next" data-title="[LeetCode]4.Median-of-Two-Sorted-Arrays"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

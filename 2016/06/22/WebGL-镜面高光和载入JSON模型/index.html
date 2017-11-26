@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [WebGL]镜面高光和载入JSON模型 |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[WebGL]镜面高光和载入JSON模型</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2016-06-22</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/WebGL/">WebGL</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/WebGL/13.gif" alt=""></p>
+<a id="more"></a>
+<hr>
+<font color="#228B22"><br><strong>镜面反射（Specular）：这就像镜子一样，反射光将按照和入射角相同的角度反射出来。这种情况下，你看到的物体反射出来的光的亮度，取决于你的眼睛和光反射的方向是否在同一直线上；也就是说，反射光的亮度不仅与光线的入射角有关，还与你的视线和物体表面之间的角度有关。镜面反射通常会造成物体表面上的“闪烁”和“高光”现象，镜面反射的强度也与物体的材质有关，无光泽的木材很少会有镜面反射发生，而高光泽的金属则会有大量镜面反射。</strong><br></font>
+
+<hr>
+<font color="#FFA07A"><br><strong>计算镜面反射亮度的方程式: (R<sub>m</sub> · V)<sup>α</sup></strong><br></font>
+
+<font color="#32CD32" size="5"><br>R<sub>m</sub>: 发生镜面反射时反射光的方向的单位向量<br></font><br>GLSL提供了一个函数reflect (I, N)<br>I: 入射向量, 光源位置指向顶点位置<br>N: 物体表面朝向, 即法线<br>函数返回反射光的方向<br><br><font color="#32CD32" size="5"><br>V: 观察方向的单位向量<br></font><br>构造的模拟相机在原点, 从任一点看向原点的观察方向, 就是该点坐标的负值, 此例中好理解, 因为原点就是<code>( 0, 0, 0 )</code>, 随意在代码中, 我使用了<code>normalize( vec3( 0, 0, 0 ) - vPosition.xyz )</code>, 便于理解.<br><br><font color="#32CD32" size="5"><br> α: 一个描述光泽度的常量，常量的值越大，光泽度越高<br></font>
+
+<hr>
+<ul>
+<li><strong><code>shader</code></strong></li>
+</ul>
+<figure class="highlight hsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 逐片元片段着色器 --&gt;</span><br><span class="line">&lt;script id=<span class="string">"use-fragment-shader-fs"</span> type=<span class="string">"shader/fs"</span>&gt;</span><br><span class="line"></span><br><span class="line">    precision mediump float<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    varying vec4 vPosition<span class="comment">;</span></span><br><span class="line">    varying vec3 vTransformNormal<span class="comment">;</span></span><br><span class="line">    varying vec2 vCoord<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    uniform sampler2D uSampler<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 光泽度</span></span><br><span class="line">    uniform float uMaterialShininess<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    uniform bool uUseSpecularHighLights<span class="comment">;</span></span><br><span class="line">    uniform bool uUseLighting<span class="comment">;</span></span><br><span class="line">    uniform bool uUseTexture<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    uniform vec3 uAmbientColor<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    uniform vec3 uPointLightingPosition<span class="comment">;</span></span><br><span class="line">    uniform vec3 uPointLightingSpecularColor<span class="comment">;</span></span><br><span class="line">    uniform vec3 uPointLightingDiffuseColor<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    void main( void )</span><br><span class="line">    &#123;</span><br><span class="line">        vec3 lightingWeight<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 是否开启光照</span></span><br><span class="line">        <span class="keyword">if</span>( !uUseLighting )</span><br><span class="line">        &#123;</span><br><span class="line">            lightingWeight = vec3( <span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span> )<span class="comment">;</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            vec3 lightingDirection = normalize( uPointLightingPosition - vPosition.xyz )<span class="comment">;</span></span><br><span class="line">            float directionalLightingWeight = max( dot( normalize( vTransformNormal ), lightingDirection ), <span class="number">0.0</span> )<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">            float specularLightingWeight = <span class="number">0.0</span><span class="comment">;</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 是否开启镜面高光</span></span><br><span class="line">            <span class="keyword">if</span>( uUseSpecularHighLights )</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// 观察者方向 V</span></span><br><span class="line">                vec3 v = normalize( vec3( <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span> ) - vPosition.xyz )<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">                <span class="comment">// 反射光方向</span></span><br><span class="line">                vec3 r = reflect( -lightingDirection, normalize( vTransformNormal ) )<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">                specularLightingWeight = pow( max( dot( v, r ), <span class="number">0.0</span> ), uMaterialShininess )<span class="comment">;</span></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            lightingWeight = uAmbientColor</span><br><span class="line">                            + uPointLightingDiffuseColor * directionalLightingWeight</span><br><span class="line">                            + uPointLightingSpecularColor * specularLightingWeight<span class="comment">;</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        vec4 textureColor<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 是否使用纹理</span></span><br><span class="line">        <span class="keyword">if</span>( !uUseTexture )</span><br><span class="line">        &#123;</span><br><span class="line">            textureColor = vec4( <span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span> )<span class="comment">;</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">           textureColor = texture2D( uSampler, vec2( vCoord.s, vCoord.t ) )<span class="comment">;</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        gl_FragColor = vec4( textureColor.rgb * lightingWeight, textureColor.a )<span class="comment">;</span></span><br><span class="line">    &#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>其他少许参见源码.</strong></p>
+<hr>
+<p><a href="https://github.com/pepsigit/WebGL/blob/master/lesson_13.html" target="_blank" rel="external">源码</a></p>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2016/06/22/WebGL-高光贴图/" class="prev" data-title="[WebGL]高光贴图"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2016/06/22/WebGL-片元级光照与多个Program对象/" class="next" data-title="[WebGL]片元级光照与多个Program对象"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

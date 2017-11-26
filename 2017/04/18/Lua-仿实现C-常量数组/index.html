@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [Lua]仿实现C++常量数组 |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[Lua]仿实现C++常量数组</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2017-04-18</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Lua/">Lua</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <p><br></p>
+<blockquote>
+<p>Lua如何实现不能更改数据表的功能(类似C++的常量数组)</p>
+</blockquote>
+<h2 id="来说下table的元方法："><a href="#来说下table的元方法：" class="headerlink" title="来说下table的元方法："></a>来说下<code>table</code>的元方法：</h2><ul>
+<li><h3 id="index"><a href="#index" class="headerlink" title="__index :"></a><code>__index</code> :</h3><ul>
+<li><h4 id="当访问table中不存在的字段时，得到的结果为nil。如果我们为该table定义了元方法-index，那个访问的结果将由该方法决定。"><a href="#当访问table中不存在的字段时，得到的结果为nil。如果我们为该table定义了元方法-index，那个访问的结果将由该方法决定。" class="headerlink" title="当访问table中不存在的字段时，得到的结果为nil。如果我们为该table定义了元方法__index，那个访问的结果将由该方法决定。"></a>当访问<code>table</code>中不存在的字段时，得到的结果为<code>nil</code>。如果我们为该<code>table</code>定义了元方法__index，那个访问的结果将由该方法决定。</h4></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 全局表</span></span><br><span class="line">uTable = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 属性</span></span><br><span class="line">uTable.property = </span><br><span class="line">&#123;</span><br><span class="line">	x = <span class="number">100</span>,</span><br><span class="line">	y = <span class="number">200</span>,</span><br><span class="line">	width = <span class="number">300</span>,</span><br><span class="line">	height = <span class="number">400</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 全局表的元表</span></span><br><span class="line">uTable.mt = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 元表的元方法</span></span><br><span class="line">uTable.mt.__index = <span class="function"><span class="keyword">function</span><span class="params">( table, key )</span></span> <span class="keyword">return</span> uTable.property[ key ] <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">uTable.New</span><span class="params">( o )</span></span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">setmetatable</span>( o, uTable.mt )</span><br><span class="line">	<span class="keyword">return</span> o</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 测试代码</span></span><br><span class="line"><span class="keyword">local</span> u = uTable.New&#123; x= <span class="number">10</span>, y = <span class="number">20</span>, &#125;</span><br><span class="line"><span class="built_in">print</span>( u.x )			<span class="comment">-- 10</span></span><br><span class="line"><span class="built_in">print</span>( u.y )			<span class="comment">-- 20</span></span><br><span class="line"><span class="built_in">print</span>( u.width )		<span class="comment">-- 300</span></span><br><span class="line"><span class="built_in">print</span>( u.height )		<span class="comment">-- 400</span></span><br><span class="line"><span class="built_in">print</span>( u.rect )			<span class="comment">-- nil</span></span><br></pre></td></tr></table></figure>
+<p><br></p>
+<hr>
+<ul>
+<li><h3 id="newindex"><a href="#newindex" class="headerlink" title="__newindex :"></a><code>__newindex</code> :</h3><ul>
+<li><h4 id="和-index不同的是，该元方法用于不存在键的赋值，而前者则用于访问。当对一个table中不存在的索引赋值时，解释器就会查找-newindex元方法。如果有就调用它，而不是直接赋值。"><a href="#和-index不同的是，该元方法用于不存在键的赋值，而前者则用于访问。当对一个table中不存在的索引赋值时，解释器就会查找-newindex元方法。如果有就调用它，而不是直接赋值。" class="headerlink" title="和__index不同的是，该元方法用于不存在键的赋值，而前者则用于访问。当对一个table中不存在的索引赋值时，解释器就会查找__newindex元方法。如果有就调用它，而不是直接赋值。"></a>和<code>__index</code>不同的是，该元方法用于不存在键的赋值，而前者则用于访问。当对一个<code>table</code>中不存在的索引赋值时，解释器就会查找<code>__newindex</code>元方法。如果有就调用它，而不是直接赋值。</h4></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">见下面示例。</span><br></pre></td></tr></table></figure>
+<p><br></p>
+<hr>
+<ul>
+<li><h3 id="让我们跟踪下他们"><a href="#让我们跟踪下他们" class="headerlink" title="让我们跟踪下他们"></a>让我们跟踪下他们</h3><ul>
+<li><h4 id="index和-newindex都是在table中没有所需访问的index时才发挥作用的。因此，为了监控某个table的访问状况，我们可以为其提供一个空table作为代理，之后再将-index和-newindex元方法重定向到原来的table上。"><a href="#index和-newindex都是在table中没有所需访问的index时才发挥作用的。因此，为了监控某个table的访问状况，我们可以为其提供一个空table作为代理，之后再将-index和-newindex元方法重定向到原来的table上。" class="headerlink" title="__index和__newindex都是在table中没有所需访问的index时才发挥作用的。因此，为了监控某个table的访问状况，我们可以为其提供一个空table作为代理，之后再将__index和__newindex元方法重定向到原来的table上。"></a><code>__index</code>和<code>__newindex</code>都是在<code>table</code>中没有所需访问的<code>index</code>时才发挥作用的。因此，为了监控某个<code>table</code>的访问状况，我们可以为其提供一个空<code>table</code>作为代理，之后再将<code>__index</code>和<code>__newindex</code>元方法重定向到原来的<code>table</code>上。</h4></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 原始表</span></span><br><span class="line">t = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 本地私有化访问</span></span><br><span class="line"><span class="keyword">local</span> _t = t</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 代理表</span></span><br><span class="line">t = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 元表</span></span><br><span class="line"><span class="keyword">local</span> mt = </span><br><span class="line">&#123;</span><br><span class="line">	__index = <span class="function"><span class="keyword">function</span><span class="params">( table, key )</span></span></span><br><span class="line">		<span class="built_in">print</span>( <span class="string">"查找属性 : "</span> .. <span class="built_in">tostring</span>( key ) )</span><br><span class="line">		<span class="keyword">return</span> _t[ key ]</span><br><span class="line">	<span class="keyword">end</span>,</span><br><span class="line">	</span><br><span class="line">	__newindex = <span class="function"><span class="keyword">function</span><span class="params">( table, key, value )</span></span></span><br><span class="line">		<span class="built_in">print</span>( <span class="string">"更新属性 : "</span> .. <span class="built_in">tostring</span>( key ) .. <span class="string">" -&gt; "</span> .. <span class="built_in">tostring</span>( value ) )</span><br><span class="line">		_t[ key ] = value</span><br><span class="line">	<span class="keyword">end</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">setmetatable</span>( t, mt )</span><br><span class="line">t[<span class="number">2</span>] = <span class="string">"hello world!"</span>			<span class="comment">-- 更新属性 : 2 -&gt; hello world!</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>( t[<span class="number">2</span>] )					<span class="comment">-- 查找属性 : 2</span></span><br><span class="line">								<span class="comment">-- hello world!</span></span><br></pre></td></tr></table></figure>
+<p><br></p>
+<hr>
+<ul>
+<li><h3 id="现在来实现我们的初衷"><a href="#现在来实现我们的初衷" class="headerlink" title="现在来实现我们的初衷"></a>现在来实现我们的初衷</h3><ul>
+<li><h4 id="只需跟踪所有对table的更新操作，并引发一个错误即可。"><a href="#只需跟踪所有对table的更新操作，并引发一个错误即可。" class="headerlink" title="只需跟踪所有对table的更新操作，并引发一个错误即可。"></a>只需跟踪所有对<code>table</code>的更新操作，并引发一个错误即可。</h4></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">readonly</span><span class="params">( o )</span></span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">local</span> _readonly = &#123;&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">local</span> mt = </span><br><span class="line">	&#123;</span><br><span class="line">		__index = o,</span><br><span class="line">		</span><br><span class="line">		__newindex = <span class="function"><span class="keyword">function</span><span class="params">( table, key, value )</span></span> </span><br><span class="line">			<span class="built_in">error</span>( <span class="string">"尝试修改只读表错误。"</span> )</span><br><span class="line">		<span class="keyword">end</span>,</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="built_in">setmetatable</span>( _readonly, mt )</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> _readonly</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 测试</span></span><br><span class="line"><span class="keyword">local</span> days = readonly&#123;<span class="string">"Sunday"</span>,<span class="string">"Monday"</span>,<span class="string">"Tuesday"</span>,<span class="string">"Wednesday"</span>,<span class="string">"Thursday"</span>,<span class="string">"Friday"</span>,<span class="string">"Saturday"</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(days[<span class="number">1</span>])					<span class="comment">-- Sunday</span></span><br><span class="line"></span><br><span class="line">days[<span class="number">2</span>] = <span class="string">"Noday"</span></span><br><span class="line"><span class="comment">--[[</span><br><span class="line">lua: Untitled 2.lua:10: 尝试修改只读表错误。</span><br><span class="line">stack traceback:</span><br><span class="line">	[C]: in function 'error'</span><br><span class="line">	Untitled 2.lua:10: in function &lt;Untitled 2.lua:9&gt;</span><br><span class="line">	Untitled 2.lua:24: in main chunk</span><br><span class="line">	[C]: ?</span><br><span class="line">--]]</span></span><br></pre></td></tr></table></figure>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2017/04/22/Unity-Camera/" class="prev" data-title="[Unity]Camera"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2017/04/10/Unity-Physics/" class="next" data-title="[Unity]Physics"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

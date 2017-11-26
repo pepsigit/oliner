@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [WebGL]片元级光照与多个Program对象 |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[WebGL]片元级光照与多个Program对象</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2016-06-22</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/WebGL/">WebGL</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/WebGL/12.gif" alt=""></p>
+<a id="more"></a>
+<font color="#8A2BE2"><br><strong>先来说下<code>逐顶点光照</code>和<code>逐片元光照</code></strong><br></font>
+
+<hr>
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/WebGL/point.png" alt=""></p>
+<font color="#FF7F50"><br><strong>物体表面的光亮程度是由<code>法线</code>和<code>入射光线之间的夹角</code>决定的. 如图, 光线垂直于<code>B</code>点入射, 与<code>B</code>点的法线平行, <code>B</code>点会很明亮, 而<code>A</code>点会稍微暗一些. 在<code>A</code>点和<code>B</code>点之间的点, 将会有一个从明到暗的渐变.</strong><br></font>
+
+<hr>
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/WebGL/point-lighting-in-middle.png" alt=""></p>
+<font color="#00CED1"><br><strong>当光源向上稍微移动时, <code>A</code>点和<code>C</code>点会比较暗, 因为光线的入射角大一些.如果使用<code>逐顶点光照</code>, 那么<code>B</code>点的明亮程度应该是<code>A</code>点和<code>C</code>点的平均值, 所以<code>B</code>点也同样会比较暗.这明显是<font color="red">错误的, 错误的, 错误的.</font> 在<code>B</code>点, 光线几乎是平行于法线的，所以它应该是其中最明亮的一个点. 所以在计算顶点之间的片元光照时, 我们必须逐个片元、逐个片元的单独进行计算.</strong><br></font>
+
+<hr>
+<ul>
+<li><strong><code>shader</code></strong></li>
+</ul>
+<p><strong>更改以前的<code>shader</code>的<code>id</code>, 便于区分是<code>逐顶点</code>还是<code>逐片元</code>.</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 逐顶点顶点着色器 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">id</span>=<span class="string">"use-vertex-shader-vs"</span> <span class="attr">type</span>=<span class="string">"shader/vs"</span>&gt;</span><span class="undefined"></span><br><span class="line">    ...</span><br><span class="line"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 逐顶点片段着色器 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">id</span>=<span class="string">"use-vertex-shader-fs"</span> <span class="attr">type</span>=<span class="string">"shader/fs"</span>&gt;</span><span class="undefined"></span><br><span class="line">    ...</span><br><span class="line"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>添加<code>逐片元</code>的<code>shader</code></strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 逐片元顶点着色器 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">id</span>=<span class="string">"use-fragment-shader-vs"</span> <span class="attr">type</span>=<span class="string">"shader/vs"</span>&gt;</span><span class="actionscript"></span><br><span class="line">    attribute vec3 aPosition;</span><br><span class="line">    attribute vec3 aNormal;</span><br><span class="line">    attribute vec2 aCoord;</span><br><span class="line"></span><br><span class="line">    uniform mat4 uMVMatrix;</span><br><span class="line">    uniform mat4 uPMatrix;</span><br><span class="line">    uniform mat4 uNMatrix;</span><br><span class="line"></span><br><span class="line">    varying vec4 vPosition;</span><br><span class="line">    varying vec3 vTransformNormal;</span><br><span class="line">    varying vec2 vCoord;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> main( <span class="keyword">void</span> )</span><br><span class="line">    &#123;</span><br><span class="line">        vPosition = uMVMatrix * vec4( aPosition, <span class="number">1.0</span> );</span><br><span class="line">        gl_Position = uPMatrix * vPosition;</span><br><span class="line">        vTransformNormal = ( uNMatrix * vec4( aNormal, <span class="number">1.0</span> ) ).xyz;</span><br><span class="line">        vCoord = aCoord;</span><br><span class="line">    &#125;</span><br><span class="line"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight hsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 逐片元片段着色器 --&gt;</span><br><span class="line">&lt;script id=<span class="string">"use-fragment-shader-fs"</span> type=<span class="string">"shader/fs"</span>&gt;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 无这句, 下句报错</span></span><br><span class="line">    precision mediump float<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    varying vec4 vPosition<span class="comment">;</span></span><br><span class="line">    varying vec3 vTransformNormal<span class="comment">;</span></span><br><span class="line">    varying vec2 vCoord<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    uniform sampler2D uSampler<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    uniform bool uUseLighting<span class="comment">;</span></span><br><span class="line">    uniform bool uUseTexture<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    uniform vec3 uAmbientColor<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    uniform vec3 uPointLightingPosition<span class="comment">;</span></span><br><span class="line">    uniform vec3 uPointLightingColor<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    void main( void )</span><br><span class="line">    &#123;</span><br><span class="line">        vec3 lightingWeight<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 是否开启光照</span></span><br><span class="line">        <span class="keyword">if</span>( !uUseLighting )</span><br><span class="line">        &#123;</span><br><span class="line">            lightingWeight = vec3( <span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span> )<span class="comment">;</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            vec3 lightingDirection = normalize( uPointLightingPosition - vPosition.xyz )<span class="comment">;</span></span><br><span class="line">            </span><br><span class="line">            float directionalLightingWeight = max( dot( normalize( vTransformNormal ), lightingDirection ), <span class="number">0.0</span> )<span class="comment">;</span></span><br><span class="line">            </span><br><span class="line">            lightingWeight = uAmbientColor + uPointLightingColor * directionalLightingWeight<span class="comment">;</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        vec4 textureColor<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 是否使用纹理</span></span><br><span class="line">        <span class="keyword">if</span>( !uUseTexture )</span><br><span class="line">        &#123;</span><br><span class="line">            textureColor = vec4( <span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span> )<span class="comment">;</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">           textureColor = texture2D( uSampler, vec2( vCoord.s, vCoord.t ) )<span class="comment">;</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        gl_FragColor = vec4( textureColor.rgb * lightingWeight, textureColor.a )<span class="comment">;</span></span><br><span class="line">    &#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>我们需要多个<code>program</code>对象来切换是否使用<code>逐片元光照</code></strong></p>
+<ul>
+<li><strong><code>createProgram( vertexId, fragmentId )</code></strong></li>
+</ul>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">function createProgram( vertexId, fragmentId )</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> vertexShader    = getShader( <span class="keyword">gl</span>, vertexId );</span><br><span class="line">    <span class="keyword">var</span> fragmentShader  = getShader( <span class="keyword">gl</span>, fragmentId );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> shaderProgram = <span class="keyword">gl</span>.createProgram();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">gl</span>.attachShader( shaderProgram, vertexShader );</span><br><span class="line">    <span class="keyword">gl</span>.attachShader( shaderProgram, fragmentShader );</span><br><span class="line">    <span class="keyword">gl</span>.linkProgram( shaderProgram );</span><br><span class="line">    <span class="comment">//gl.useProgram( shaderProgram );</span></span><br><span class="line"></span><br><span class="line">    shaderProgram.vertexPositionAttribute = <span class="keyword">gl</span>.getAttribLocation( shaderProgram, <span class="string">"aPosition"</span>);</span><br><span class="line">    <span class="keyword">gl</span>.enableVertexAttribArray( shaderProgram.vertexPositionAttribute );</span><br><span class="line"></span><br><span class="line">    shaderProgram.vertexCoordAttribute = <span class="keyword">gl</span>.getAttribLocation( shaderProgram, <span class="string">"aCoord"</span>);</span><br><span class="line">    <span class="keyword">gl</span>.enableVertexAttribArray( shaderProgram.vertexCoordAttribute );</span><br><span class="line"></span><br><span class="line">    shaderProgram.vertexNormalAttribute = <span class="keyword">gl</span>.getAttribLocation( shaderProgram, <span class="string">"aNormal"</span> );</span><br><span class="line">    <span class="keyword">gl</span>.enableVertexAttribArray( shaderProgram.vertexNormalAttribute );</span><br><span class="line"></span><br><span class="line">    shaderProgram.pMatrix   = <span class="keyword">gl</span>.getUniformLocation( shaderProgram, <span class="string">"uPMatrix"</span>);</span><br><span class="line">    shaderProgram.mvMatrix  = <span class="keyword">gl</span>.getUniformLocation( shaderProgram, <span class="string">"uMVMatrix"</span>);</span><br><span class="line">    shaderProgram.uSample   = <span class="keyword">gl</span>.getUniformLocation( shaderProgram, <span class="string">"uSampler"</span>);</span><br><span class="line">    shaderProgram.uNMatrix  = <span class="keyword">gl</span>.getUniformLocation( shaderProgram, <span class="string">"uNMatrix"</span> );</span><br><span class="line"></span><br><span class="line">    shaderProgram.uUseLighting          = <span class="keyword">gl</span>.getUniformLocation( shaderProgram, <span class="string">"uUseLighting"</span> );</span><br><span class="line">    shaderProgram.uUseTexture           = <span class="keyword">gl</span>.getUniformLocation( shaderProgram, <span class="string">"uUseTexture"</span> );</span><br><span class="line">    shaderProgram.uAmbientColor         = <span class="keyword">gl</span>.getUniformLocation( shaderProgram, <span class="string">"uAmbientColor"</span> );</span><br><span class="line">    shaderProgram.uPointLightingColor   = <span class="keyword">gl</span>.getUniformLocation( shaderProgram, <span class="string">"uPointLightingColor"</span> );</span><br><span class="line">    shaderProgram.uPointLightingPosition = <span class="keyword">gl</span>.getUniformLocation( shaderProgram, <span class="string">"uPointLightingPosition"</span> );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> shaderProgram;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong><code>initShaders()</code></strong></li>
+</ul>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 记录当前使用的`program`</span></span><br><span class="line"><span class="keyword">var</span> currProgram;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用逐顶点光照的`program`</span></span><br><span class="line"><span class="keyword">var</span> useVertexProgram;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用逐片元光照的`program`</span></span><br><span class="line"><span class="keyword">var</span> useFragmentProgram;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">initShaders</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    useVertexProgram = createProgram( <span class="string">"use-vertex-shader-vs"</span>, <span class="string">"use-vertex-shader-fs"</span> );</span><br><span class="line">    </span><br><span class="line">    useFragmentProgram = createProgram( <span class="string">"use-fragment-shader-vs"</span>, <span class="string">"use-fragment-shader-fs"</span> );</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong><code>drawScene()</code></strong></li>
+</ul>
+<figure class="highlight qml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">drawScene</span>(<span class="params"></span>)</span><br><span class="line"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 着色器选择</span></span><br><span class="line">    <span class="built_in">var</span> vertex_or_fragment = <span class="built_in">document</span>.getElementById(<span class="string">"vertex-or-fragment"</span>).checked;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>( vertex_or_fragment )</span><br><span class="line">    &#123;</span><br><span class="line">        currProgram = useFragmentProgram;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="decorator"><span class="keyword">else</span></span></span><br><span class="line">    &#123;</span><br><span class="line">        currProgram = useVertexProgram;</span><br><span class="line">    &#125;</span><br><span class="line">    gl.useProgram( currProgram );</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 是否使用纹理</span></span><br><span class="line">    <span class="built_in">var</span> isUseTexture = <span class="built_in">document</span>.getElementById(<span class="string">"texture"</span>).checked;</span><br><span class="line">    gl.uniform1i( currProgram.uUseTexture, isUseTexture );</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 是否使用光照</span></span><br><span class="line">    <span class="built_in">var</span> isLighting = <span class="built_in">document</span>.getElementById(<span class="string">"lighting"</span>).checked;</span><br><span class="line">    gl.uniform1i( currProgram.uUseLighting, isLighting );</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><a href="https://github.com/pepsigit/WebGL/blob/master/lesson_12.html" target="_blank" rel="external">源码</a></p>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2016/06/22/WebGL-镜面高光和载入JSON模型/" class="prev" data-title="[WebGL]镜面高光和载入JSON模型"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2016/06/19/WebGL-点光源/" class="next" data-title="[WebGL]点光源"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

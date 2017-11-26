@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [Unity]NGUI - Label |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[Unity]NGUI - Label</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2017-06-25</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Unity/">Unity</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <h1 id="NGUI-Label"><a href="#NGUI-Label" class="headerlink" title="NGUI - Label"></a><strong>NGUI - Label</strong></h1><hr>
+<p><br></p>
+<ul>
+<li><h2 id="Label"><a href="#Label" class="headerlink" title="Label"></a><strong>Label</strong></h2><ul>
+<li><strong>在<code>Hierarchy</code>窗口中，选中<code>UI Root</code></strong></li>
+<li><strong>在<code>Scene</code>视图中，在<code>UI Root</code>中右键单击 : <code>Create -&gt; Label</code></strong></li>
+<li><strong>属性 :</strong><ul>
+<li><code>Font Atlas</code> :<ul>
+<li><code>NGUI</code> : 使用<code>NGUI</code>的字体集</li>
+<li><code>Unity</code> : 使用系统字体，如<code>ttf</code></li>
+</ul>
+</li>
+<li><code>Font Size</code> : 字体大小，受限于<code>Widget</code>下<code>Size</code>属性</li>
+<li><code>Text</code> : 文本内容<ul>
+<li>可以设置<code>[颜色值]内容[-]</code>是自己自定义变色，颜色值会和<code>Color Tint</code>颜色进行融合</li>
+<li>文本加粗<code>[b][/b]</code></li>
+<li>文本斜体<code>[i]italic[/i]</code></li>
+<li>文字加下划线<code>[u]underline[/u]</code></li>
+<li>直线穿过文字<code>[s]strikethrough[/s]</code></li>
+<li>让文字在左下角或右上角显示<code>[sub]sub[/sub]</code> or <code>[sup]sup[/sup]</code></li>
+<li>文字超链接显示格式<code>[url=http:xxx]clickable hyperlinks[/url]</code>(详情方法见下面)</li>
+</ul>
+</li>
+<li><code>Overflow</code> : <ul>
+<li><code>ShrinkContent</code> : 字体大小自适应控件大小</li>
+<li><code>ClampContent</code> : 裁剪</li>
+<li><code>ResizeFreely</code> : 控件大小自适应字体大小</li>
+<li><code>ResizeHeight</code> : 控件高度自适应字体需要的高度</li>
+</ul>
+</li>
+<li><code>Alignment</code> : 对齐方式<ul>
+<li><code>Justified</code> : 自动填充宽度(只对英文有效)</li>
+</ul>
+</li>
+<li><code>Gridient</code> : 颜色渐变</li>
+<li><code>Space</code> : 字间距、行间距 </li>
+<li><code>BBCode</code> : 文本属性的编码识别</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p><strong>文本超链接</strong></p>
+<ul>
+<li>需要为<code>Label</code>添加<code>Box Collider</code> : 右键单击文本<code>Attach -&gt; Box Collider</code></li>
+<li><p>为<code>Label</code>添加脚本 :</p>
+<ul>
+<li><code>void OnClick()</code></li>
+<li><code>{</code></li>
+<li><code>UILabel lbl = GetComponent&lt;UILabel&gt;();</code></li>
+<li><code>string url =     lbl.GetUrlAtPosition(UICamera.lastWorldPosition);</code></li>
+<li><code>Application.OpenURL(url);</code></li>
+<li><code>}</code></li>
+</ul>
+</li>
+<li><p>若只想点击只有超链接文字大小的区域才会响应，请设置<code>Box Collider</code>的<code>Center</code>、<code>Size</code>，并将<code>Widget</code>下的<code>auto-adjust to match</code>取消勾选</p>
+</li>
+</ul>
+</li>
+<li><p><strong>使用图片</strong></p>
+<ul>
+<li>修改<code>UIFont</code>，参考<code>Arimo20</code></li>
+</ul>
+</li>
+<li><p><strong>动态文字</strong></p>
+<ul>
+<li><code>content</code> : <code>UILabel</code>，并有脚本<code>Typewriter Effect</code><ul>
+<li><code>Chars Per Second</code> : 每秒显示多少个字符</li>
+<li><code>Fade In Time</code> : 字符的淡入时间</li>
+<li><code>Delay on Period</code> : 延迟期</li>
+<li><code>Delay on New Line</code> : 开始新行延迟时间</li>
+<li><code>Keep Full Dimentions</code> : 保持全部尺寸，一开始就显示最大尺寸</li>
+</ul>
+</li>
+<li><code>bg</code> : <code>UISprite</code>，<code>content</code>的孩子，作为背景</li>
+<li><code>UILabel</code>的<code>Overflow</code>设置为<code>ResizeHeight</code></li>
+<li><code>bg</code>的<code>Anchors</code>的<code>Type</code>设置为<code>Unified</code>，<code>Execute</code>为<code>OnUpdate</code>，<code>Target</code>为<code>content</code>即可</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+        </li>
+        <li>
+            
+            <a href="/2017/05/20/Lua-使用弱引用检查内存泄漏/" class="next" data-title="[Lua]使用弱引用检查内存泄漏"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

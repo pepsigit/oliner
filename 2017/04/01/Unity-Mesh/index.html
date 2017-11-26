@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [Unity]Mesh |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[Unity]Mesh</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2017-04-01</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Unity/">Unity</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <p><br></p>
+<h2 id="Mesh-Filter"><a href="#Mesh-Filter" class="headerlink" title="Mesh Filter"></a>Mesh Filter</h2><p><code>网格过滤器</code></p>
+<ul>
+<li><h3 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h3><ul>
+<li><h4 id="Mesh-引用将要被渲染的网格。"><a href="#Mesh-引用将要被渲染的网格。" class="headerlink" title="Mesh : 引用将要被渲染的网格。"></a><code>Mesh</code> : 引用将要被渲染的网格。</h4></li>
+</ul>
+</li>
+<li><h3 id="mesh"><a href="#mesh" class="headerlink" title="mesh:"></a><code>mesh</code>:</h3><ul>
+<li><h4 id="mesh像是值传递。"><a href="#mesh像是值传递。" class="headerlink" title="mesh像是值传递。"></a><code>mesh</code>像是值传递。</h4></li>
+<li><h4 id="使用mesh会多次克隆对象，对具体的object拷贝，改变此mesh只改变当前对象。"><a href="#使用mesh会多次克隆对象，对具体的object拷贝，改变此mesh只改变当前对象。" class="headerlink" title="使用mesh会多次克隆对象，对具体的object拷贝，改变此mesh只改变当前对象。"></a>使用<code>mesh</code>会多次克隆对象，对具体的<code>object</code>拷贝，改变此<code>mesh</code>只改变当前对象。</h4></li>
+<li><h4 id="改变mesh中的数据，改变的是真实数据。"><a href="#改变mesh中的数据，改变的是真实数据。" class="headerlink" title="改变mesh中的数据，改变的是真实数据。"></a>改变<code>mesh</code>中的数据，改变的是真实数据。</h4><ul>
+<li><h5 id="运行时：改变数据，只会改变当前物体的形状，不影响基于此mesh的其他物体，退出程序时，数据恢复。-Unity5-3已验证"><a href="#运行时：改变数据，只会改变当前物体的形状，不影响基于此mesh的其他物体，退出程序时，数据恢复。-Unity5-3已验证" class="headerlink" title="运行时：改变数据，只会改变当前物体的形状，不影响基于此mesh的其他物体，退出程序时，数据恢复。( Unity5.3已验证 )"></a>运行时：改变数据，只会改变当前物体的形状，不影响基于此<code>mesh</code>的其他物体，退出程序时，数据恢复。( <font color="green">Unity5.3已验证</font> )</h5></li>
+<li><h5 id="编辑时：改变数据，退出unity后，数据无法恢复。-Unity5-3会改变形状，但是会报错，Instantiating-mesh-due-to-calling-MeshFilter-mesh-during-edit-mode-This-will-leak-meshes-Please-use-MeshFilter-sharedMesh-instead"><a href="#编辑时：改变数据，退出unity后，数据无法恢复。-Unity5-3会改变形状，但是会报错，Instantiating-mesh-due-to-calling-MeshFilter-mesh-during-edit-mode-This-will-leak-meshes-Please-use-MeshFilter-sharedMesh-instead" class="headerlink" title="编辑时：改变数据，退出unity后，数据无法恢复。( Unity5.3会改变形状，但是会报错，Instantiating mesh due to calling MeshFilter.mesh during edit mode. This will leak meshes. Please use MeshFilter.sharedMesh instead. )"></a>编辑时：改变数据，退出<code>unity</code>后，数据无法恢复。( <font color="red">Unity5.3会改变形状，但是会报错，<code>Instantiating mesh due to calling MeshFilter.mesh during edit mode. This will leak meshes. Please use MeshFilter.sharedMesh instead.</code></font> )</h5></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><h3 id="sharedMesh"><a href="#sharedMesh" class="headerlink" title="sharedMesh :"></a><code>sharedMesh</code> :</h3><ul>
+<li><h4 id="sharedMesh像是引用传递。"><a href="#sharedMesh像是引用传递。" class="headerlink" title="sharedMesh像是引用传递。"></a><code>sharedMesh</code>像是引用传递。</h4></li>
+<li><h4 id="sharedMesh只有一份，改变此sharedMesh会改变所有。"><a href="#sharedMesh只有一份，改变此sharedMesh会改变所有。" class="headerlink" title="sharedMesh只有一份，改变此sharedMesh会改变所有。"></a><code>sharedMesh</code>只有一份，改变此<code>sharedMesh</code>会改变所有。</h4></li>
+<li><h4 id="改变sharedMesh中的数据，改变的是缓存中的数据。"><a href="#改变sharedMesh中的数据，改变的是缓存中的数据。" class="headerlink" title="改变sharedMesh中的数据，改变的是缓存中的数据。"></a>改变<code>sharedMesh</code>中的数据，改变的是缓存中的数据。</h4><ul>
+<li><h5 id="运行时：改变数据，会改变所有基于此mesh的物体形状，退出程序时，数据无法恢复。退出unity后，数据恢复。-Unity5-3已验证"><a href="#运行时：改变数据，会改变所有基于此mesh的物体形状，退出程序时，数据无法恢复。退出unity后，数据恢复。-Unity5-3已验证" class="headerlink" title="运行时：改变数据，会改变所有基于此mesh的物体形状，退出程序时，数据无法恢复。退出unity后，数据恢复。( Unity5.3已验证 )"></a>运行时：改变数据，会改变所有基于此<code>mesh</code>的物体形状，退出程序时，数据无法恢复。退出<code>unity</code>后，数据恢复。( <font color="green">Unity5.3已验证</font> )</h5></li>
+<li><h5 id="编辑时：改变数据，退出unity后，数据恢复。-Unity5-3已验证"><a href="#编辑时：改变数据，退出unity后，数据恢复。-Unity5-3已验证" class="headerlink" title="编辑时：改变数据，退出unity后，数据恢复。( Unity5.3已验证 )"></a>编辑时：改变数据，退出<code>unity</code>后，数据恢复。( <font color="green">Unity5.3已验证</font> )</h5></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+<hr>
+<h2 id="Mesh-Render"><a href="#Mesh-Render" class="headerlink" title="Mesh Render"></a>Mesh Render</h2><p><code>网格渲染器</code></p>
+<ul>
+<li><h3 id="属性-1"><a href="#属性-1" class="headerlink" title="属性"></a>属性</h3><ul>
+<li><h4 id="Cast-Shadows-是否开启投射阴影。"><a href="#Cast-Shadows-是否开启投射阴影。" class="headerlink" title="Cast Shadows : 是否开启投射阴影。"></a><code>Cast Shadows</code> : 是否开启投射阴影。</h4></li>
+<li><h4 id="Recieve-Shadows-是否接受阴影投射。"><a href="#Recieve-Shadows-是否接受阴影投射。" class="headerlink" title="Recieve Shadows : 是否接受阴影投射。"></a><code>Recieve Shadows</code> : 是否接受阴影投射。</h4></li>
+<li><h4 id="Use-Light-Probes-是否使用灯光探头。"><a href="#Use-Light-Probes-是否使用灯光探头。" class="headerlink" title="Use Light Probes : 是否使用灯光探头。"></a><code>Use Light Probes</code> : 是否使用灯光探头。</h4></li>
+</ul>
+</li>
+<li><h3 id="material"><a href="#material" class="headerlink" title="material:"></a><code>material</code>:</h3><ul>
+<li><h4 id="每次更换属性，unity会自动new一份新的material。直到Application-LoadLevel-或者Resources-UnloadUnusedAssets-时才会释放内存。"><a href="#每次更换属性，unity会自动new一份新的material。直到Application-LoadLevel-或者Resources-UnloadUnusedAssets-时才会释放内存。" class="headerlink" title="每次更换属性，unity会自动new一份新的material。直到Application.LoadLevel()或者Resources.UnloadUnusedAssets()时才会释放内存。"></a>每次更换属性，<code>unity</code>会自动<code>new</code>一份新的<code>material</code>。直到<code>Application.LoadLevel()</code>或者<code>Resources.UnloadUnusedAssets()</code>时才会释放内存。</h4></li>
+</ul>
+</li>
+<li><h3 id="sharedMaterial"><a href="#sharedMaterial" class="headerlink" title="sharedMaterial:"></a><code>sharedMaterial</code>:</h3><ul>
+<li><h4 id="共享材质，无论如何操作材质的属性（颜色、shader），内存中只会占有一份。"><a href="#共享材质，无论如何操作材质的属性（颜色、shader），内存中只会占有一份。" class="headerlink" title="共享材质，无论如何操作材质的属性（颜色、shader），内存中只会占有一份。"></a>共享材质，无论如何操作材质的属性（颜色、shader），内存中只会占有一份。</h4></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 编辑器开发模式下，防止大量修改 .material 文件，导致 svn 无法管理，每次获取 material 时，根据平台而定。</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Material <span class="title">GetMaterialByPlatform</span><span class="params">( Renderer render )</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="meta">#<span class="meta-keyword">if</span> UNITY_EDITOR</span></span><br><span class="line">		<span class="keyword">return</span> render.material;</span><br><span class="line">	<span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line">		<span class="keyword">return</span> render.sharedmaterial;</span><br><span class="line">	<span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><br></p>
+<hr>
+<h2 id="Skinned-Mesh-Renderer"><a href="#Skinned-Mesh-Renderer" class="headerlink" title="Skinned Mesh Renderer"></a>Skinned Mesh Renderer</h2><p><code>蒙皮网格渲染器</code></p>
+<h5 id="如果想理解这个东西，推荐做下官方的换装实例-Character-Customization，可以参考这个教程。"><a href="#如果想理解这个东西，推荐做下官方的换装实例-Character-Customization，可以参考这个教程。" class="headerlink" title="如果想理解这个东西，推荐做下官方的换装实例 - Character Customization，可以参考这个教程。"></a>如果想理解这个东西，推荐做下官方的换装实例 - <a href="https://www.assetstore.unity3d.com/cn/#!/content/8" target="_blank" rel="external">Character Customization</a>，可以参考这个<a href="http://blog.csdn.net/lyh916/article/details/44802459" target="_blank" rel="external">教程</a>。</h5>
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2017/04/10/Unity-Physics/" class="prev" data-title="[Unity]Physics"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2017/03/27/Unity-输入系统/" class="next" data-title="[Unity]输入系统"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

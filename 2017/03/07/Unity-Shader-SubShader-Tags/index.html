@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [Unity]Shader-SubShader Tags |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[Unity]Shader-SubShader Tags</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2017-03-07</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Unity/">Unity</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <p><br></p>
+<h1 id="“Queue”-渲染顺序"><a href="#“Queue”-渲染顺序" class="headerlink" title="“Queue” : 渲染顺序"></a>“Queue” : 渲染顺序</h1><p><code>SubShader</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">数值</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">“Background”</td>
+<td style="text-align:left">1000</td>
+<td style="text-align:left">这个渲染队列会在任何其他队列之前被渲染, 我们通常使用该队列来渲染那些需要绘制在背景上的物体. 比如用于天空盒.</td>
+</tr>
+<tr>
+<td style="text-align:left">“Geometry”</td>
+<td style="text-align:left">2000</td>
+<td style="text-align:left">默认的渲染队列，大多数物体都使用这个队列。不透明物体使用这个队列.</td>
+</tr>
+<tr>
+<td style="text-align:left">“AlphaTest”</td>
+<td style="text-align:left">2450</td>
+<td style="text-align:left">需要透明度测试的物体使用这个队列。在Unity5中它从Geometry队列中被单独分出来，这是因为在所有不透明物体渲染之后再渲染它们会更加高效.</td>
+</tr>
+<tr>
+<td style="text-align:left">“Transparent”</td>
+<td style="text-align:left">3000</td>
+<td style="text-align:left">这个队列中的物体会在所有Geometry和AlphaTest物体渲染后，再按从后往前的顺序进行渲染。任何使用了透明度混合(例如关闭了深度写入的Shader)的物体都应该使用该队列.</td>
+</tr>
+<tr>
+<td style="text-align:left">“Overlay”</td>
+<td style="text-align:left">4000</td>
+<td style="text-align:left">该队列用于实现一些叠加效果。任何需要在最后渲染的物体都应该使用该队列.比如镜头光晕</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<figure class="highlight qml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Shader <span class="string">"Transparent Queue Example"</span></span><br><span class="line">&#123;</span><br><span class="line">     <span class="decorator">SubShader</span></span><br><span class="line">     &#123;</span><br><span class="line">        <span class="decorator">Tags</span> &#123; <span class="string">"Queue"</span> = <span class="string">"Transparent"</span> &#125;</span><br><span class="line">        <span class="decorator">Pass</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// rest of the shader body...</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">or</span><br><span class="line"></span><br><span class="line"><span class="decorator">Tags</span> &#123; <span class="string">"Queue"</span> = <span class="string">"Geometry+1"</span> &#125;</span><br></pre></td></tr></table></figure>
+<p><br></p>
+<hr>
+<h1 id="“RenderType”-指定渲染类型"><a href="#“RenderType”-指定渲染类型" class="headerlink" title="“RenderType” : 指定渲染类型"></a>“RenderType” : 指定渲染类型</h1><p><code>SubShader</code></p>
+<blockquote>
+<p>这里的内置属性就不说了，主要说下使用方法。</p>
+</blockquote>
+<p><br></p>
+<ul>
+<li><h3 id="Camera-RenderWithShader"><a href="#Camera-RenderWithShader" class="headerlink" title="Camera.RenderWithShader"></a>Camera.RenderWithShader</h3><ul>
+<li><h5 id="只是本次渲染使用替换的shader"><a href="#只是本次渲染使用替换的shader" class="headerlink" title="只是本次渲染使用替换的shader"></a>只是本次渲染使用替换的shader</h5></li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+<ul>
+<li><h3 id="Camera-SetReplacementShader"><a href="#Camera-SetReplacementShader" class="headerlink" title="Camera.SetReplacementShader"></a>Camera.SetReplacementShader</h3><ul>
+<li><h5 id="自调用起以后都使用替换的shader进行渲染，直到手动调用Camera-ResetReplacementShader为止，恢复为用本身的shader进行渲染。"><a href="#自调用起以后都使用替换的shader进行渲染，直到手动调用Camera-ResetReplacementShader为止，恢复为用本身的shader进行渲染。" class="headerlink" title="自调用起以后都使用替换的shader进行渲染，直到手动调用Camera.ResetReplacementShader为止，恢复为用本身的shader进行渲染。"></a>自调用起以后都使用替换的shader进行渲染，直到手动调用Camera.ResetReplacementShader为止，恢复为用本身的shader进行渲染。</h5></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">★ 当物体自身根据 <span class="keyword">Shader_A </span>中的 RenderType 为 a 的效果实现时，摄像机脚本调用 API，只有 <span class="keyword">Shader_B </span>中也有 RenderType 为 a 的，才能实现次替换的效果。否则，不会渲染物体。</span><br><span class="line">★ 反过来就是说，当我们命令摄像机替换 <span class="keyword">Shader </span>渲染物体时，根据我们替换的参数，去匹配场景中第一个使用和参数一样的 RenderType 的 <span class="keyword">SubShader </span>的物体，然后使用参数的 <span class="keyword">SubShader </span>去绘制。</span><br></pre></td></tr></table></figure>
+<p><br></p>
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/unity_tech/16_RenderType.png" alt=""></p>
+<p><br></p>
+<hr>
+<h1 id="“DisableBatching”-禁用批处理"><a href="#“DisableBatching”-禁用批处理" class="headerlink" title="“DisableBatching” : 禁用批处理"></a>“DisableBatching” : 禁用批处理</h1><p><code>SubShader</code></p>
+<h6 id="当使用绘制调用批处理-Draw-Call-Batching-时，一些-shaders（主要是做对象空间顶点变形的shader）不工作-这是因为批处理将所有几何转换为世界空间，因此“对象空间”丢失。"><a href="#当使用绘制调用批处理-Draw-Call-Batching-时，一些-shaders（主要是做对象空间顶点变形的shader）不工作-这是因为批处理将所有几何转换为世界空间，因此“对象空间”丢失。" class="headerlink" title="当使用绘制调用批处理 Draw Call Batching 时，一些 shaders（主要是做对象空间顶点变形的shader）不工作 - 这是因为批处理将所有几何转换为世界空间，因此“对象空间”丢失。"></a>当使用绘制调用批处理 Draw Call Batching 时，一些 shaders（主要是做对象空间顶点变形的shader）不工作 - 这是因为批处理将所有几何转换为世界空间，因此“对象空间”丢失。</h6><ul>
+<li><h4 id="“True”（始终禁用此着色器的批处理）"><a href="#“True”（始终禁用此着色器的批处理）" class="headerlink" title="“True”（始终禁用此着色器的批处理）"></a>“True”（始终禁用此着色器的批处理）</h4></li>
+<li><h4 id="“False”（不禁用批处理-这是默认值）"><a href="#“False”（不禁用批处理-这是默认值）" class="headerlink" title="“False”（不禁用批处理;这是默认值）"></a>“False”（不禁用批处理;这是默认值）</h4></li>
+<li><h4 id="“LODFading”（当LOD衰减活动时禁用批处理-主要用于树）。"><a href="#“LODFading”（当LOD衰减活动时禁用批处理-主要用于树）。" class="headerlink" title="“LODFading”（当LOD衰减活动时禁用批处理;主要用于树）。"></a>“LODFading”（当LOD衰减活动时禁用批处理;主要用于树）。</h4></li>
+</ul>
+<p><br></p>
+<hr>
+<h1 id="“ForceNoShadowCasting”-强制无阴影投射"><a href="#“ForceNoShadowCasting”-强制无阴影投射" class="headerlink" title="“ForceNoShadowCasting” : 强制无阴影投射"></a>“ForceNoShadowCasting” : 强制无阴影投射</h1><p><code>SubShader</code></p>
+<h6 id="如果给出了ForceNoShadowCasting标签并且值为“True”，则使用此subshader渲染的对象将永远不会投射阴影。-当你在透明对象上使用shader替换，并且你不会继承来自另一个subshader的阴影传递时，这是最有用的。"><a href="#如果给出了ForceNoShadowCasting标签并且值为“True”，则使用此subshader渲染的对象将永远不会投射阴影。-当你在透明对象上使用shader替换，并且你不会继承来自另一个subshader的阴影传递时，这是最有用的。" class="headerlink" title="如果给出了ForceNoShadowCasting标签并且值为“True”，则使用此subshader渲染的对象将永远不会投射阴影。 当你在透明对象上使用shader替换，并且你不会继承来自另一个subshader的阴影传递时，这是最有用的。"></a>如果给出了ForceNoShadowCasting标签并且值为“True”，则使用此subshader渲染的对象将永远不会投射阴影。 当你在透明对象上使用shader替换，并且你不会继承来自另一个subshader的阴影传递时，这是最有用的。</h6><p><br></p>
+<hr>
+<h1 id="“IgnoreProjector”-忽略投影机"><a href="#“IgnoreProjector”-忽略投影机" class="headerlink" title="“IgnoreProjector” : 忽略投影机"></a>“IgnoreProjector” : 忽略投影机</h1><p><code>SubShader</code></p>
+<h6 id="如果给定IgnoreProjector标记并且值为“True”，则使用此shader的对象不会受到投影机的影响。-这对半透明对象最有用，因为暂时没有对他们产生投影的比较合适的办法，那么直接忽略掉就行了。"><a href="#如果给定IgnoreProjector标记并且值为“True”，则使用此shader的对象不会受到投影机的影响。-这对半透明对象最有用，因为暂时没有对他们产生投影的比较合适的办法，那么直接忽略掉就行了。" class="headerlink" title="如果给定IgnoreProjector标记并且值为“True”，则使用此shader的对象不会受到投影机的影响。 这对半透明对象最有用，因为暂时没有对他们产生投影的比较合适的办法，那么直接忽略掉就行了。"></a>如果给定IgnoreProjector标记并且值为“True”，则使用此shader的对象不会受到投影机的影响。 这对半透明对象最有用，因为暂时没有对他们产生投影的比较合适的办法，那么直接忽略掉就行了。</h6><p><br></p>
+<hr>
+<h1 id="“CanUseSpriteAtlas”-可以使用Sprite图集"><a href="#“CanUseSpriteAtlas”-可以使用Sprite图集" class="headerlink" title="“CanUseSpriteAtlas” : 可以使用Sprite图集"></a>“CanUseSpriteAtlas” : 可以使用Sprite图集</h1><p><code>SubShader</code></p>
+<h6 id="如果shader用于sprite，则将CanUseSpriteAtlas标记设置为“False”，并且当它们打包到图集时将失效。"><a href="#如果shader用于sprite，则将CanUseSpriteAtlas标记设置为“False”，并且当它们打包到图集时将失效。" class="headerlink" title="如果shader用于sprite，则将CanUseSpriteAtlas标记设置为“False”，并且当它们打包到图集时将失效。"></a>如果shader用于sprite，则将CanUseSpriteAtlas标记设置为“False”，并且当它们打包到图集时将失效。</h6><p><br></p>
+<hr>
+<h1 id="“PreviewType”-预览类型"><a href="#“PreviewType”-预览类型" class="headerlink" title="“PreviewType” : 预览类型"></a>“PreviewType” : 预览类型</h1><p><code>SubShader</code></p>
+<h6 id="PreviewType指示-material-inspector-预览应如何显示材质。-默认情况下，材质显示为球体，但PreviewType也可以设置为“Plane”（显示为2D）或“Skybox”（将显示为天空盒）。"><a href="#PreviewType指示-material-inspector-预览应如何显示材质。-默认情况下，材质显示为球体，但PreviewType也可以设置为“Plane”（显示为2D）或“Skybox”（将显示为天空盒）。" class="headerlink" title="PreviewType指示 material inspector 预览应如何显示材质。 默认情况下，材质显示为球体，但PreviewType也可以设置为“Plane”（显示为2D）或“Skybox”（将显示为天空盒）。"></a>PreviewType指示 material inspector 预览应如何显示材质。 默认情况下，材质显示为球体，但PreviewType也可以设置为“Plane”（显示为2D）或“Skybox”（将显示为天空盒）。</h6><p><br></p>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2017/03/27/Unity-知识目录/" class="prev" data-title="[Unity]知识目录"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2017/03/07/Unity-Shader-计算光照模型内置函数/" class="next" data-title="[Unity]Shader-计算光照模型内置函数"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [Unity]输入系统 |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[Unity]输入系统</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2017-03-27</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Unity/">Unity</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <ul>
+<li><h3 id="默认输入轴："><a href="#默认输入轴：" class="headerlink" title="默认输入轴："></a>默认输入轴：</h3><ul>
+<li><h5 id="Horizontal、Vertical映射到a、d、w、s。"><a href="#Horizontal、Vertical映射到a、d、w、s。" class="headerlink" title="Horizontal、Vertical映射到a、d、w、s。"></a><code>Horizontal</code>、<code>Vertical</code>映射到<code>a</code>、<code>d</code>、<code>w</code>、<code>s</code>。</h5></li>
+<li><h5 id="Fire1、Fire2、Fire3映射到left-control、left-alt、left-shift-（-mac-unity-）。"><a href="#Fire1、Fire2、Fire3映射到left-control、left-alt、left-shift-（-mac-unity-）。" class="headerlink" title="Fire1、Fire2、Fire3映射到left control、left alt、left shift （ mac-unity ）。"></a><code>Fire1</code>、<code>Fire2</code>、<code>Fire3</code>映射到<code>left control</code>、<code>left alt</code>、<code>left shift</code> （ mac-unity ）。</h5></li>
+<li><h5 id="Mouse-X、Mouse-Y映射到鼠标移动增量。"><a href="#Mouse-X、Mouse-Y映射到鼠标移动增量。" class="headerlink" title="Mouse X、Mouse Y映射到鼠标移动增量。"></a><code>Mouse X</code>、<code>Mouse Y</code>映射到鼠标移动增量。</h5></li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+<hr>
+<ul>
+<li><h3 id="添加新输入轴："><a href="#添加新输入轴：" class="headerlink" title="添加新输入轴："></a>添加新输入轴：</h3></li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/unity_tech/17_inputsys.png" alt=""></p>
+<p><br></p>
+<hr>
+<ul>
+<li><h3 id="虚拟轴："><a href="#虚拟轴：" class="headerlink" title="虚拟轴："></a>虚拟轴：</h3><ul>
+<li><h5 id="Input-GetAixs-param-string"><a href="#Input-GetAixs-param-string" class="headerlink" title="Input.GetAixs( @param: string )"></a><code>Input.GetAixs( @param: string )</code></h5></li>
+<li><h5 id="return-1-1"><a href="#return-1-1" class="headerlink" title="@return ( -1 ~ 1 )"></a>@return ( -1 ~ 1 )</h5></li>
+<li><h5 id="Input-GetAixsRaw-param-string"><a href="#Input-GetAixsRaw-param-string" class="headerlink" title="Input.GetAixsRaw( @param: string )"></a><code>Input.GetAixsRaw( @param: string )</code></h5></li>
+<li><h5 id="return-1-0-1"><a href="#return-1-0-1" class="headerlink" title="@return ( -1 || 0 || 1 )"></a>@return ( -1 || 0 || 1 )</h5></li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+<hr>
+<ul>
+<li><h3 id="鼠标输入："><a href="#鼠标输入：" class="headerlink" title="鼠标输入："></a>鼠标输入：</h3><ul>
+<li><h5 id="GetMouseButton-param-index-：鼠标按下，只会执行一次。"><a href="#GetMouseButton-param-index-：鼠标按下，只会执行一次。" class="headerlink" title="GetMouseButton( @param : index )：鼠标按下，只会执行一次。"></a><code>GetMouseButton( @param : index )</code>：鼠标按下，只会执行一次。</h5></li>
+<li><h5 id="GetMouseButtonDown-param-index-：鼠标一直按下状态。"><a href="#GetMouseButtonDown-param-index-：鼠标一直按下状态。" class="headerlink" title="GetMouseButtonDown( @param : index )：鼠标一直按下状态。"></a><code>GetMouseButtonDown( @param : index )</code>：鼠标一直按下状态。</h5></li>
+<li><h5 id="GetMouseButtonUp-param-index-：鼠标抬起，只会执行一次。"><a href="#GetMouseButtonUp-param-index-：鼠标抬起，只会执行一次。" class="headerlink" title="GetMouseButtonUp( @param : index )：鼠标抬起，只会执行一次。"></a><code>GetMouseButtonUp( @param : index )</code>：鼠标抬起，只会执行一次。</h5></li>
+<li><h5 id="param-0-左键-1-右键-2-中键"><a href="#param-0-左键-1-右键-2-中键" class="headerlink" title="@param : 0 : 左键 || 1 : 右键 || 2 : 中键"></a>@param : <code>0 : 左键 || 1 : 右键 || 2 : 中键</code></h5></li>
+<li><h5 id="return-bool"><a href="#return-bool" class="headerlink" title="@return bool"></a>@return bool</h5></li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+<hr>
+<ul>
+<li><h3 id="键盘输入："><a href="#键盘输入：" class="headerlink" title="键盘输入："></a>键盘输入：</h3><ul>
+<li><h5 id="GetButton-param-string-：按键按下，只会执行一次。"><a href="#GetButton-param-string-：按键按下，只会执行一次。" class="headerlink" title="GetButton( @param : string )：按键按下，只会执行一次。"></a><code>GetButton( @param : string )</code>：按键按下，只会执行一次。</h5></li>
+<li><h5 id="GetButtonDown-param-string-：按键一直按下状态。"><a href="#GetButtonDown-param-string-：按键一直按下状态。" class="headerlink" title="GetButtonDown( @param : string )：按键一直按下状态。"></a><code>GetButtonDown( @param : string )</code>：按键一直按下状态。</h5></li>
+<li><h5 id="GetButtonUp-param-string-：按键抬起，只会执行一次。"><a href="#GetButtonUp-param-string-：按键抬起，只会执行一次。" class="headerlink" title="GetButtonUp( @param : string )：按键抬起，只会执行一次。"></a><code>GetButtonUp( @param : string )</code>：按键抬起，只会执行一次。</h5></li>
+<li><h5 id="GetKey-param-string-KeyCode-：按键按下，只会执行一次。"><a href="#GetKey-param-string-KeyCode-：按键按下，只会执行一次。" class="headerlink" title="GetKey( @param : string || KeyCode )：按键按下，只会执行一次。"></a><code>GetKey( @param : string || KeyCode )</code>：按键按下，只会执行一次。</h5></li>
+<li><h5 id="GetKeyDown-param-string-KeyCode-：按键一直按下状态。"><a href="#GetKeyDown-param-string-KeyCode-：按键一直按下状态。" class="headerlink" title="GetKeyDown( @param : string || KeyCode )：按键一直按下状态。"></a><code>GetKeyDown( @param : string || KeyCode )</code>：按键一直按下状态。</h5></li>
+<li><h5 id="GetKeyUp-param-string-KeyCode-：按键抬起，只会执行一次。"><a href="#GetKeyUp-param-string-KeyCode-：按键抬起，只会执行一次。" class="headerlink" title="GetKeyUp( @param : string || KeyCode )：按键抬起，只会执行一次。"></a><code>GetKeyUp( @param : string || KeyCode )</code>：按键抬起，只会执行一次。</h5></li>
+<li><h5 id="return-bool-1"><a href="#return-bool-1" class="headerlink" title="@return bool"></a>@return bool</h5></li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+<hr>
+<ul>
+<li><h3 id="触摸："><a href="#触摸：" class="headerlink" title="触摸："></a>触摸：</h3><ul>
+<li><h5 id="Touch-GetTouch-0-phase-返回最近一帧的触摸状态。"><a href="#Touch-GetTouch-0-phase-返回最近一帧的触摸状态。" class="headerlink" title="Touch.GetTouch( 0 ).phase : 返回最近一帧的触摸状态。"></a><code>Touch.GetTouch( 0 ).phase</code> : 返回最近一帧的触摸状态。</h5></li>
+<li><h5 id="Input-touches-返回上一帧所有的触摸状态的对象列表（readonly）。"><a href="#Input-touches-返回上一帧所有的触摸状态的对象列表（readonly）。" class="headerlink" title="Input.touches : 返回上一帧所有的触摸状态的对象列表（readonly）。"></a><code>Input.touches</code> : 返回上一帧所有的触摸状态的对象列表（readonly）。</h5></li>
+<li><h5 id="Touch-deltaPosition-距离上次改变的距离增量。"><a href="#Touch-deltaPosition-距离上次改变的距离增量。" class="headerlink" title="Touch.deltaPosition : 距离上次改变的距离增量。"></a><code>Touch.deltaPosition</code> : 距离上次改变的距离增量。</h5></li>
+<li><h5 id="TouchPhase"><a href="#TouchPhase" class="headerlink" title="TouchPhase :"></a><code>TouchPhase</code> :</h5><ul>
+<li><p><code>Began</code> : 手指已触摸屏幕。</p>
+</li>
+<li><p><code>Moved</code> : 手指在屏幕上移动。</p>
+</li>
+<li><p><code>Stationary</code> : 手指触摸屏幕，但未移动。</p>
+</li>
+<li><p><code>Endedn</code> : 手指离开屏幕，触摸的最后状态。</p>
+</li>
+<li><p><code>Canceled</code> : 系统取消跟踪触摸，如用户把屏幕放到他脸上或超过五个接触同时发生。这是一个触摸的最后状态。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2017/04/01/Unity-Mesh/" class="prev" data-title="[Unity]Mesh"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2017/03/27/Unity-坐标系统/" class="next" data-title="[Unity]坐标系统"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

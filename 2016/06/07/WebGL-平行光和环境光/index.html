@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [WebGL]平行光和环境光 |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[WebGL]平行光和环境光</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2016-06-07</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/WebGL/">WebGL</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <a id="more"></a>
+<font color="red"><strong>WebGL完全没有提供任何对光照系统的内置支持！</strong></font>
+
+<font color="red"><strong>WebGL完全没有提供任何对光照系统的内置支持！</strong></font>
+
+<font color="red"><strong>WebGL完全没有提供任何对光照系统的内置支持！</strong></font>
+
+<hr>
+<font color="green"><strong>要做的就是向顶点着色器写入代码来处理光照。我们将要计算出光照对每个顶点的影响，并以此来调整顶点的颜色。虽然现在我们只准备计算一道光源，但计算多道光源也不复杂，只是重复这一过程然后把结果累加在一起.</strong></font>
+
+<hr>
+<font color="#FF7F50"><strong>按照光与物体表面的作用进行分类可分:</strong></font>
+
+<ul>
+<li><font color="#FF7F50">平行光: 从特定方向射入并只会照亮面对入射方向的物体.</font>
+</li>
+<li><font color="#FF7F50">环境光: 来自所有方向并且会照亮所有物体，不管这些物体的朝向如何.</font>
+
+</li>
+</ul>
+<hr>
+<font color="#8A2BE2"><strong>当光照在物体表面时, 会发生:</strong></font>
+
+<ul>
+<li><font color="#8A2BE2">漫反射( Diffuse ): 无论光的入射角度如何，都会向所有方向发生反射。反射光的亮度只和光线的入射角度有关，与观察角度无关。光线越平行于物体表面，则反射光越弱，表面越暗；光线越垂直于表面，反射光越强，表面越亮。</font>
+</li>
+<li><font color="#8A2BE2">镜面反射( Specular ): 反射光将按照和入射角相同的角度反射出来。这种情况下，你看到的物体反射出来的光的亮度，取决于你的眼睛和光反射的方向是否在同一直线上；也就是说，反射光的亮度不仅与光线的入射角有关，还与你的视线和物体表面之间的角度有关。镜面反射通常会造成物体表面上的“闪烁”和“高光”现象，镜面反射的强度也与物体的材质有关，无光泽的木材很少会有镜面反射发生，而高光泽的金属则会有大量镜面反射。</font>
+
+</li>
+</ul>
+<hr>
+<font color="#008B8B"><strong>所有的光线具有两个属性:</strong></font>
+
+<ul>
+<li><font color="#008B8B">发生漫反射光的RGB值</font>
+</li>
+<li><font color="#008B8B">发生镜面反射光的RGB值</font>
+
+</li>
+</ul>
+<hr>
+<font color="#556B2F"><strong>所有材质具有4个属性:</strong></font>
+
+<ul>
+<li><font color="#556B2F">反射的环境光RGB值</font>
+</li>
+<li><font color="#556B2F">反射的漫反射光RGB值</font>
+</li>
+<li><font color="#556B2F">反射的镜面反射光RGB值</font>
+</li>
+<li><font color="#556B2F">物体的反光度，它决定了镜面反射的细节</font>
+
+</li>
+</ul>
+<hr>
+<p><strong>此文先只考虑漫反射 ( 平行光 ) 和环境光, 忽略镜面反射.</strong></p>
+<ul>
+<li><p><strong>为每一个顶点指定一个法向量</strong></p>
+</li>
+<li><p><strong>指定光线的方向向量</strong></p>
+</li>
+<li><p><strong>在顶点着色器中计算法线向量和光线方向向量的点积，然后计算出相应的颜色值，同时加入环境光的分量.</strong></p>
+</li>
+</ul>
+<hr>
+<ul>
+<li><strong>添加顶点法向量信息</strong></li>
+</ul>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">var cubeNormalBuffer;</span><br><span class="line"></span><br><span class="line">function initBuffer()</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    /<span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span> 法线信息 <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span>/</span><br><span class="line"></span><br><span class="line">    cubeNormalBuffer = gl.createBuffer();</span><br><span class="line">    </span><br><span class="line">    gl.bindBuffer( gl.ARRAY_BUFFER, cubeNormalBuffer );</span><br><span class="line">    </span><br><span class="line">    var vertexNormals = [</span><br><span class="line">    </span><br><span class="line">        // Front face</span><br><span class="line">        0.0,  0.0,  1.0,</span><br><span class="line">        0.0,  0.0,  1.0,</span><br><span class="line">        0.0,  0.0,  1.0,</span><br><span class="line">        0.0,  0.0,  1.0,</span><br><span class="line"></span><br><span class="line">        // Back face</span><br><span class="line">        0.0,  0.0, -1.0,</span><br><span class="line">        0.0,  0.0, -1.0,</span><br><span class="line">        0.0,  0.0, -1.0,</span><br><span class="line">        0.0,  0.0, -1.0,</span><br><span class="line"></span><br><span class="line">        // Top face</span><br><span class="line">        0.0,  1.0,  0.0,</span><br><span class="line">        0.0,  1.0,  0.0,</span><br><span class="line">        0.0,  1.0,  0.0,</span><br><span class="line">        0.0,  1.0,  0.0,</span><br><span class="line"></span><br><span class="line">        // Bottom face</span><br><span class="line">        0.0, -1.0,  0.0,</span><br><span class="line">        0.0, -1.0,  0.0,</span><br><span class="line">        0.0, -1.0,  0.0,</span><br><span class="line">        0.0, -1.0,  0.0,</span><br><span class="line"></span><br><span class="line">        // Right face</span><br><span class="line">        1.0,  0.0,  0.0,</span><br><span class="line">        1.0,  0.0,  0.0,</span><br><span class="line">        1.0,  0.0,  0.0,</span><br><span class="line">        1.0,  0.0,  0.0,</span><br><span class="line"></span><br><span class="line">        // Left face</span><br><span class="line">        -1.0,  0.0,  0.0,</span><br><span class="line">        -1.0,  0.0,  0.0,</span><br><span class="line">        -1.0,  0.0,  0.0,</span><br><span class="line">        -1.0,  0.0,  0.0</span><br><span class="line">    ];</span><br><span class="line">    </span><br><span class="line">    gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( vertexNormals ), gl.STATIC_DRAW );</span><br><span class="line">    </span><br><span class="line">    cubeNormalBuffer.itemSize = 3;</span><br><span class="line">    cubeNormalBuffer.numItems = 24;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong><code>drawScene()</code></strong></li>
+</ul>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">function drawScene()</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    gl.<span class="keyword">bindBuffer( </span>gl.ARRAY_BUFFER, cubeNormalBuffer )<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    gl.vertexAttribPointer( <span class="keyword">shaderProgram.vertexNormalAttribute, </span>cubeNormalBuffer.itemSize, gl.FLOAT, flase, <span class="number">0</span>, <span class="number">0</span> )<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<font color="red"><br><em> <em>*只保留一种纹理过滤方式, 请自行更改.</em></em><br></font>
+
+<hr>
+<ul>
+<li><strong>当开启光照时:</strong></li>
+</ul>
+<figure class="highlight qml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">drawScene</span>(<span class="params"></span>)</span><br><span class="line"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">var</span> isLighting = <span class="built_in">document</span>.getElementById(<span class="string">"lighting"</span>).cheched;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 通知着色器, 是否使用光照效果.</span></span><br><span class="line">    gl.uniform( shaderProgram.uUseLight, isLighting );</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>( isLighting )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 传入环境光数值</span></span><br><span class="line">        gl.uniform3f(</span><br><span class="line">                shaderProgram.uAmbientColor,</span><br><span class="line">                <span class="built_in">parseFloat</span>( <span class="built_in">document</span>.getElementById(<span class="string">"ambientR"</span>).value ),</span><br><span class="line">                <span class="built_in">parseFloat</span>( <span class="built_in">document</span>.getElementById(<span class="string">"ambientG"</span>).value ),</span><br><span class="line">                <span class="built_in">parseFloat</span>( <span class="built_in">document</span>.getElementById(<span class="string">"ambientB"</span>).value )</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*</span><br><span class="line"></span><br><span class="line">         * 当平行光方向确定后, 需要计算出反方向, 才能正确的计算出权重</span><br><span class="line"></span><br><span class="line">        */</span></span><br><span class="line">        <span class="built_in">var</span> lightingDirection = <span class="keyword">new</span> okVec3(</span><br><span class="line">                <span class="built_in">parseFloat</span>( <span class="built_in">document</span>.getElementById(<span class="string">"lightDirectionX"</span>).value ),</span><br><span class="line">                <span class="built_in">parseFloat</span>( <span class="built_in">document</span>.getElementById(<span class="string">"lightDirectionY"</span>).value ),</span><br><span class="line">                <span class="built_in">parseFloat</span>( <span class="built_in">document</span>.getElementById(<span class="string">"lightDirectionZ"</span>).value )</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 计算反方向</span></span><br><span class="line">        <span class="built_in">var</span> adjustedLD = lightingDirection.normalize( <span class="literal">false</span> );</span><br><span class="line">        adjustedLD = okVec3MulVal( adjustedLD, <span class="number">-1.0</span> );</span><br><span class="line">        gl.uniform3fv(shaderProgram.uLightingDirection, adjustedLD.toArray() );</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 平行光颜色</span></span><br><span class="line">        gl.uniform3f(</span><br><span class="line">                shaderProgram.uDirectionalColor,</span><br><span class="line">                <span class="built_in">parseFloat</span>(<span class="built_in">document</span>.getElementById(<span class="string">"directionalR"</span>).value),</span><br><span class="line">                <span class="built_in">parseFloat</span>(<span class="built_in">document</span>.getElementById(<span class="string">"directionalG"</span>).value),</span><br><span class="line">                <span class="built_in">parseFloat</span>(<span class="built_in">document</span>.getElementById(<span class="string">"directionalB"</span>).value)</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    setMatrixUniforms();</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>在<code>&lt;body&gt;</code>标签中添加:</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span> <span class="attr">onload</span>=<span class="string">"WebGLStart();"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"checkbox"</span> <span class="attr">id</span>=<span class="string">"lighting"</span> <span class="attr">checked</span> /&gt;</span> 开启光照<span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">    （使用<span class="tag">&lt;<span class="name">code</span>&gt;</span>Page Up<span class="tag">&lt;/<span class="name">code</span>&gt;</span>和<span class="tag">&lt;<span class="name">code</span>&gt;</span>Page Down<span class="tag">&lt;/<span class="name">code</span>&gt;</span>键来进行缩放）</span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>平行光：<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">table</span> <span class="attr">style</span>=<span class="string">"border: 0; padding: 10px;"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">b</span>&gt;</span>方向：<span class="tag">&lt;/<span class="name">b</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>X: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">id</span>=<span class="string">"lightDirectionX"</span> <span class="attr">value</span>=<span class="string">"-0.25"</span> /&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>Y: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">id</span>=<span class="string">"lightDirectionY"</span> <span class="attr">value</span>=<span class="string">"-0.25"</span> /&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>Z: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">id</span>=<span class="string">"lightDirectionZ"</span> <span class="attr">value</span>=<span class="string">"-1.0"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">b</span>&gt;</span>颜色：<span class="tag">&lt;/<span class="name">b</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>R: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">id</span>=<span class="string">"directionalR"</span> <span class="attr">value</span>=<span class="string">"0.8"</span> /&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>G: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">id</span>=<span class="string">"directionalG"</span> <span class="attr">value</span>=<span class="string">"0.8"</span> /&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>B: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">id</span>=<span class="string">"directionalB"</span> <span class="attr">value</span>=<span class="string">"0.8"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>环境光：<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">table</span> <span class="attr">style</span>=<span class="string">"border: 0; padding: 10px;"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">b</span>&gt;</span>颜色：<span class="tag">&lt;/<span class="name">b</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>R: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">id</span>=<span class="string">"ambientR"</span> <span class="attr">value</span>=<span class="string">"0.2"</span> /&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>G: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">id</span>=<span class="string">"ambientG"</span> <span class="attr">value</span>=<span class="string">"0.2"</span> /&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>B: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">id</span>=<span class="string">"ambientB"</span> <span class="attr">value</span>=<span class="string">"0.2"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li><strong><code>setMatrixUniforms()</code></strong></li>
+</ul>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">setMatrixUniforms</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 模型视图矩阵的逆的转置矩阵</span></span><br><span class="line">    <span class="keyword">var</span> normalMatrix = mvMatrix.inverse().transpose();</span><br><span class="line">    </span><br><span class="line">    gl.uniformMatrix4fv( shaderProgram.uNMatrix, <span class="literal">false</span>, normalMatrix.toArray() );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<font color="red" size="4"><br><strong>参考:</strong><br><a href="http://www.songho.ca/opengl/gl_normaltransform.html" target="_blank" rel="external">OpenGL Normal Vector Transformation</a><br><a href="http://blog.csdn.net/christina123y/article/details/5963679" target="_blank" rel="external">shader中法线向量为什么要乘以模型视图矩阵的逆转置矩阵</a><br><a href="http://blog.csdn.net/pizi0475/article/details/7932913" target="_blank" rel="external">法线变换详解</a><br></font>
+
+<hr>
+<ul>
+<li><strong><code>initShader()</code></strong></li>
+</ul>
+<figure class="highlight hsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">function initShader()</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 法线</span></span><br><span class="line">    shaderProgram.uNMatrix  = gl.getUniformLocation( shaderProgram, <span class="string">"uNMatrix"</span> )<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 是否开启光照</span></span><br><span class="line">    shaderProgram.uUseLighting       = gl.getUniformLocation( shaderProgram, <span class="string">"uUseLighting"</span> )<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 环境光</span></span><br><span class="line">    shaderProgram.uAmbientColor      = gl.getUniformLocation( shaderProgram, <span class="string">"uAmbientColor"</span> )<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 平行光颜色</span></span><br><span class="line">    shaderProgram.uDirectionalColor  = gl.getUniformLocation( shaderProgram, <span class="string">"uDirectionalColor"</span> )<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 平行光方向</span></span><br><span class="line">    shaderProgram.uLightingDirection = gl.getUniformLocation( shaderProgram, <span class="string">"uLightingDirection"</span> )<span class="comment">;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li><strong>最后是<code>shader</code>程序</strong></li>
+</ul>
+<figure class="highlight hsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 顶点着色器 --&gt;</span><br><span class="line">&lt;script id=<span class="string">"shader-vs"</span> type=<span class="string">"shader/vs"</span>&gt;</span><br><span class="line"></span><br><span class="line">    attribute vec3 aPosition<span class="comment">;</span></span><br><span class="line">    <span class="comment">// 顶点法线</span></span><br><span class="line">    attribute vec3 aNormal<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    attribute vec2 aCoord<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 模型视图矩阵</span></span><br><span class="line">    uniform mat4 uMVMatrix<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 投影矩阵</span></span><br><span class="line">    uniform mat4 uPMatrix<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 法线计算矩阵( 模型视图矩阵的逆的转置 )</span></span><br><span class="line">    uniform mat4 uNMatrix<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 环境光</span></span><br><span class="line">    uniform vec3 uAmbientColor<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 方向光方向</span></span><br><span class="line">    uniform vec3 uLightingDirection<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 方向光颜色</span></span><br><span class="line">    uniform vec3 uDirectionalColor<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 是否开启光照</span></span><br><span class="line">    uniform bool uUseLighting<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    varying vec2 vCoord<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 传给片段着色器的RGB颜色权重</span></span><br><span class="line">    varying vec3 vLightingWeighting<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    void main( void )</span><br><span class="line">    &#123;</span><br><span class="line">        gl_Position = uPMatrix * uMVMatrix * vec4( aPosition, <span class="number">1.0</span> )<span class="comment">;</span></span><br><span class="line">        vCoord = aCoord<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>( !uUseLighting )</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 未开启光照</span></span><br><span class="line">            vLightingWeighting = vec3( <span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span> )<span class="comment">;</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 根据法线矩阵, 计算经过变换后的法线</span></span><br><span class="line">            vec3 transformNormal = ( uNMatrix * vec4( aNormal, <span class="number">1.0</span> ) ).xyz<span class="comment">;</span></span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 平行光反射权重</span></span><br><span class="line">            <span class="comment">// 垂直照射到平面, 反射最大化</span></span><br><span class="line">            float directionalLightWeighting = max( dot( transformNormal, uLightingDirection ), <span class="number">0.0</span> )<span class="comment">;</span></span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 漫反射权重 = 环境光 + 平行光颜色 * 权重</span></span><br><span class="line">            vLightingWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting<span class="comment">;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 片段着色器 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">id</span>=<span class="string">"shader-fs"</span> <span class="attr">type</span>=<span class="string">"shader/fs"</span>&gt;</span><span class="actionscript"></span><br><span class="line"></span><br><span class="line">    precision mediump float;</span><br><span class="line"></span><br><span class="line">    varying vec2 vCoord;</span><br><span class="line">    </span><br><span class="line">    varying vec3 vLightingWeighting;</span><br><span class="line"></span><br><span class="line">    uniform sampler2D uSampler;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> main( <span class="keyword">void</span> )</span><br><span class="line">    &#123;</span><br><span class="line">        vec4 textureColor = texture2D( uSampler, vec2( vCoord.s, vCoord.t ) );</span><br><span class="line">        </span><br><span class="line">        gl_FragColor = vec4( textureColor.rgb * vLightingWeighting, textureColor.a );</span><br><span class="line">    &#125;</span><br><span class="line"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p><a href="https://github.com/pepsigit/WebGL/blob/master/lesson_6.html" target="_blank" rel="external">源码</a></p>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2016/06/12/WebGL-深度缓存、透明度和混合/" class="prev" data-title="[WebGL]深度缓存、透明度和混合"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2016/06/06/WebGL-键盘输入和纹理过滤/" class="next" data-title="[WebGL]键盘输入和纹理过滤"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

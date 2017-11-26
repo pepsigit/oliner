@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [WebGL]渲染到纹理 |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[WebGL]渲染到纹理</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2016-06-23</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/WebGL/">WebGL</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/WebGL/14.gif" alt=""></p>
+<a id="more"></a>
+<ul>
+<li><strong><code>WebGLStart()</code></strong></li>
+</ul>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">function</span> <span class="selector-tag">WebGLStart</span>()</span><br><span class="line">&#123;</span><br><span class="line">	...</span><br><span class="line">	</span><br><span class="line">	<span class="selector-tag">initTextureFrameBuffer</span>();</span><br><span class="line">	</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="FrameBuffer"><a href="#FrameBuffer" class="headerlink" title="FrameBuffer"></a><font color="red"><strong>FrameBuffer</strong></font></h2><font color="#8B008B"><strong>FBO(Frame Buffer Object)是被推荐用于<code>将数据渲染到纹理对象</code>的扩展.</strong></font>
+
+<ul>
+<li><p><strong>创建</strong></p>
+  <figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fb = <span class="keyword">gl</span>.createFrameBuffer();</span><br><span class="line"><span class="keyword">gl</span>.bindFrameBuffer( <span class="keyword">gl</span>.FRAMEBUFFER, fb );</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>渲染到纹理, 需要一个纹理对象</strong></p>
+  <figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> texture = <span class="keyword">gl</span>.createTexture();</span><br><span class="line"></span><br><span class="line"><span class="keyword">gl</span>.bindTexture( <span class="keyword">gl</span>.TEXTURE_2D, texture );</span><br><span class="line"></span><br><span class="line"><span class="keyword">gl</span>.texParameteri(<span class="keyword">gl</span>.TEXTURE_2D, <span class="keyword">gl</span>.TEXTURE_WRAP_S, <span class="keyword">gl</span>.CLAMP_TO_EDGE);</span><br><span class="line"></span><br><span class="line"><span class="keyword">gl</span>.texParameteri(<span class="keyword">gl</span>.TEXTURE_2D, <span class="keyword">gl</span>.TEXTURE_WRAP_T, <span class="keyword">gl</span>.CLAMP_TO_EDGE);</span><br><span class="line"></span><br><span class="line"><span class="keyword">gl</span>.texParameteri(<span class="keyword">gl</span>.TEXTURE_2D, <span class="keyword">gl</span>.TEXTURE_MIN_FILTER, <span class="keyword">gl</span>.NEAREST);</span><br><span class="line"></span><br><span class="line"><span class="keyword">gl</span>.texParameteri(<span class="keyword">gl</span>.TEXTURE_2D, <span class="keyword">gl</span>.TEXTURE_MAG_FILTER, <span class="keyword">gl</span>.NEAREST);</span><br><span class="line"></span><br><span class="line"><span class="comment">// null : 没有上传任何数据, 只是让 gl 保留分配好的空间, 稍后会用到</span></span><br><span class="line"><span class="keyword">gl</span>.texImage2D(<span class="keyword">gl</span>.TEXTURE_2D, 0, <span class="keyword">gl</span>.RGBA, rttFramebuffer.width, rttFramebuffer.height, 0, <span class="keyword">gl</span>.RGBA, <span class="keyword">gl</span>.UNSIGNED_BYTE, null);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p><strong>将纹理对象与FBO绑定</strong></p>
+<blockquote>
+<p><strong>To render directly into a texture image, a specified image from a texture object can be attached as one of the logical buffers of the currently bound framebuffer object by calling the command.</strong></p>
+<p><strong>为了直接渲染至纹理图片中，一个纹理对象中指定的图片可用下面的方法绑定在当前使用的FBO上一个逻辑缓存中</strong></p>
+<font color="#87CEFA"><strong>void FramebufferTexture2D( enum target, enum attachment, enum textarget, uint texture, int level );</strong></font>
+
+
+
+</blockquote>
+</li>
+</ul>
+<ul>
+<li><font color="#FF8C00"><strong><code>target</code>: FRAMEBUFFER</strong></font>
+
+
+</li>
+</ul>
+<ul>
+<li><font color="#FF8C00"><strong><code>attachment</code>:</strong></font> 
+
+<ul>
+<li><font color="#FF8C00"><strong>If attachment is <code>COLOR_ATTACHMENT0</code>, then image must have a colorrenderable internal format.（色彩）</strong></font>
+</li>
+<li><font color="#FF8C00"><strong>If attachment is <code>DEPTH_ATTACHMENT</code>, then image must have a depthrenderable internal format.（深度）</strong></font>
+</li>
+<li><font color="#FF8C00"><strong>If attachment is <code>STENCIL_ATTACHMENT</code>, then image must have a stencilrenderable internal format.（模板）</strong></font>
+</li>
+</ul>
+</li>
+<li><font color="#FF8C00"><strong><code>textarget</code>:</strong></font>
+
+<ul>
+<li><font color="#FF8C00"><strong>TEXTURE_2D（two-dimensional texture）</strong></font>
+</li>
+<li><font color="#FF8C00"><strong>TEXTURE_CUBE_MAP_POSITIVE_X  （three-dimensional +x texture）</strong></font>
+</li>
+<li><font color="#FF8C00"><strong>TEXTURE_CUBE_MAP_POSITIVE_Y  （three-dimensional +y texture）</strong></font>
+</li>
+<li><font color="#FF8C00"><strong>TEXTURE_CUBE_MAP_POSITIVE_Z  （three-dimensional +z texture）</strong></font>
+</li>
+<li><font color="#FF8C00"><strong>TEXTURE_CUBE_MAP_NEGATIVE_X  （three-dimensional -x texture）</strong></font>
+</li>
+<li><font color="#FF8C00"><strong>TEXTURE_CUBE_MAP_NEGATIVE_Y  （three-dimensional -y texture）</strong></font>
+</li>
+<li><font color="#FF8C00"><strong>TEXTURE_CUBE_MAP_NEGATIVE_Z  （three-dimensional -z texture）</strong></font>
+</li>
+</ul>
+</li>
+<li><font color="#FF8C00"><strong><code>texture</code>: texture object</strong></font>
+</li>
+<li><font color="#FF8C00"><strong><code>level</code>: specifies the mipmap level of the texture image to be attached to the framebuffer and must be 0( Number Zero ).</strong></font>
+
+</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">gl</span><span class="selector-class">.framebufferTexture2D</span>(<span class="selector-tag">gl</span><span class="selector-class">.FRAMEBUFFER</span>, <span class="selector-tag">gl</span><span class="selector-class">.COLOR_ATTACHMENT0</span>, <span class="selector-tag">gl</span><span class="selector-class">.TEXTURE_2D</span>, <span class="selector-tag">texture</span>, 0);</span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li><p><strong>渲染缓冲区</strong></p>
+<blockquote>
+<p><strong>一个FBO它本身其实没有多大用处，要想让它能被更有效的利用，我们需要把它与一些可被渲染的缓冲区绑定在一起，这样的缓冲区可以是纹理，也可以是渲染缓冲区(renderbuffers)。一个渲染缓冲区，其实就是一个用来支持离屏渲染的缓冲区。</strong></p>
+<p><strong>在这里，我们要为我们的FBO指定一个渲染缓冲区。这样，当我们渲染的时候，我们便把这个渲染缓冲区作为FBO的一个深度缓存来使用。</strong></p>
+</blockquote>
+  <figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> renderBuffer = <span class="keyword">gl</span>.createRenderbuffer();</span><br><span class="line"><span class="keyword">gl</span>.bindRenderbuffer( <span class="keyword">gl</span>.RENDERBUFFER, renderBuffer );</span><br></pre></td></tr></table></figure>
+  <font color="red"><strong>这里有一个关键的地方，也就是我们生成的渲染缓冲对像，它本身并不会自动分配内存空间。因此我们要调用函数来给它分配指定大小的内存空间，在这里，我们分配一个固定大小的深度缓显空间。</strong></font>
+
+  <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gl.renderbufferStorage( gl<span class="selector-class">.RENDERBUFFER</span>, gl<span class="selector-class">.DEPTH_COMPONENT16</span>, <span class="attribute">width</span>, height );</span><br></pre></td></tr></table></figure>
+  <font color="red"><strong>与FBO绑定</strong></font>
+
+  <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">gl</span><span class="selector-class">.framebufferRenderbuffer</span>( <span class="selector-tag">gl</span><span class="selector-class">.FRAMEBUFFER</span>, <span class="selector-tag">gl</span><span class="selector-class">.DEPTH_ATTACHMENT</span>, <span class="selector-tag">gl</span><span class="selector-class">.RENDERBUFFER</span>, <span class="selector-tag">renderBuffer</span> );</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<ul>
+<li><strong>接下来再来看我们自己的<code>initTextureFrameBuffer()</code></strong></li>
+</ul>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 存储将被渲染到笔记本屏幕的 Frame Buffer</span></span><br><span class="line"><span class="keyword">var</span> rttFramebuffer;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 存储容纳笔记本屏幕渲染的纹理</span></span><br><span class="line"><span class="keyword">var</span> rttTexture;</span><br><span class="line"></span><br><span class="line">function initTextureFrameBuffer()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 创建 FBO</span></span><br><span class="line">    rttFramebuffer = <span class="keyword">gl</span>.createFramebuffer();</span><br><span class="line">    <span class="keyword">gl</span>.bindFramebuffer(<span class="keyword">gl</span>.FRAMEBUFFER, rttFramebuffer);</span><br><span class="line">    rttFramebuffer.width = 512;</span><br><span class="line">    rttFramebuffer.height = 512;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建纹理对象</span></span><br><span class="line">    rttTexture = <span class="keyword">gl</span>.createTexture();</span><br><span class="line">    <span class="keyword">gl</span>.bindTexture(<span class="keyword">gl</span>.TEXTURE_2D, rttTexture);</span><br><span class="line">    <span class="keyword">gl</span>.texParameteri(<span class="keyword">gl</span>.TEXTURE_2D, <span class="keyword">gl</span>.TEXTURE_MAG_FILTER, <span class="keyword">gl</span>.LINEAR);</span><br><span class="line">    <span class="keyword">gl</span>.texParameteri(<span class="keyword">gl</span>.TEXTURE_2D, <span class="keyword">gl</span>.TEXTURE_MIN_FILTER, <span class="keyword">gl</span>.LINEAR_MIPMAP_NEAREST);</span><br><span class="line">    <span class="keyword">gl</span>.generateMipmap(<span class="keyword">gl</span>.TEXTURE_2D);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">gl</span>.texImage2D(<span class="keyword">gl</span>.TEXTURE_2D, 0, <span class="keyword">gl</span>.RGBA, rttFramebuffer.width, rttFramebuffer.height, 0, <span class="keyword">gl</span>.RGBA, <span class="keyword">gl</span>.UNSIGNED_BYTE, null);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">gl</span>.framebufferTexture2D(<span class="keyword">gl</span>.FRAMEBUFFER, <span class="keyword">gl</span>.COLOR_ATTACHMENT0, <span class="keyword">gl</span>.TEXTURE_2D, rttTexture, 0);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建渲染缓冲区作为深度缓冲</span></span><br><span class="line">    <span class="keyword">var</span> renderbuffer = <span class="keyword">gl</span>.createRenderbuffer();</span><br><span class="line">    <span class="keyword">gl</span>.bindRenderbuffer(<span class="keyword">gl</span>.RENDERBUFFER, renderbuffer);</span><br><span class="line">    <span class="keyword">gl</span>.renderbufferStorage(<span class="keyword">gl</span>.RENDERBUFFER, <span class="keyword">gl</span>.DEPTH_COMPONENT16, rttFramebuffer.width, rttFramebuffer.height);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">gl</span>.framebufferRenderbuffer(<span class="keyword">gl</span>.FRAMEBUFFER, <span class="keyword">gl</span>.DEPTH_ATTACHMENT, <span class="keyword">gl</span>.RENDERBUFFER, renderbuffer);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 重置</span></span><br><span class="line">    <span class="keyword">gl</span>.bindTexture(<span class="keyword">gl</span>.TEXTURE_2D, null);</span><br><span class="line">    <span class="keyword">gl</span>.bindRenderbuffer(<span class="keyword">gl</span>.RENDERBUFFER, null);</span><br><span class="line">    <span class="keyword">gl</span>.bindFramebuffer(<span class="keyword">gl</span>.FRAMEBUFFER, null);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li><strong><code>drawScene()</code></strong></li>
+</ul>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var laptopAngle = <span class="number">0</span><span class="comment">;</span></span><br><span class="line"></span><br><span class="line">function drawScene() </span><br><span class="line">&#123;</span><br><span class="line">    gl.<span class="keyword">bindFramebuffer(gl.FRAMEBUFFER, </span>rttFramebuffer)<span class="comment">;</span></span><br><span class="line">    drawSceneOnLaptopScreen()<span class="comment">;</span></span><br><span class="line">    gl.<span class="keyword">bindFramebuffer( </span>gl.FRAMEBUFFER, null )<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong><code>drawSceneOnLaptopScreen()</code></strong></li>
+</ul>
+<figure class="highlight hsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">function drawSceneOnLaptopScreen()</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 是否开启高光</span></span><br><span class="line">    gl.uniform1i(shaderProgram.uUseSpecularHighlights, false)<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 环境光颜色</span></span><br><span class="line">    gl.uniform3f(shaderProgram.uAmbientLightingColor, <span class="number">0.2</span>, <span class="number">0.2</span>, <span class="number">0.2</span>)<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 点光源位置</span></span><br><span class="line">    gl.uniform3f(shaderProgram.uPointLightingLocation, <span class="number">0</span>, <span class="number">0</span>, <span class="number">-5</span>)<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 点光源颜色</span></span><br><span class="line">    gl.uniform3f(shaderProgram.uPointLightingDiffuseColor, <span class="number">0.8</span>, <span class="number">0.8</span>, <span class="number">0.8</span>)<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 是否使用纹理, 绘制的 月球 和 木箱 是有纹理的</span></span><br><span class="line">    gl.uniform1i(shaderProgram.uUseTextures, true)<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 材质反射的环境光RGB</span></span><br><span class="line">    gl.uniform3f(shaderProgram.uMaterialAmbientColor, <span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>)<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 材质反射的平行光RGB</span></span><br><span class="line">    gl.uniform3f(shaderProgram.uMaterialDiffuseColor, <span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>)<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 材质反射的镜面反射光RGB</span></span><br><span class="line">    gl.uniform3f(shaderProgram.uMaterialSpecularColor, <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>)<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 材质反光度</span></span><br><span class="line">    gl.uniform1f(shaderProgram.uMaterialShininess, <span class="number">0</span>)<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 材质自发光</span></span><br><span class="line">    gl.uniform3f(shaderProgram.uMaterialEmissiveColor, <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>)<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>其他变化不大, 请参照源码, 仔细研究.</strong></p>
+<hr>
+<p><a href="https://github.com/pepsigit/WebGL/blob/master/lesson_15.html" target="_blank" rel="external">源码</a></p>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2016/07/16/WebGL-置顶-WebGL系列教程/" class="prev" data-title="[WebGL]置顶:WebGL系列教程"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2016/06/22/WebGL-高光贴图/" class="next" data-title="[WebGL]高光贴图"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [Unity]Resources |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[Unity]Resources</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2017-02-26</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Unity/">Unity</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <hr>
+<p><br></p>
+<ul>
+<li><h3 id="资源放在Resources文件夹下"><a href="#资源放在Resources文件夹下" class="headerlink" title="资源放在Resources文件夹下"></a><font color="">资源放在Resources文件夹下</font></h3><ul>
+<li><h4 id="Assets-Resources"><a href="#Assets-Resources" class="headerlink" title="Assets/Resources/"></a><font color="">Assets/Resources/</font></h4></li>
+<li><h4 id="Assets-xxx-Resources"><a href="#Assets-xxx-Resources" class="headerlink" title="Assets/xxx/Resources/"></a><font color="">Assets/xxx/Resources/</font></h4></li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+<hr>
+<p><br></p>
+<ul>
+<li><h3 id="加载-Resources-Load"><a href="#加载-Resources-Load" class="headerlink" title="加载 : Resources.Load()"></a><font color="">加载 : <a href="https://docs.unity3d.com/ScriptReference/Resources.Load.html" target="_blank" rel="external">Resources.Load()</a></font></h3></li>
+</ul>
+<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Resources.<span class="keyword">Load</span>&lt;<span class="built_in">TYPE</span>&gt;(<span class="string">"从Resources目录起的路径，无需扩展名"</span>);</span><br></pre></td></tr></table></figure>
+<hr>
+<p><br></p>
+<ul>
+<li><h3 id="卸载-Resources-UnloadAsset"><a href="#卸载-Resources-UnloadAsset" class="headerlink" title="卸载 : Resources.UnloadAsset()"></a><font color="">卸载 : <a href="https://docs.unity3d.com/ScriptReference/Resources.UnloadAsset.html" target="_blank" rel="external">Resources.UnloadAsset()</a></font></h3></li>
+</ul>
+<figure class="highlight hsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. pure asset and cloned asset</span></span><br><span class="line"></span><br><span class="line">Resources.UnloadAsset( ... )<span class="comment">;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> UNITY_EDITOR</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. gameobject asset</span></span><br><span class="line">    DestroyImmediate( gameObject, true )<span class="comment">; // 彻底释放，资源无效，谨慎使用</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. cloned gameobject</span></span><br><span class="line">    Destroy( gameObject )<span class="comment">;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//推荐</span></span><br><span class="line">Resources.UnloadUnusedAssets()<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2017/02/27/Unity-AssetBundle/" class="prev" data-title="[Unity]AssetBundle"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2017/02/25/Unity-AssetDatabase/" class="next" data-title="[Unity]AssetDatabase"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

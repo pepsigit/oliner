@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [WebGL]三角锥和正方体 |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[WebGL]三角锥和正方体</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2016-06-02</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/WebGL/">WebGL</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <hr>
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/WebGL/3.gif" alt=""></p>
+<a id="more"></a>
+<p><strong>由效果图可知, 本实例将绘制的是3D物体.</strong></p>
+<hr>
+<ul>
+<li><strong><code>animate()</code></strong></li>
+</ul>
+<h4 id="前面绘制的是2D物体-所以为了一个好习惯-更改下变量名"><a href="#前面绘制的是2D物体-所以为了一个好习惯-更改下变量名" class="headerlink" title="前面绘制的是2D物体, 所以为了一个好习惯, 更改下变量名."></a><strong>前面绘制的是2D物体, 所以为了一个好习惯, 更改下变量名.</strong></h4><p><del>var rTri = 0;           // 三角形旋转角度</del><br><del>var rSquare = 0;        // 正方形旋转角度</del><br><del>rTri += ( 90.0 * subTime ) / 1000.0;</del><br><del>rSquare += ( 75.0 * subTime ) / 1000.0;</del></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable"><span class="keyword">var</span> rPyramid</span> = <span class="number">0</span>;           <span class="comment">// 三角锥旋转角度</span></span><br><span class="line"><span class="variable"><span class="keyword">var</span> rCube</span> = <span class="number">0</span>;              <span class="comment">// 正方体旋转角度</span></span><br><span class="line"><span class="variable"><span class="keyword">var</span> lastTime</span> = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 更新旋转角度</span></span><br><span class="line">function animate()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="variable"><span class="keyword">var</span> timeNow</span> = Date.now();</span><br><span class="line">    <span class="keyword">if</span>( <span class="number">0</span> != lastTime )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="variable"><span class="keyword">var</span> subTime</span> = timeNow - lastTime;</span><br><span class="line">        </span><br><span class="line">        rPyramid += ( <span class="number">90.0</span> * subTime ) / <span class="number">1000.0</span>;</span><br><span class="line">        rCube -= ( <span class="number">75.0</span> * subTime ) / <span class="number">1000.0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    lastTime = timeNow;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li><strong><code>drawScene()</code></strong></li>
+</ul>
+<h4 id="在绕轴旋转API中-更改我们的变量名"><a href="#在绕轴旋转API中-更改我们的变量名" class="headerlink" title="在绕轴旋转API中, 更改我们的变量名"></a><strong>在绕轴旋转API中, 更改我们的变量名</strong></h4><h5 id="mvMatrix-rotY-OAK-SPACE-LOCAL-rTri-true"><a href="#mvMatrix-rotY-OAK-SPACE-LOCAL-rTri-true" class="headerlink" title="_mvMatrix.rotY( OAK.SPACE_LOCAL, rTri, true );_"></a>_<del>mvMatrix.rotY( OAK.SPACE_LOCAL, rTri, true );</del>_</h5><p><code>mvMatrix.rotY( OAK.SPACE_LOCAL, rPyramid, true );</code></p>
+<h5 id="mvMatrix-rotX-OAK-SPACE-LOCAL-rSquare-true"><a href="#mvMatrix-rotX-OAK-SPACE-LOCAL-rSquare-true" class="headerlink" title="_mvMatrix.rotX( OAK.SPACE_LOCAL, rSquare, true );_"></a>_<del>mvMatrix.rotX( OAK.SPACE_LOCAL, rSquare, true );</del>_</h5><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 绕 ( 1.0, 1.0, 1.0 ) 轴旋转</span></span><br><span class="line">mvMatrix.rot( OAK.SPACE_LOCAL, rCube, <span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>, <span class="literal">true</span> );</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>绘制3D物体, 与2D物体不同的是, 我们需要更过的顶点位置信息和顶点颜色信息.</strong></p>
+<p><strong>首先, 还是好习惯的更改变量名.</strong></p>
+<p><del>var triangBuffer;</del><br><del>var squareBuffer;</del></p>
+<p><del>var triangColorBuffer;</del><br><del>var squareColorBuffer;</del></p>
+<ul>
+<li><strong><code>initBuffer()</code></strong></li>
+</ul>
+<figure class="highlight hsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 三角锥的顶点位置信息</span></span><br><span class="line">var pyramidBuffer<span class="comment">;</span></span><br><span class="line"><span class="comment">// 立方体的顶点位置信息</span></span><br><span class="line">var cubeBuffer<span class="comment">;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 三角锥的顶点颜色信息</span></span><br><span class="line">var pyramidColorBuffer<span class="comment">;</span></span><br><span class="line"><span class="comment">// 立方体的顶点颜色信息</span></span><br><span class="line">var cubeColorBuffer<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">function initBuffer()</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/*** 三角锥顶点位置信息 ***/</span></span><br><span class="line">    </span><br><span class="line">    gl.bindBuffer( gl.ARRAY_BUFFER, pyramidBuffer )<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    var vertices = [</span><br><span class="line">    </span><br><span class="line">        <span class="comment">// Front face</span></span><br><span class="line">         <span class="number">0.0</span>,  <span class="number">1.0</span>, <span class="number">0.0</span>,</span><br><span class="line">        <span class="number">-1.0</span>, <span class="number">-1.0</span>, <span class="number">1.0</span>,</span><br><span class="line">         <span class="number">1.0</span>, <span class="number">-1.0</span>, <span class="number">1.0</span>,</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Right face</span></span><br><span class="line">        <span class="number">0.0</span>,  <span class="number">1.0</span>,  <span class="number">0.0</span>,</span><br><span class="line">        <span class="number">1.0</span>, <span class="number">-1.0</span>,  <span class="number">1.0</span>,</span><br><span class="line">        <span class="number">1.0</span>, <span class="number">-1.0</span>, <span class="number">-1.0</span>,</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Back face</span></span><br><span class="line">         <span class="number">0.0</span>,  <span class="number">1.0</span>,  <span class="number">0.0</span>,</span><br><span class="line">         <span class="number">1.0</span>, <span class="number">-1.0</span>, <span class="number">-1.0</span>,</span><br><span class="line">        <span class="number">-1.0</span>, <span class="number">-1.0</span>, <span class="number">-1.0</span>,</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Left face</span></span><br><span class="line">         <span class="number">0.0</span>,  <span class="number">1.0</span>,  <span class="number">0.0</span>,</span><br><span class="line">        <span class="number">-1.0</span>, <span class="number">-1.0</span>, <span class="number">-1.0</span>,</span><br><span class="line">        <span class="number">-1.0</span>, <span class="number">-1.0</span>,  <span class="number">1.0</span></span><br><span class="line">    ]<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/*** 立方体顶点位置信息 ***/</span></span><br><span class="line">    </span><br><span class="line">    gl.bindBuffer( gl.ARRAY_BUFFER, cubeBuffer )<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    vertices = [</span><br><span class="line">    </span><br><span class="line">        <span class="comment">// Front face</span></span><br><span class="line">        <span class="number">-1.0</span>, <span class="number">-1.0</span>,  <span class="number">1.0</span>,</span><br><span class="line">         <span class="number">1.0</span>, <span class="number">-1.0</span>,  <span class="number">1.0</span>,</span><br><span class="line">         <span class="number">1.0</span>,  <span class="number">1.0</span>,  <span class="number">1.0</span>,</span><br><span class="line">        <span class="number">-1.0</span>,  <span class="number">1.0</span>,  <span class="number">1.0</span>,</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Back face</span></span><br><span class="line">        <span class="number">-1.0</span>, <span class="number">-1.0</span>, <span class="number">-1.0</span>,</span><br><span class="line">        <span class="number">-1.0</span>,  <span class="number">1.0</span>, <span class="number">-1.0</span>,</span><br><span class="line">         <span class="number">1.0</span>,  <span class="number">1.0</span>, <span class="number">-1.0</span>,</span><br><span class="line">         <span class="number">1.0</span>, <span class="number">-1.0</span>, <span class="number">-1.0</span>,</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Top face</span></span><br><span class="line">        <span class="number">-1.0</span>,  <span class="number">1.0</span>, <span class="number">-1.0</span>,</span><br><span class="line">        <span class="number">-1.0</span>,  <span class="number">1.0</span>,  <span class="number">1.0</span>,</span><br><span class="line">         <span class="number">1.0</span>,  <span class="number">1.0</span>,  <span class="number">1.0</span>,</span><br><span class="line">         <span class="number">1.0</span>,  <span class="number">1.0</span>, <span class="number">-1.0</span>,</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Bottom face</span></span><br><span class="line">        <span class="number">-1.0</span>, <span class="number">-1.0</span>, <span class="number">-1.0</span>,</span><br><span class="line">         <span class="number">1.0</span>, <span class="number">-1.0</span>, <span class="number">-1.0</span>,</span><br><span class="line">         <span class="number">1.0</span>, <span class="number">-1.0</span>,  <span class="number">1.0</span>,</span><br><span class="line">        <span class="number">-1.0</span>, <span class="number">-1.0</span>,  <span class="number">1.0</span>,</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Right face</span></span><br><span class="line">        <span class="number">1.0</span>, <span class="number">-1.0</span>, <span class="number">-1.0</span>,</span><br><span class="line">        <span class="number">1.0</span>,  <span class="number">1.0</span>, <span class="number">-1.0</span>,</span><br><span class="line">        <span class="number">1.0</span>,  <span class="number">1.0</span>,  <span class="number">1.0</span>,</span><br><span class="line">        <span class="number">1.0</span>, <span class="number">-1.0</span>,  <span class="number">1.0</span>,</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Left face</span></span><br><span class="line">        <span class="number">-1.0</span>, <span class="number">-1.0</span>, <span class="number">-1.0</span>,</span><br><span class="line">        <span class="number">-1.0</span>, <span class="number">-1.0</span>,  <span class="number">1.0</span>,</span><br><span class="line">        <span class="number">-1.0</span>,  <span class="number">1.0</span>,  <span class="number">1.0</span>,</span><br><span class="line">        <span class="number">-1.0</span>,  <span class="number">1.0</span>, <span class="number">-1.0</span></span><br><span class="line">    ]<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/*** 三角锥顶点颜色信息 ***/</span></span><br><span class="line">    </span><br><span class="line">    gl.bindBuffer( gl.ARRAY_BUFFER, pyramidColorBuffer )<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 三角锥每个面 3 个顶点颜色信息</span></span><br><span class="line">    vertices = [</span><br><span class="line">    </span><br><span class="line">        <span class="comment">// Front face</span></span><br><span class="line">        <span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>,</span><br><span class="line">        <span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>,</span><br><span class="line">        <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>,</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Right face</span></span><br><span class="line">        <span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>,</span><br><span class="line">        <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>,</span><br><span class="line">        <span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>,</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Back face</span></span><br><span class="line">        <span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>,</span><br><span class="line">        <span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>,</span><br><span class="line">        <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>,</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Left face</span></span><br><span class="line">        <span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>,</span><br><span class="line">        <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>,</span><br><span class="line">        <span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span></span><br><span class="line">    ]<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/*** 立方体顶点颜色信息 ***/</span></span><br><span class="line">    </span><br><span class="line">    gl.bindBuffer( gl.ARRAY_BUFFER, cubeColorBuffer )<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 24 个颜色信息与 24 个顶点一一对应</span></span><br><span class="line">    vertices =  [</span><br><span class="line">    </span><br><span class="line">        [<span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>], <span class="comment">// Front face</span></span><br><span class="line">        [<span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>], <span class="comment">// Back face</span></span><br><span class="line">        [<span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>], <span class="comment">// Top face</span></span><br><span class="line">        [<span class="number">1.0</span>, <span class="number">0.5</span>, <span class="number">0.5</span>, <span class="number">1.0</span>], <span class="comment">// Bottom face</span></span><br><span class="line">        [<span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>], <span class="comment">// Right face</span></span><br><span class="line">        [<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>]  <span class="comment">// Left face</span></span><br><span class="line">        </span><br><span class="line">    ]<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 使用循环来减少书写麻烦</span></span><br><span class="line">    var unpackedColors = []<span class="comment">;</span></span><br><span class="line">    <span class="keyword">for</span> (var i in vertices) &#123;</span><br><span class="line">        var <span class="keyword">color</span> = vertices[i]<span class="comment">;</span></span><br><span class="line">        <span class="keyword">for</span> (var j=<span class="number">0</span><span class="comment">; j &lt; 4; j++) &#123;</span></span><br><span class="line">            unpackedColors = unpackedColors.concat(<span class="keyword">color</span>)<span class="comment">;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>有三种方法可以画出一个立方体。</strong></p>
+<ul>
+<li><strong>使用三角形带( <code>Triangle Strip</code> ),  如果整个立方体是单色的, 那<code>Triangle Strip</code>方式可以很好的绘制我们想要的东西——首先，我们使用最开始的三个顶点来绘制一个三角面，之后，增加一个顶点(是<code>WebGL</code>目前并不支持的<code>quad strip</code> )，并和刚才绘制的三角形中最后两个顶点组合为一个新的三角面进行绘制，以此类推，直到完成整个绘制过程， 这非常简单高效，但可惜在这里我们不能使用这种技术，因为我们想要立方体在不同的面可以有不同的颜色，立方体中，每一个顶点都被三个不同的面所共享，因此我们需要每个顶点被独立使用三次。这样做十分的麻烦.</strong></li>
+<li><strong>我们可以采用一些投机取巧的方法来绘制这个我们需要的立方体，让我们先来绘制六个独立正方形，每一个正方形都是立方体的一个面，我们分别设置这些正方形的顶点和颜色。很好用，但是却并不是实用的好方法，因为每次独立的绘制调用都会带来额外的性能开销，我们应当将调用<code>drawArrays</code>的次数最小化来提高绘制的性能.</strong></li>
+<li><strong>最后一种选择就是将立方体指定为六个正方形，每个正方形有两个三角形构成，但是我们将让<code>WebGL</code>一次性完成这些图形的绘制。这个方法有点类似我们用三角形带制作立方体。但由于我们每次都是定义一个完整的三角形，而不是通过添加点来定义三角形，我们很容易来定义每一个面的颜色。这个方法的另一个好处就是它的代码是最简洁的。</strong></li>
+</ul>
+<hr>
+<p><strong>定义三角锥和立方体绘制的顶点索引<code>Buffer</code></strong></p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> pyramidIndexBuffer;</span><br><span class="line"><span class="keyword">var</span> cubeIndexBuffer;</span><br></pre></td></tr></table></figure>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">function initBuffer()</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/*** 三角锥顶点索引 ***/</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">gl</span>.bindBuffer( <span class="keyword">gl</span>.ELEMENT_ARRAY_BUFFER, pyramidIndexBuffer );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> pyramindVertexIndices = [</span><br><span class="line">        0, 1, 2,</span><br><span class="line">        3, 4, 5,</span><br><span class="line">        6, 7, 8,</span><br><span class="line">        9, 10, 11</span><br><span class="line">    ];</span><br><span class="line">            </span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/*** 立方体顶点索引 ***/</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">gl</span>.bindBuffer( <span class="keyword">gl</span>.ELEMENT_ARRAY_BUFFER, cubeIndexBuffer );</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 一个正方形面由 2 个三角形组成</span></span><br><span class="line">    <span class="keyword">var</span> cubeVertexIndices = [</span><br><span class="line">        0, 1, 2,      0, 2, 3,    <span class="comment">// Front face</span></span><br><span class="line">        4, 5, 6,      4, 6, 7,    <span class="comment">// Back face</span></span><br><span class="line">        8, 9, 10,     8, 10, 11,  <span class="comment">// Top face</span></span><br><span class="line">        12, 13, 14,   12, 14, 15, <span class="comment">// Bottom face</span></span><br><span class="line">        16, 17, 18,   16, 18, 19, <span class="comment">// Right face</span></span><br><span class="line">        20, 21, 22,   20, 22, 23  <span class="comment">// Left face</span></span><br><span class="line">    ];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li><strong>更改渲染方式</strong></li>
+</ul>
+<p><del>gl.drawArrays(gl.TRIANGLES, 0, triangBuffer.numItems);</del></p>
+<p><del>gl.drawArrays(gl.TRIANGLE_STRIP, 0, squareBuffer.numItems);</del></p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">function drawScene()</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    setMatrixUniforms();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 绑定三角锥顶点索引 Buffer</span></span><br><span class="line">    <span class="keyword">gl</span>.bindBuffer( <span class="keyword">gl</span>.ELEMENT_ARRAY_BUFFER, pyramidIndexBuffer );</span><br><span class="line"></span><br><span class="line">    <span class="comment">// @param mode      绘制方式</span></span><br><span class="line">    <span class="comment">// @param count     绘制图元的数量乘上一个图元的顶点数</span></span><br><span class="line">    <span class="comment">// @param type      索引类型</span></span><br><span class="line">    <span class="comment">// @param indices   索引存储位置的指针</span></span><br><span class="line">    <span class="keyword">gl</span>.drawElements( <span class="keyword">gl</span>.TRIANGLES, pyramidIndexBuffer.numItems, <span class="keyword">gl</span>.UNSIGNED_SHORT, 0 );</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    setMatrixUniforms();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 绑定立方体顶点索引 Buffer</span></span><br><span class="line">    <span class="keyword">gl</span>.bindBuffer( <span class="keyword">gl</span>.ELEMENT_ARRAY_BUFFER, cubeIndexBuffer );</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">gl</span>.drawElements( <span class="keyword">gl</span>.TRIANGLES, cubeIndexBuffer.numItems, <span class="keyword">gl</span>.UNSIGNED_SHORT, 0 );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><a href="https://github.com/pepsigit/WebGL/blob/master/lesson_3.html" target="_blank" rel="external">源码</a></p>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2016/06/06/WebGL-纹理载入/" class="prev" data-title="[WebGL]纹理载入"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2016/06/01/旋转/" class="next" data-title="[WebGL]旋转"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

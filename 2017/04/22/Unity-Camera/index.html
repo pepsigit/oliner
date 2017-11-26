@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [Unity]Camera |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[Unity]Camera</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2017-04-22</time></li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <p><br></p>
+<ul>
+<li><h2 id="Camera"><a href="#Camera" class="headerlink" title="Camera"></a>Camera</h2><code>摄像机</code></li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/unity_tech/21_camera.png" alt=""></p>
+<ul>
+<li><h3 id="Clear-Flag-清除标记"><a href="#Clear-Flag-清除标记" class="headerlink" title="Clear Flag : 清除标记"></a><code>Clear Flag</code> : 清除标记</h3><ul>
+<li><h4 id="Skybox-天空盒-默认项-。在屏幕空白处显示当前摄像机的天空盒，如果没有指定天空盒，则会显示默认背景色"><a href="#Skybox-天空盒-默认项-。在屏幕空白处显示当前摄像机的天空盒，如果没有指定天空盒，则会显示默认背景色" class="headerlink" title="Skybox : 天空盒(默认项)。在屏幕空白处显示当前摄像机的天空盒，如果没有指定天空盒，则会显示默认背景色"></a><code>Skybox</code> : 天空盒(默认项)。在屏幕空白处显示当前摄像机的天空盒，如果没有指定天空盒，则会显示默认背景色</h4></li>
+<li><h4 id="Solid-Color-如果没有设置天空盒，将默认显示此处设置的背景色"><a href="#Solid-Color-如果没有设置天空盒，将默认显示此处设置的背景色" class="headerlink" title="Solid Color : 如果没有设置天空盒，将默认显示此处设置的背景色"></a><code>Solid Color</code> : 如果没有设置天空盒，将默认显示此处设置的背景色</h4></li>
+<li><h4 id="Depth-Only-仅深度，该模式用于对象不被裁剪"><a href="#Depth-Only-仅深度，该模式用于对象不被裁剪" class="headerlink" title="Depth Only : 仅深度，该模式用于对象不被裁剪"></a><code>Depth Only</code> : 仅深度，该模式用于对象不被裁剪</h4></li>
+<li><h4 id="Don-39-t-Clear-不清除，该模式不清楚任何颜色和或深度缓存，但这样做每帧渲染的结果都会叠加在下一帧之上。一般与自定义的Shader-着色器-配合使用"><a href="#Don-39-t-Clear-不清除，该模式不清楚任何颜色和或深度缓存，但这样做每帧渲染的结果都会叠加在下一帧之上。一般与自定义的Shader-着色器-配合使用" class="headerlink" title="Don&#39;t Clear : 不清除，该模式不清楚任何颜色和或深度缓存，但这样做每帧渲染的结果都会叠加在下一帧之上。一般与自定义的Shader(着色器)配合使用"></a><code>Don&#39;t Clear</code> : 不清除，该模式不清楚任何颜色和或深度缓存，但这样做每帧渲染的结果都会叠加在下一帧之上。一般与自定义的Shader(着色器)配合使用</h4></li>
+</ul>
+</li>
+<li><h3 id="Background-背景色"><a href="#Background-背景色" class="headerlink" title="Background : 背景色"></a><code>Background</code> : 背景色</h3></li>
+<li><h3 id="Culling-Mask-剔除遮罩，根据对象所指定的层来控制渲染的对象"><a href="#Culling-Mask-剔除遮罩，根据对象所指定的层来控制渲染的对象" class="headerlink" title="Culling Mask : 剔除遮罩，根据对象所指定的层来控制渲染的对象"></a><code>Culling Mask</code> : 剔除遮罩，根据对象所指定的层来控制渲染的对象</h3></li>
+<li><h3 id="Projection-投影方式"><a href="#Projection-投影方式" class="headerlink" title="Projection : 投影方式"></a><code>Projection</code> : 投影方式</h3><ul>
+<li><h4 id="Perspective-透视投影"><a href="#Perspective-透视投影" class="headerlink" title="Perspective : 透视投影"></a><code>Perspective</code> : 透视投影</h4><ul>
+<li><h3 id="Field-of-View-视野范围"><a href="#Field-of-View-视野范围" class="headerlink" title="Field of View : 视野范围"></a><code>Field of View</code> : 视野范围</h3></li>
+</ul>
+</li>
+<li><h4 id="Orthographic-正交投影"><a href="#Orthographic-正交投影" class="headerlink" title="Orthographic : 正交投影"></a><code>Orthographic</code> : 正交投影</h4><ul>
+<li><h3 id="Size-视野框大小"><a href="#Size-视野框大小" class="headerlink" title="Size : 视野框大小"></a><code>Size</code> : 视野框大小</h3></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><h3 id="Clipping-Planes-剪裁平面，摄像机的渲染范围"><a href="#Clipping-Planes-剪裁平面，摄像机的渲染范围" class="headerlink" title="Clipping Planes :  剪裁平面，摄像机的渲染范围"></a><code>Clipping Planes</code> :  剪裁平面，摄像机的渲染范围</h3></li>
+<li><h3 id="Viewport-Rect-标准视图矩形，用四个数值来控制摄像机的视图在屏幕中的位置及大小，该项使用屏幕坐标系，数值在0-1之间"><a href="#Viewport-Rect-标准视图矩形，用四个数值来控制摄像机的视图在屏幕中的位置及大小，该项使用屏幕坐标系，数值在0-1之间" class="headerlink" title="Viewport Rect : 标准视图矩形，用四个数值来控制摄像机的视图在屏幕中的位置及大小，该项使用屏幕坐标系，数值在0~1之间"></a><code>Viewport Rect</code> : 标准视图矩形，用四个数值来控制摄像机的视图在屏幕中的位置及大小，该项使用屏幕坐标系，数值在<code>0~1</code>之间</h3></li>
+<li><h3 id="Depth-深度-，用于控制摄像机的渲染顺序，值大的摄像机将被渲染在较小值的摄像机之上"><a href="#Depth-深度-，用于控制摄像机的渲染顺序，值大的摄像机将被渲染在较小值的摄像机之上" class="headerlink" title="Depth : 深度 ，用于控制摄像机的渲染顺序，值大的摄像机将被渲染在较小值的摄像机之上"></a><code>Depth</code> : 深度 ，用于控制摄像机的渲染顺序，值大的摄像机将被渲染在较小值的摄像机之上</h3></li>
+<li><h3 id="Rendering-Path-渲染路径"><a href="#Rendering-Path-渲染路径" class="headerlink" title="Rendering Path : 渲染路径"></a><code>Rendering Path</code> : <a href="http://www.jianshu.com/p/9eb900d3b0ee" target="_blank" rel="external">渲染路径</a></h3><ul>
+<li><h4 id="Use-Player-Settings-使用Project-Settings-gt-Player中的设置"><a href="#Use-Player-Settings-使用Project-Settings-gt-Player中的设置" class="headerlink" title="Use Player Settings : 使用Project Settings-&gt;Player中的设置"></a><code>Use Player Settings</code> : 使用<code>Project Settings-&gt;Player</code>中的设置</h4></li>
+<li><h4 id="Forward-快速渲染，摄像机将对所有对象按每种材质一个通道的方式来渲染"><a href="#Forward-快速渲染，摄像机将对所有对象按每种材质一个通道的方式来渲染" class="headerlink" title="Forward : 快速渲染，摄像机将对所有对象按每种材质一个通道的方式来渲染"></a><code>Forward</code> : 快速渲染，摄像机将对所有对象按每种材质一个通道的方式来渲染</h4></li>
+<li><h4 id="Deferred-延迟光照"><a href="#Deferred-延迟光照" class="headerlink" title="Deferred : 延迟光照"></a><code>Deferred</code> : 延迟光照</h4></li>
+<li><h4 id="Legacy-Vertex-Lit-顶点光照，将所有的对象做为顶点光照对象来渲染"><a href="#Legacy-Vertex-Lit-顶点光照，将所有的对象做为顶点光照对象来渲染" class="headerlink" title="Legacy Vertex Lit : 顶点光照，将所有的对象做为顶点光照对象来渲染"></a><code>Legacy Vertex Lit</code> : 顶点光照，将所有的对象做为顶点光照对象来渲染</h4></li>
+<li><h4 id="Legacy-Deferred-light-prepass-传统延迟光照"><a href="#Legacy-Deferred-light-prepass-传统延迟光照" class="headerlink" title="Legacy Deferred(light prepass) : 传统延迟光照"></a><code>Legacy Deferred(light prepass)</code> : 传统延迟光照</h4></li>
+</ul>
+</li>
+<li><h3 id="Target-Texture-目标纹理"><a href="#Target-Texture-目标纹理" class="headerlink" title="Target Texture : 目标纹理"></a><code>Target Texture</code> : 目标纹理</h3></li>
+<li><h3 id="Occlusion-Culling-遮挡剔除"><a href="#Occlusion-Culling-遮挡剔除" class="headerlink" title="Occlusion Culling : 遮挡剔除"></a><code>Occlusion Culling</code> : 遮挡剔除</h3></li>
+<li><h3 id="HDR-高动态光照渲染，用于启用摄像机的高动态范围渲染功能，因为人眼对的范围的光照强度更为敏感，所有用高动态范围渲染能让场景变得更为真实，光照的变化不会显得太突兀"><a href="#HDR-高动态光照渲染，用于启用摄像机的高动态范围渲染功能，因为人眼对的范围的光照强度更为敏感，所有用高动态范围渲染能让场景变得更为真实，光照的变化不会显得太突兀" class="headerlink" title="HDR : 高动态光照渲染，用于启用摄像机的高动态范围渲染功能，因为人眼对的范围的光照强度更为敏感，所有用高动态范围渲染能让场景变得更为真实，光照的变化不会显得太突兀"></a><code>HDR</code> : 高动态光照渲染，用于启用摄像机的高动态范围渲染功能，因为人眼对的范围的光照强度更为敏感，所有用高动态范围渲染能让场景变得更为真实，光照的变化不会显得太突兀</h3></li>
+</ul>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2017/04/22/Unity-Material/" class="prev" data-title="[Unity]Material"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2017/04/18/Lua-仿实现C-常量数组/" class="next" data-title="[Lua]仿实现C++常量数组"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

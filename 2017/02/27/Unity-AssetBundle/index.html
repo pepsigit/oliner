@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [Unity]AssetBundle |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[Unity]AssetBundle</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2017-02-27</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Unity/">Unity</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <hr>
+<p><br></p>
+<ul>
+<li><h3 id="制作AssetBundle"><a href="#制作AssetBundle" class="headerlink" title="制作AssetBundle"></a><font color="">制作AssetBundle</font></h3></li>
+</ul>
+<figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/*示例代码为基本模型*/</span></span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"><span class="keyword">using</span> UnityEditor;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">xxx</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="comment">// Use BuildPipeline.BuildAssetBundles </span></span><br><span class="line">    [MenuItem(<span class="string">"Publish/Build Bundle"</span>)]</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> MyBuildBundle()</span><br><span class="line">    &#123;</span><br><span class="line">        AssetBundleBuild[] bundles = <span class="keyword">new</span> AssetBundleBuild[<span class="number">1</span>];</span><br><span class="line">        bundles[<span class="number">0</span>].assetBundleName = <span class="string">"包名.unity3d"</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">string</span>[] strBundlesName = <span class="keyword">new</span> <span class="keyword">string</span>[<span class="number">1</span>];</span><br><span class="line">        strBundlesName[<span class="number">0</span>] = <span class="string">"Assets/xxx/xxx.xxx"</span>;</span><br><span class="line"></span><br><span class="line">        bundles[<span class="number">0</span>].assetNames = strBundlesName;</span><br><span class="line"></span><br><span class="line">        BuildPipeline.BuildAssetBundles( <span class="string">"Assets/xxx"</span>, bundles, </span><br><span class="line">                                        BuildAssetBundleOptions.xxx | BuildAssetBundleOptions.xxx2, BuildTarget.xxx );</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//////////////////////////////////////////////////////////////////////////</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Use BuildPipeline.BuildAssetBundle </span></span><br><span class="line">    [MenuItem(<span class="string">"Publish/Build Bundle with old api"</span>)]</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> MyBuildBundle2()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">Object</span> mainAsset = <span class="literal">null</span>;</span><br><span class="line">        <span class="built_in">Object</span>[] assets = <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">string</span> bundleName = <span class="keyword">string</span>.Empty;</span><br><span class="line"></span><br><span class="line">        mainAsset = AssetDatabase.LoadAssetAtPath&lt;<span class="built_in">Object</span>&gt;(<span class="string">"Assets/xxx/xxx.xxx"</span>);</span><br><span class="line">        <span class="comment">// or</span></span><br><span class="line">        <span class="comment">// assets = &#123; obj1, obj2, obj3, ... &#125;</span></span><br><span class="line"></span><br><span class="line">        BuildAssetBundleOptions bo = BuildAssetBundleOptions.xxx | BuildAssetBundleOptions.xxx2;</span><br><span class="line"></span><br><span class="line">        BuildPipeline.BuildAssetBundle( mainAsset, <span class="literal">null</span>, <span class="string">"Assets/xxx/xxx.xxx"</span>, bo, BuildTarget.xxx );</span><br><span class="line">        <span class="comment">// or</span></span><br><span class="line">        <span class="comment">//BuildPipeline.BuildAssetBundle( null, assets, "Assets/xxx/xxx.xxx", bo, BuildTarget.xxx );</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><br></p>
+<ul>
+<li><h3 id="加载AssetBundle"><a href="#加载AssetBundle" class="headerlink" title="加载AssetBundle"></a><font color="">加载AssetBundle</font></h3></li>
+</ul>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/*示例代码为基本模型*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">xxx</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Start</span>(<span class="params"></span>)</span><br><span class="line">    </span>&#123;</span><br><span class="line">        StartCoroutine( Load() );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">IEnumetator <span class="title">Load</span>(<span class="params"></span>)</span><br><span class="line">    </span>&#123;</span><br><span class="line">        WWW www = <span class="keyword">new</span> WWW( <span class="string">"file://"</span> + Application.dataPath + <span class="string">"/xxx.unity3d"</span> );   </span><br><span class="line"></span><br><span class="line">        <span class="keyword">yield</span> <span class="keyword">return</span> www;</span><br><span class="line"></span><br><span class="line">        AssetBundle bundle = www.assetBundle;</span><br><span class="line"></span><br><span class="line">        <span class="comment"><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span>//</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 1. 同步加载</span></span><br><span class="line">        GameObject ib = bundle.LoadAsset(<span class="string">"xxx.xxx"</span>);</span><br><span class="line">        Instantiate( ib ) <span class="keyword">as</span> GameObject;</span><br><span class="line"></span><br><span class="line">        <span class="comment"><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span>//</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. 异步加载</span></span><br><span class="line">        <span class="comment">//AssetBundleRequest request = bundle.LoadAssetAsync("xxx.xxx");</span></span><br><span class="line">        <span class="comment">//yield return request;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//GameObject ib2 = request.asset as GameObject; </span></span><br><span class="line">        <span class="comment">//Instantiate( ib2 );</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span><span class="doctag">///</span>//</span></span><br><span class="line"></span><br><span class="line">        www.Dispose();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><br></p>
+<ul>
+<li><h3 id="使用AssetBundle管理资源之间的依赖"><a href="#使用AssetBundle管理资源之间的依赖" class="headerlink" title="使用AssetBundle管理资源之间的依赖"></a><font color="">使用AssetBundle管理资源之间的依赖</font></h3></li>
+</ul>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/*示例代码为基本模型*/</span></span><br><span class="line"></span><br><span class="line">[MenuItem(<span class="string">"Publish/Build Dependency Bundle"</span>)]</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">void</span> <span class="title">MyBuildBundle3</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    BuildPipeline.PushAssetDependencies();          <span class="comment">// (1)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将公用依赖包入栈</span></span><br><span class="line">    BuildPipeline.BuildAssetBundles( ... );</span><br><span class="line"></span><br><span class="line">    BuildPipeline.PushAssetDependencies();          <span class="comment">// (2)</span></span><br><span class="line">    <span class="comment">// 打包使用依赖包的资源</span></span><br><span class="line">    BuildPipeline.BuildAssetBundles( ... );</span><br><span class="line">    <span class="comment">// 出栈， 栈中留有依赖包</span></span><br><span class="line">    BuildPipeline.PopAssetDependencies();           <span class="comment">// (2)</span></span><br><span class="line"></span><br><span class="line">    BuildPipeline.PushAssetDependencies();          <span class="comment">// (3)</span></span><br><span class="line">    <span class="comment">// 打包使用依赖包的资源</span></span><br><span class="line">    BuildPipeline.BuildAssetBundles( ... );</span><br><span class="line">    <span class="comment">// 出栈， 栈中留有依赖包</span></span><br><span class="line">    BuildPipeline.PopAssetDependencies();           <span class="comment">// (3)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将依赖包出栈</span></span><br><span class="line">    BuildPipeline.PopAssetDependencies();           <span class="comment">// (1)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><br></p>
+<ul>
+<li><h3 id="打包、加载场景"><a href="#打包、加载场景" class="headerlink" title="打包、加载场景"></a><font color="">打包、加载场景</font></h3></li>
+</ul>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/*打包*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">BuildPipeline.BuildPlayer( </span>new <span class="keyword">string[]&#123; </span><span class="string">"Assets/xxx.unity"</span> &#125;, <span class="string">"Assets/xxx.unity3d"</span>,</span><br><span class="line">                                <span class="keyword">BuildTarget.xxx, </span><span class="keyword">BuildOptions.xxx </span>)<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/*加载*/</span></span><br><span class="line"></span><br><span class="line">WWW www = <span class="attr">...</span></span><br><span class="line"></span><br><span class="line"><span class="attr">...</span></span><br><span class="line"></span><br><span class="line">Application.LoadLevel(<span class="string">"SceneName"</span>);</span><br><span class="line"><span class="comment">// or </span></span><br><span class="line"><span class="comment">// Application.LoadLevelAsync("SceneName");</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p><br></p>
+<ul>
+<li><h3 id="资源的生命周期和内存管理"><a href="#资源的生命周期和内存管理" class="headerlink" title="资源的生命周期和内存管理"></a><font color="">资源的生命周期和内存管理</font></h3><ul>
+<li><a href="http://www.cnblogs.com/88999660/archive/2013/03/15/2961663.html" target="_blank" rel="external">–&gt; 通读这个吧 &lt;–</a></li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2017/02/27/Unity-编辑器内资源加载/" class="prev" data-title="[Unity]编辑器内资源加载"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2017/02/26/Unity-Resources/" class="next" data-title="[Unity]Resources"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [Xcode]Xcode OpenGL-ES Tools Overview |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[Xcode]Xcode OpenGL-ES Tools Overview</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2016-07-25</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Xcode/">Xcode</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <h1 id="Xcode-OpenGL-ES-工具"><a href="#Xcode-OpenGL-ES-工具" class="headerlink" title="Xcode OpenGL ES 工具"></a><font color="#9400D3"><strong>Xcode OpenGL ES 工具</strong></font></h1><font color="#00BFFF"><strong>在开发阶段中，Xcode的调试工具、分析工具和优化OpenGL-ES应用程序工具是很有用的。当你在使用Xcode设计和建造你的渲染器时，你可以通过FPS调试仪和应用程序的GPU分析报告，快速的找出性能存在的问题。一旦找到问题所在，捕获frame，可以使用OpenGL-ES Frame Debugger准确的找到渲染问题和解决性能问题。</strong></font>
+
+<font color="#00BFFF"><strong>有效地使用Xcode OpenGL ES特性需要熟悉一些Xcode的调试接口</strong></font>
+
+<a id="more"></a>
+<hr>
+<ul>
+<li><h2 id="使用FPS调试仪和GPU报告"><a href="#使用FPS调试仪和GPU报告" class="headerlink" title="使用FPS调试仪和GPU报告"></a><font color="#FF1493"><strong>使用FPS调试仪和GPU报告</strong></font></h2></li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/xcode/xcode_gpu_gauge_and_report_2x.png" alt=""></p>
+<font color="#00BFFF"><strong>FPS调试仪和附带的GPU报告，如图所示，当应用程序运行时，提供了高层次的概要信息。当我们在开发应用时，通过监视这些信息，可以发现性能问题何时出现，并考虑我们需要优化的地方。</strong></font>
+
+<h4 id="Notice"><a href="#Notice" class="headerlink" title="Notice:"></a><font color="red"><strong>Notice:</strong></font></h4><ul>
+<li><font color="red"><strong>要使用这个功能，需要真机连接到运行Xcode的Mac。</strong></font>
+</li>
+<li><font color="red"><strong>我的Xcode版本是7.1，所以：</strong></font>
+
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/xcode/1.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/xcode/2.png" alt=""></p>
+<hr>
+<ul>
+<li><h2 id="捕获Frame"><a href="#捕获Frame" class="headerlink" title="捕获Frame"></a><font color="#FF1493"><strong>捕获Frame</strong></font></h2></li>
+</ul>
+<blockquote>
+<font color="#32CD32"><strong>这里我使用的Cocos工具创建的预编译库Demo，只为探索功能，所以节省编译源码的时间，况且，我们不需要更改源码。</strong></font>
+
+
+</blockquote>
+<font color="#7B68EE"><strong>真机运行Demo</strong></font>
+
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/xcode/3.png" alt=""></p>
+<font color="#BA55D3"><strong>我们可以看到CPU和GPU的消耗时间毫秒数，如果想要达到60 FPS，那么CPU和GPU时间应该只有16毫秒，30FPS的话是32毫秒。这里例子中可以看到GPU消耗时间多一点。</strong></font>
+
+<hr>
+<font color="#C71585"><strong>为了获得更好的信息，我们可以捕获一个GPU Trace，来查看每帧渲染内部的具体流程，我们在Debug的输出窗口上，点击照相机图标获取整个Frame。</strong></font>
+
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/xcode/4.png" alt=""></p>
+<hr>
+<font color="#7B68EE"><strong>面板信息</strong></font>
+
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/xcode/5.png" alt=""></p>
+<hr>
+<font color="#7B68EE"><strong>我们可以看到，在<code>Program #4</code>里面的<code>54</code>指令耗时占用非常大的一部分</strong></font>
+
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/xcode/6.png" alt=""></p>
+<hr>
+<font color="#7B68EE"><strong>在<code>Objects</code>面板中，我们可以看到<code>Buffer</code>、<code>VAO</code>、<code>Texture</code>和<code>Shader Program</code>。有兴趣的可以双击查看信息。</strong></font>
+
+<hr>
+<font color="#7B68EE"><strong>下面我们来看很耗时的那个<code>Program #4</code>，双击，会在副窗口看见Shader程序</strong></font>
+
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/xcode/7.png" alt=""></p>
+<hr>
+<font color="#7B68EE"><strong>我们可以根据实际情况，来对耗时的shader进行修改，然后点击副窗口最下角的刷新，可以看到修改后的效果。如图，蓝色的修改前的情况，绿色是当前的情况。</strong></font>
+
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/xcode/8.png" alt=""></p>
+<blockquote>
+<p><strong>这里已经是最基本的shader程序了，不需要任何更改，我仅仅是刷新了一下。</strong></p>
+</blockquote>
+<hr>
+<h3 id="总结：虽然从创建Demo、一点点翻译文档学习开始有点难，但经过几个小时的坚持，也初版了这篇文章，最后学到了这块知识，也是蛮高兴。加油吧！！"><a href="#总结：虽然从创建Demo、一点点翻译文档学习开始有点难，但经过几个小时的坚持，也初版了这篇文章，最后学到了这块知识，也是蛮高兴。加油吧！！" class="headerlink" title="总结：虽然从创建Demo、一点点翻译文档学习开始有点难，但经过几个小时的坚持，也初版了这篇文章，最后学到了这块知识，也是蛮高兴。加油吧！！"></a><font color="#FA8072"><strong>总结：虽然从创建Demo、一点点翻译文档学习开始有点难，但经过几个小时的坚持，也初版了这篇文章，最后学到了这块知识，也是蛮高兴。加油吧！！</strong></font></h3>
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2017/02/24/Unity-资源类型和资源的管理方式/" class="prev" data-title="[Unity]资源类型和资源的管理方式"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2016/07/16/WebGL-置顶-WebGL系列教程/" class="next" data-title="[WebGL]置顶:WebGL系列教程"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

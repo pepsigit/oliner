@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [Unity]Time |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[Unity]Time</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2017-04-22</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Unity/">Unity</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <p><br></p>
+<hr>
+<h2 id="Time"><a href="#Time" class="headerlink" title="Time"></a>Time</h2><table>
+<thead>
+<tr>
+<th style="text-align:left">变量</th>
+<th style="text-align:left">描述</th>
+<th style="text-align:left">权限</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Time.time</td>
+<td style="text-align:left">从游戏开始到现在所用的时间，会随着游戏暂停而停止</td>
+<td style="text-align:left"><font color="red">只读</font></td>
+</tr>
+<tr>
+<td style="text-align:left">Time.timeSinceLevelLoad</td>
+<td style="text-align:left">从当前场景加载到目前为止的时间，会随着游戏暂停而停止（秒）</td>
+<td style="text-align:left"><font color="red">只读</font></td>
+</tr>
+<tr>
+<td style="text-align:left">Time.deltaTime</td>
+<td style="text-align:left">从上一帧到当前帧的时间（秒）</td>
+<td style="text-align:left"><font color="red">只读</font></td>
+</tr>
+<tr>
+<td style="text-align:left">Time.fixedTime</td>
+<td style="text-align:left">FixedUpdate已经执行的时间</td>
+<td style="text-align:left"><font color="red">只读</font></td>
+</tr>
+<tr>
+<td style="text-align:left">Time.smoothDeltaTime</td>
+<td style="text-align:left">平稳的deltaTime，防止起伏太大</td>
+<td style="text-align:left"><font color="red">只读</font></td>
+</tr>
+<tr>
+<td style="text-align:left">Time.frameCount</td>
+<td style="text-align:left">总帧数</td>
+<td style="text-align:left"><font color="red">只读</font></td>
+</tr>
+<tr>
+<td style="text-align:left">Time.realtimeSinceStartup</td>
+<td style="text-align:left">从游戏开始到现在所用的时间，游戏暂停不会停止</td>
+<td style="text-align:left"><font color="red">只读</font></td>
+</tr>
+<tr>
+<td style="text-align:left">Time.unscaledDeltaTime</td>
+<td style="text-align:left">不考虑timescale时候与deltaTime相同，若timescale被设置，则无效</td>
+<td style="text-align:left"><font color="red">只读</font></td>
+</tr>
+<tr>
+<td style="text-align:left">Time.unscaledTime</td>
+<td style="text-align:left">不考虑timescale时候与time相同，若timescale被设置，则无效</td>
+<td style="text-align:left"><font color="red">只读</font></td>
+</tr>
+<tr>
+<td style="text-align:left">Time.fixedDeltaTime</td>
+<td style="text-align:left">固定时间增量</td>
+<td style="text-align:left"><font color="green">读写</font></td>
+</tr>
+<tr>
+<td style="text-align:left">Time.maximumDeltaTime</td>
+<td style="text-align:left">一帧(固定帧)能获得的最大时间增量，普通帧内固定帧可执行多少次</td>
+<td style="text-align:left"><font color="green">读写</font></td>
+</tr>
+<tr>
+<td style="text-align:left">Time.timeScale</td>
+<td style="text-align:left">时间缩放</td>
+<td style="text-align:left"><font color="green">读写</font></td>
+</tr>
+<tr>
+<td style="text-align:left">Time.captureFramerate</td>
+<td style="text-align:left">设置每秒的帧率</td>
+<td style="text-align:left"><font color="green">读写</font></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<hr>
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/unity_tech/22_time.png" alt=""></p>
+<p><a href="https://raw.githubusercontent.com/pepsigit/Pictures/master/unity_tech/22_time.png" target="_blank" rel="external">图片下载地址，右键保存</a></p>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2017/05/09/LeetCode-1-Two-Sum/" class="prev" data-title="[LeetCode]1.Two-Sum"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2017/04/22/Unity-Material/" class="next" data-title="[Unity]Material"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

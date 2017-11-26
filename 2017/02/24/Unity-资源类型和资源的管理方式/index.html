@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [Unity]资源类型和资源的管理方式 |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[Unity]资源类型和资源的管理方式</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2017-02-24</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Unity/">Unity</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <hr>
+<ul>
+<li><h3 id="类型"><a href="#类型" class="headerlink" title="类型"></a><font color="">类型</font></h3><ul>
+<li><h4 id="Asset"><a href="#Asset" class="headerlink" title="Asset"></a><font color="">Asset</font></h4><ul>
+<li><h5 id="Pure-Asset-Maxterial、Texture、Mesh、Animator、Shader…"><a href="#Pure-Asset-Maxterial、Texture、Mesh、Animator、Shader…" class="headerlink" title="Pure Asset : Maxterial、Texture、Mesh、Animator、Shader…"></a><font color="">Pure Asset : Maxterial、Texture、Mesh、Animator、Shader…</font></h5></li>
+<li><h5 id="ScriptableObject-介绍"><a href="#ScriptableObject-介绍" class="headerlink" title="ScriptableObject : 介绍"></a><font color="">ScriptableObject : <a href="http://blog.csdn.net/candycat1992/article/details/52181814" target="_blank" rel="external">介绍</a><font></font></font></h5></li>
+<li><h5 id="TextAsset"><a href="#TextAsset" class="headerlink" title="TextAsset"></a><font color="">TextAsset</font></h5></li>
+<li><h5 id="Build-In"><a href="#Build-In" class="headerlink" title="Build-In"></a><font color="">Build-In</font></h5></li>
+</ul>
+</li>
+<li><h4 id="Prefab-特殊的Asset"><a href="#Prefab-特殊的Asset" class="headerlink" title="Prefab : 特殊的Asset"></a><font color="">Prefab : 特殊的Asset</font></h4><ul>
+<li><h4 id="与实际GameObject区别-第一次拿到Prefab以后，是无法显示在场景中，只有实例化（Instantiate）以后，才能是一个真正的GameObject。"><a href="#与实际GameObject区别-第一次拿到Prefab以后，是无法显示在场景中，只有实例化（Instantiate）以后，才能是一个真正的GameObject。" class="headerlink" title="与实际GameObject区别 : 第一次拿到Prefab以后，是无法显示在场景中，只有实例化（Instantiate）以后，才能是一个真正的GameObject。"></a><font color="">与实际GameObject区别 : 第一次拿到Prefab以后，是无法显示在场景中，<br>只有实例化（Instantiate）以后，才能是一个真正的GameObject。<br></font></h4></li>
+</ul>
+</li>
+<li><h4 id="Sceen-特殊的Asset"><a href="#Sceen-特殊的Asset" class="headerlink" title="Sceen : 特殊的Asset"></a><font color="">Sceen : 特殊的Asset</font></h4></li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>
+<p><br></p>
+<hr>
+<ul>
+<li><h3 id="管理方式"><a href="#管理方式" class="headerlink" title="管理方式"></a><font color="">管理方式</font></h3><ul>
+<li><h4 id="编辑器内管理-AssetDatabase"><a href="#编辑器内管理-AssetDatabase" class="headerlink" title="编辑器内管理 : AssetDatabase"></a><font color="">编辑器内管理 : AssetDatabase</font></h4></li>
+<li><h4 id="运行时管理-Resource、AssetBundle"><a href="#运行时管理-Resource、AssetBundle" class="headerlink" title="运行时管理 : Resource、AssetBundle"></a><font color="">运行时管理 : Resource、AssetBundle</font></h4></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2017/02/25/Unity-AssetDatabase/" class="prev" data-title="[Unity]AssetDatabase"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2016/07/25/Xcode-Xcode-OpenGL-ES-Tools-Overview/" class="next" data-title="[Xcode]Xcode OpenGL-ES Tools Overview"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

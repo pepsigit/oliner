@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [Unity]坐标系统 |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[Unity]坐标系统</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2017-03-27</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Unity/">Unity</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <ul>
+<li><h3 id="World-Space-世界坐标系"><a href="#World-Space-世界坐标系" class="headerlink" title="World Space ( 世界坐标系 )"></a>World Space ( 世界坐标系 )</h3><ul>
+<li><h5 id="场景中的物体，以世界坐标系显示在场景中。transform-position可以获得该位置坐标。"><a href="#场景中的物体，以世界坐标系显示在场景中。transform-position可以获得该位置坐标。" class="headerlink" title="场景中的物体，以世界坐标系显示在场景中。transform.position可以获得该位置坐标。"></a>场景中的物体，以世界坐标系显示在场景中。<code>transform.position</code>可以获得该位置坐标。</h5></li>
+</ul>
+</li>
+<li><h3 id="Screen-Space-（-屏幕坐标系-）"><a href="#Screen-Space-（-屏幕坐标系-）" class="headerlink" title="Screen Space （ 屏幕坐标系 ）"></a>Screen Space （ 屏幕坐标系 ）</h3><ul>
+<li><h5 id="这是一个以像素来定义的坐标系。"><a href="#这是一个以像素来定义的坐标系。" class="headerlink" title="这是一个以像素来定义的坐标系。"></a>这是一个以像素来定义的坐标系。</h5></li>
+<li><h5 id="屏幕的左下角为（-0，0-）；右上角为（-Screen-width，Screen-height-）"><a href="#屏幕的左下角为（-0，0-）；右上角为（-Screen-width，Screen-height-）" class="headerlink" title="屏幕的左下角为（ 0，0 ）；右上角为（ Screen.width，Screen.height ）"></a>屏幕的<code>左下角</code>为<code>（ 0，0 ）</code>；<code>右上角</code>为<code>（ Screen.width，Screen.height ）</code></h5></li>
+<li><h5 id="鼠标、触摸位置属于屏幕坐标（Input-mousePosition-Input-GetTouch-0-position）"><a href="#鼠标、触摸位置属于屏幕坐标（Input-mousePosition-Input-GetTouch-0-position）" class="headerlink" title="鼠标、触摸位置属于屏幕坐标（Input.mousePosition || Input.GetTouch(0).position）"></a>鼠标、触摸位置属于屏幕坐标（<code>Input.mousePosition</code> || <code>Input.GetTouch(0).position</code>）</h5></li>
+<li><h5 id="Screen-width-Camera-pixelWidth-Screen-height-Camera-pixelHeight"><a href="#Screen-width-Camera-pixelWidth-Screen-height-Camera-pixelHeight" class="headerlink" title="Screen.width = Camera.pixelWidth Screen.height = Camera.pixelHeight"></a><code>Screen.width = Camera.pixelWidth</code> <code>Screen.height = Camera.pixelHeight</code></h5></li>
+</ul>
+</li>
+<li><h3 id="ViewPort-Space-（-视口坐标系-）"><a href="#ViewPort-Space-（-视口坐标系-）" class="headerlink" title="ViewPort Space （ 视口坐标系 ）"></a>ViewPort Space （ 视口坐标系 ）</h3><ul>
+<li><h5 id="视口坐标是标准的坐标系，相对于相机。"><a href="#视口坐标是标准的坐标系，相对于相机。" class="headerlink" title="视口坐标是标准的坐标系，相对于相机。"></a>视口坐标是标准的坐标系，相对于相机。</h5></li>
+<li><h5 id="屏幕的左下角为（-0，0-）；右上角为（-1，1-）"><a href="#屏幕的左下角为（-0，0-）；右上角为（-1，1-）" class="headerlink" title="屏幕的左下角为（ 0，0 ）；右上角为（ 1，1 ）"></a>屏幕的<code>左下角</code>为<code>（ 0，0 ）</code>；<code>右上角</code>为<code>（ 1，1 ）</code></h5></li>
+</ul>
+</li>
+<li><h3 id="GUI-Space-（-绘制GUI坐标系-）"><a href="#GUI-Space-（-绘制GUI坐标系-）" class="headerlink" title="GUI Space （ 绘制GUI坐标系 ）"></a>GUI Space （ 绘制GUI坐标系 ）</h3><ul>
+<li><h5 id="相似于屏幕坐标系。"><a href="#相似于屏幕坐标系。" class="headerlink" title="相似于屏幕坐标系。"></a>相似于屏幕坐标系。</h5></li>
+<li><h5 id="屏幕的左上角为（-0，0-）；右下角为（-Screen-width，Screen-height-）"><a href="#屏幕的左上角为（-0，0-）；右下角为（-Screen-width，Screen-height-）" class="headerlink" title="屏幕的左上角为（ 0，0 ）；右下角为（ Screen.width，Screen.height ）"></a>屏幕的<code>左上角</code>为<code>（ 0，0 ）</code>；<code>右下角</code>为<code>（ Screen.width，Screen.height ）</code></h5></li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+<hr>
+<ul>
+<li><h3 id="坐标系之间转换"><a href="#坐标系之间转换" class="headerlink" title="坐标系之间转换"></a>坐标系之间转换</h3><ul>
+<li><h5 id="世界坐标-gt-屏幕坐标"><a href="#世界坐标-gt-屏幕坐标" class="headerlink" title="世界坐标 -&gt; 屏幕坐标"></a>世界坐标 -&gt; 屏幕坐标</h5><ul>
+<li><p>Camera.main.WorldToScreenPoint( transform.position )</p>
+</li>
+<li><p>@return Vector3</p>
+</li>
+</ul>
+</li>
+<li><h5 id="屏幕坐标-gt-世界坐标"><a href="#屏幕坐标-gt-世界坐标" class="headerlink" title="屏幕坐标 -&gt; 世界坐标"></a>屏幕坐标 -&gt; 世界坐标</h5><ul>
+<li><p>Camera.main.ScreenToWorldPoint( new Vector3( 100, 100, camera.nearClipPlane ) )</p>
+</li>
+<li><p>@return Vector3</p>
+</li>
+</ul>
+</li>
+<li><h5 id="屏幕坐标-gt-视口坐标"><a href="#屏幕坐标-gt-视口坐标" class="headerlink" title="屏幕坐标 -&gt; 视口坐标"></a>屏幕坐标 -&gt; 视口坐标</h5><ul>
+<li><p>Camera.main.ScreenToViewportPoint( Input.GetTouch( 0 ).position )</p>
+</li>
+<li><p>@return Vector3</p>
+</li>
+</ul>
+</li>
+<li><h5 id="视口坐标-gt-屏幕坐标"><a href="#视口坐标-gt-屏幕坐标" class="headerlink" title="视口坐标 -&gt; 屏幕坐标"></a>视口坐标 -&gt; 屏幕坐标</h5><ul>
+<li><p>Camera.main.ViewportToScreenPoint( new Vector3( (0.0~1.0f), (0.0~1.0f), 0.0f ) )</p>
+</li>
+<li><p>@return Vector3</p>
+</li>
+</ul>
+</li>
+<li><h5 id="世界坐标-gt-视口坐标"><a href="#世界坐标-gt-视口坐标" class="headerlink" title="世界坐标 -&gt; 视口坐标"></a>世界坐标 -&gt; 视口坐标</h5><ul>
+<li><p>Camera.main.WorldToViewportPoint( transform.position )</p>
+</li>
+<li><p>@return Vector3</p>
+</li>
+</ul>
+</li>
+<li><h5 id="视口坐标-gt-世界坐标"><a href="#视口坐标-gt-世界坐标" class="headerlink" title="视口坐标 -&gt; 世界坐标"></a>视口坐标 -&gt; 世界坐标</h5><ul>
+<li><p>Camera.main.ViewportToWorldPoint( new Vector3( (0.0~1.0f), (0.0~1.0f), camera.nearClipPlane ) )</p>
+</li>
+<li><p>@return Vector3</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+<hr>
+<h4 id="Exp-模型跟随鼠标"><a href="#Exp-模型跟随鼠标" class="headerlink" title="Exp: 模型跟随鼠标"></a>Exp: 模型跟随鼠标</h4><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">void Update()</span><br><span class="line">&#123;</span><br><span class="line">	Vector3 _screenPos = Camera.main.WorldToScreenPoint( transform.position );</span><br><span class="line">	Vector3 _mousePos = Input.mousePosition;</span><br><span class="line">	</span><br><span class="line">	//<span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span></span><br><span class="line">	_mousePos.z = _screenPos.z;</span><br><span class="line">	//<span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span></span><br><span class="line">	</span><br><span class="line">	Vector3 _worldPos = Camera.main.ScreenToWorldPoint( _mousePos )</span><br><span class="line">	transform.position = _worldPos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2017/03/27/Unity-输入系统/" class="prev" data-title="[Unity]输入系统"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2017/03/27/Unity-知识目录/" class="next" data-title="[Unity]知识目录"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

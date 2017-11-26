@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [WebGL]多物体运动 |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[WebGL]多物体运动</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2016-06-12</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/WebGL/">WebGL</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <hr>
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/WebGL/7.gif" alt=""></p>
+<a id="more"></a>
+<hr>
+<ul>
+<li><strong><code>WebGLStart()</code></strong></li>
+</ul>
+<font color="red"><br><strong>我们不再需要深度检测, 而默认也是关闭的.</strong><br></font>
+
+<p><del>gl.enable( gl.DEPTH_TEST );</del></p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">function</span> <span class="selector-tag">WebGLStart</span>()</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 初始化物体</span></span><br><span class="line">    <span class="selector-tag">initWorldObjects</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li><strong><code>initWorldObjects()</code></strong></li>
+</ul>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 星星数组</span></span><br><span class="line"><span class="keyword">var</span> stars = [];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">initWorldObjects</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="comment">// 星星数为50</span></span><br><span class="line">    <span class="keyword">var</span> numStars = <span class="number">50</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>( <span class="keyword">var</span> i = <span class="number">0</span>; i &lt; numStars; i++ )</span><br><span class="line">    &#123;</span><br><span class="line">        stars.push( <span class="keyword">new</span> Star( ( i / numStars ) * <span class="number">5.0</span>, ( i / numStars ) ) );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<font color="#008B8B"><strong>对于每个<code>Javascript</code>函数，都有一个特殊的私有变量<code>this</code>, 表示当前函数的“拥有者”。对于全局函数，<code>this</code>指向网页中的“windows”对象。如果你在引用<code>this</code>的前方加<code>new</code>关键字，那它的意义就不再是指向当前函数的拥有者，而是创建一个新的对象。所以，如果你有一个函数，在函数体内部将<code>this.foo</code>设置为1，<code>this.bar</code>设置为一个函数，并确保在调用此函数前使用<code>new</code>关键字， 那它的功能基本上等同于带<code>class</code>定义的类构造函数。</strong></font>
+
+</blockquote>
+<hr>
+<ul>
+<li><strong><code>Star( startDistance, rotationSpeed )</code></strong></li>
+</ul>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 生成新星星</span></span><br><span class="line"><span class="comment">// @param startDistance 距离场景中心距离</span></span><br><span class="line"><span class="comment">// @param rotationSpeed 围绕场景中心旋转速度</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Star</span><span class="params">( startDistance, rotationSpeed )</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.angle          = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">this</span>.dist           = startDistance;</span><br><span class="line">    <span class="keyword">this</span>.rotationSpeed  = rotationSpeed;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 随机星星颜色</span></span><br><span class="line">    <span class="keyword">this</span>.randomColors();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<blockquote>
+<font color="#FF8C00">对于每个函数，都有一个特殊的属性: <code>prototype</code>。<code>prototype</code>是一个字典容器，它内部存储了当使用<code>new</code>关键字创建此对象的副本时，所需要创建的成员变量。这是一种良好的定义<code>Javascript</code>“类”对象通用成员的方式——比如，类方法。</font>
+
+</blockquote>
+<ul>
+<li><strong><code>randomColors()</code></strong></li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 随机星星颜色 和 闪光颜色</span></span><br><span class="line">Star.prototype.randomColors = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.r = <span class="built_in">Math</span>.random();</span><br><span class="line">    <span class="keyword">this</span>.g = <span class="built_in">Math</span>.random();</span><br><span class="line">    <span class="keyword">this</span>.b = <span class="built_in">Math</span>.random();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.twinkleR = <span class="built_in">Math</span>.random();</span><br><span class="line">    <span class="keyword">this</span>.twinkleG = <span class="built_in">Math</span>.random();</span><br><span class="line">    <span class="keyword">this</span>.twinkleB = <span class="built_in">Math</span>.random();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li><strong>在<code>drawScene()</code>中, 只保留围绕 X-轴旋转</strong></li>
+</ul>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 起初面对的 XZ 平面</span></span><br><span class="line"><span class="keyword">var</span> xRot = 90;</span><br><span class="line"><span class="keyword">var</span> spin = 0;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> z = -15.0;</span><br><span class="line">        </span><br><span class="line">function drawScene()</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">gl</span>.enable( <span class="keyword">gl</span>.BLEND );</span><br><span class="line">    <span class="keyword">gl</span>.blendFunc( <span class="keyword">gl</span>.SRC_ALPHA, <span class="keyword">gl</span>.<span class="keyword">ONE</span> );</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 是否开启闪光</span></span><br><span class="line">    <span class="keyword">var</span> isTwinkle = document.getElementById(<span class="string">"twinkleing"</span>).checked;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>( <span class="keyword">var</span> i <span class="keyword">in</span> stars )</span><br><span class="line">    &#123;</span><br><span class="line">        stars[i].draw( xRot, spin, isTwinkle );</span><br><span class="line">        spin += 0.1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li><strong>先看一下运动的动画<code>animate()</code></strong></li>
+</ul>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">animate</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    &#123;</span><br><span class="line">        ...</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>( <span class="keyword">var</span> i <span class="keyword">in</span> stars )</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 调用星星类的类方法</span></span><br><span class="line">            stars[ i ].animate( subTime );</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong><code>Star.prototype.animate( subTime )</code></strong></li>
+</ul>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 帧率为60(毫秒)</span></span><br><span class="line"><span class="keyword">var</span> effFPMS = <span class="number">60</span> / <span class="number">1000</span>;</span><br><span class="line"></span><br><span class="line">Star.prototype.animate = <span class="function"><span class="keyword">function</span><span class="params">( subTime )</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="comment">// 角度变化</span></span><br><span class="line">    <span class="keyword">this</span>.angle += <span class="keyword">this</span>.rotationSpeed * effFPMS * subTime;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 与中点距离</span></span><br><span class="line">    <span class="keyword">this</span>.dist -= <span class="number">0.01</span> * effFPMS * subTime;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 如果到达中点, 重置距离和颜色</span></span><br><span class="line">    <span class="keyword">if</span>( <span class="number">0.0</span> &gt; <span class="keyword">this</span>.dist )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">this</span>.dist += <span class="number">5.0</span>;</span><br><span class="line">        <span class="keyword">this</span>.randomColors();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li><strong>再来看下绘制星星<code>Star.prototype.draw( rot, spin, isTwinkle )</code></strong></li>
+</ul>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 绘制星星</span></span><br><span class="line"><span class="comment">// @param rot       X-轴倾斜度</span></span><br><span class="line"><span class="comment">// @param spin      自转角度</span></span><br><span class="line"><span class="comment">// @param isTwinkle 是否闪光</span></span><br><span class="line">Star.prototype.draw = <span class="function"><span class="keyword">function</span><span class="params">( rot, spin, isTwinkle )</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    mvPushMatrix();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 我们面对的是 XZ 平面, 所有星星旋转是环绕 Y-轴 在旋转</span></span><br><span class="line">    <span class="comment">// 首先在星星的本地坐标系旋转, 然后在移动到位置</span></span><br><span class="line">    <span class="comment">// 此时星星的本地坐标系相对世界坐标系是旋转 this.angle 角度的, 而星星的位置还在星星的本地坐标系的 X-轴上.</span></span><br><span class="line">    mvMatrix.rotY( OAK.SPACE_LOCAL, <span class="keyword">this</span>.angle, <span class="literal">true</span> );</span><br><span class="line">    mvMatrix.translate( OAK.SPACE_LOCAL, <span class="keyword">this</span>.dist, <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="literal">true</span> );</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 恢复星星的本地坐标旋转的角度</span></span><br><span class="line">    mvMatrix.rotY(OAK.SPACE_LOCAL, -<span class="keyword">this</span>.angle, <span class="literal">true</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 根据世界坐标系人为更改的 X-轴倾斜角度, 改变星星本地坐标的 X-轴倾斜角度, 使星星一直保持面向观察者, 类似"公告板"</span></span><br><span class="line">    mvMatrix.rotX(OAK.SPACE_LOCAL, -xRot, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果开启闪光, 先绘制一个不自转的底图</span></span><br><span class="line">    <span class="keyword">if</span>( isTwinkle )</span><br><span class="line">    &#123;</span><br><span class="line">        gl.uniform3f( shaderProgram.uColor, <span class="keyword">this</span>.twinkleR, <span class="keyword">this</span>.twinkleG, <span class="keyword">this</span>.twinkleB );</span><br><span class="line">        drawStar();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 在本地坐标系中, 绕 Z-轴旋转</span></span><br><span class="line">    mvMatrix.rotZ( OAK.SPACE_LOCAL, spin, <span class="literal">true</span> );</span><br><span class="line"></span><br><span class="line">    gl.uniform3f( shaderProgram.uColor, <span class="keyword">this</span>.r, <span class="keyword">this</span>.g, <span class="keyword">this</span>.b );</span><br><span class="line">    </span><br><span class="line">    drawStar();</span><br><span class="line"></span><br><span class="line">    mvPopMatrix();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li><strong>真正绘制星星<code>drawStar()</code></strong></li>
+</ul>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">function drawStar()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 启动纹理</span></span><br><span class="line">    <span class="keyword">gl</span>.activeTexture( <span class="keyword">gl</span>.TEXTURE0 );</span><br><span class="line">    <span class="keyword">gl</span>.bindTexture( <span class="keyword">gl</span>.TEXTURE_2D, texture );</span><br><span class="line">    <span class="keyword">gl</span>.uniform1i( shaderProgram.uSample, 0 );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">gl</span>.bindBuffer( <span class="keyword">gl</span>.ARRAY_BUFFER, starBuffer );</span><br><span class="line">    <span class="keyword">gl</span>.vertexAttribPointer( shaderProgram.vertexPositionAttribute, starBuffer.itemSize, <span class="keyword">gl</span>.FLOAT, false, 0, 0 );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">gl</span>.bindBuffer( <span class="keyword">gl</span>.ARRAY_BUFFER, starTextureCoordBuffer );</span><br><span class="line">    <span class="keyword">gl</span>.vertexAttribPointer( shaderProgram.vertexCoordAttribute, starTextureCoordBuffer.itemSize, <span class="keyword">gl</span>.FLOAT, false, 0, 0 );</span><br><span class="line"></span><br><span class="line">    setMatrixUniforms();</span><br><span class="line">    <span class="keyword">gl</span>.drawArrays( <span class="keyword">gl</span>.TRIANGLE_STRIP, 0, starBuffer.numItems );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><a href="https://github.com/pepsigit/WebGL/blob/master/lesson_8.html" target="_blank" rel="external">源码</a></p>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2016/06/16/WebGL-载入世界以及相机/" class="prev" data-title="[WebGL]载入世界以及相机"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2016/06/12/WebGL-深度缓存、透明度和混合/" class="next" data-title="[WebGL]深度缓存、透明度和混合"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

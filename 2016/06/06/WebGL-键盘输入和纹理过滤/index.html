@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [WebGL]键盘输入和纹理过滤 |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[WebGL]键盘输入和纹理过滤</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2016-06-06</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/WebGL/">WebGL</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <hr>
+<p><strong>这里没有效果图.</strong></p>
+<a id="more"></a>
+<hr>
+<p><strong>我们来手动控制立方体的运动, 上下控制绕 X-轴运动, 左右控制绕 Y-轴运动.</strong></p>
+<p><del>var zRot = 0;</del><br><del>与 zRot 相关代码.</del></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// X-轴旋转速度</span></span><br><span class="line"><span class="variable"><span class="keyword">var</span> xSpeed</span> = <span class="number">0</span>;</span><br><span class="line"><span class="comment">// Y-轴旋转速度</span></span><br><span class="line"><span class="variable"><span class="keyword">var</span> ySpeed</span> = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 与观察者距离</span></span><br><span class="line"><span class="variable"><span class="keyword">var</span> z</span> = <span class="number">-5.0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 纹理过滤方式索引</span></span><br><span class="line"><span class="variable"><span class="keyword">var</span> filter</span> = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">function drawScene()</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    mvPushMatrix();</span><br><span class="line">    mvMatrix.translate( OAK.SPACE_WORLD, <span class="number">0.0</span>, <span class="number">0.0</span>, z, <span class="literal">true</span> );</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    gl.activeTexture( gl.TEXTURE0 );</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 下文介绍</span></span><br><span class="line">    gl.bindTexture( gl.TEXTURE_2D, crateTexture[ filter ] );</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>我们需要切换不同的纹理过滤方式, 所以使用数组来保存.</strong></p>
+<ul>
+<li><strong><code>initTexture()</code></strong></li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 纹理数组</span></span><br><span class="line"><span class="keyword">var</span> crateTexture = <span class="built_in">Array</span>();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">initTexture</span>(<span class="params"></span>)</span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> crateImage = <span class="keyword">new</span> Image();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>( <span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++ )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> texture = gl.createTexture();</span><br><span class="line">        texture.image = crateImage();</span><br><span class="line">        crateTexture.push( texture );</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    crateImage.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        handleLoadedTexture( crateTexture );</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    crateImage.src = <span class="string">"crate.gif"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li><strong><code>handleLoadedTexture( crateTexture )</code></strong></li>
+</ul>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">function handleLoadedTexture( crateTexture )</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">gl</span>.pixelStorei( <span class="keyword">gl</span>.UNPACK_FLIP_Y_WEBGL, true );</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">gl</span>.bindTexture( <span class="keyword">gl</span>.TEXTURE_2D, crateTexture[0] );</span><br><span class="line">    <span class="keyword">gl</span>.texImage2D( <span class="keyword">gl</span>.TEXTURE_2D, 0, <span class="keyword">gl</span>.RGBA, <span class="keyword">gl</span>.RGBA, <span class="keyword">gl</span>.UNSIGNED_BYTE, crateTexture[0].image );</span><br><span class="line">    <span class="keyword">gl</span>.texParameteri( <span class="keyword">gl</span>.TEXTURE_2D, <span class="keyword">gl</span>.TEXTURE_MAG_FILTER, <span class="keyword">gl</span>.NEAREST );</span><br><span class="line">    <span class="keyword">gl</span>.texParameteri( <span class="keyword">gl</span>.TEXTURE_2D, <span class="keyword">gl</span>.TEXTURE_MIN_FILTER, <span class="keyword">gl</span>.NEAREST );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">gl</span>.bindTexture( <span class="keyword">gl</span>.TEXTURE_2D, crateTexture[1] );</span><br><span class="line">    <span class="keyword">gl</span>.texImage2D(<span class="keyword">gl</span>.TEXTURE_2D, 0, <span class="keyword">gl</span>.RGB, <span class="keyword">gl</span>.RGB, <span class="keyword">gl</span>.UNSIGNED_BYTE, crateTexture[1].image );</span><br><span class="line">    <span class="keyword">gl</span>.texParameteri( <span class="keyword">gl</span>.TEXTURE_2D, <span class="keyword">gl</span>.TEXTURE_MIN_FILTER, <span class="keyword">gl</span>.LINEAR );</span><br><span class="line">    <span class="keyword">gl</span>.texParameteri( <span class="keyword">gl</span>.TEXTURE_2D, <span class="keyword">gl</span>.TEXTURE_MAG_FILTER, <span class="keyword">gl</span>.LINEAR );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">gl</span>.bindTexture( <span class="keyword">gl</span>.TEXTURE_2D, crateTexture[2] );</span><br><span class="line">    <span class="keyword">gl</span>.texImage2D( <span class="keyword">gl</span>.TEXTURE_2D, 0, <span class="keyword">gl</span>.RGB, <span class="keyword">gl</span>.RGB, <span class="keyword">gl</span>.UNSIGNED_BYTE, crateTexture[2].image );</span><br><span class="line">    <span class="keyword">gl</span>.texParameteri( <span class="keyword">gl</span>.TEXTURE_2D, <span class="keyword">gl</span>.TEXTURE_MAG_FILTER, <span class="keyword">gl</span>.LINEAR );</span><br><span class="line">    <span class="keyword">gl</span>.texParameteri( <span class="keyword">gl</span>.TEXTURE_2D, <span class="keyword">gl</span>.TEXTURE_MIN_FILTER, <span class="keyword">gl</span>.LINEAR_MIPMAP_NEAREST );</span><br><span class="line">    <span class="keyword">gl</span>.generateMipmap( <span class="keyword">gl</span>.TEXTURE_2D );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">gl</span>.bindTexture( <span class="keyword">gl</span>.TEXTURE_2D, null );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li><strong><code>WebGLStart()</code></strong></li>
+</ul>
+<p><strong>添加按键响应回调</strong></p>
+<figure class="highlight qml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">WebGLStart</span>(<span class="params"></span>)</span><br><span class="line"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">document</span>.onkeydown = handleKeyDown;</span><br><span class="line">    <span class="built_in">document</span>.onkeyup = handleKeyUp;</span><br><span class="line">    </span><br><span class="line">    tick();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>使用哈希表来存储按键响应</strong></p>
+<ul>
+<li><strong><code>handleKeyDown( event )</code></strong></li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//按键哈希表</span></span><br><span class="line"><span class="keyword">var</span> currPressKey = [];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 按键按下</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">handleKeyDown</span>(<span class="params"> event </span>)</span><br><span class="line"></span>&#123;</span><br><span class="line">    currPressKey[ evetn.keyCode ] = <span class="literal">true</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// F 键切换不同的纹理过滤方式</span></span><br><span class="line">    <span class="keyword">if</span>( <span class="string">"F"</span> == <span class="built_in">String</span>.fromCharCode( event.keyCode ) )</span><br><span class="line">    &#123;</span><br><span class="line">        filter += <span class="number">1</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>( <span class="number">3</span> == filter )</span><br><span class="line">        &#123;</span><br><span class="line">            filter = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 按键抬起</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">handleKeyUp</span>(<span class="params"> event </span>)</span><br><span class="line"></span>&#123;</span><br><span class="line">    currPressKey[ event.keyCode ] = <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>每帧检测我们是否按下按键、抬起按键.</strong></p>
+<ul>
+<li><strong><code>tick()</code></strong></li>
+</ul>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">function</span> <span class="selector-tag">tick</span>()</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="selector-tag">handleKeys</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong><code>handleKeys()</code></strong></li>
+</ul>
+<figure class="highlight hsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">function handleKeys()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>( currPressKey[<span class="number">33</span>] )</span><br><span class="line">    &#123;</span><br><span class="line">        z -= <span class="number">0.05</span><span class="comment">;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>( currPressKey[<span class="number">34</span>] )</span><br><span class="line">    &#123;</span><br><span class="line">        z += <span class="number">0.05</span><span class="comment">;</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ( currPressKey[<span class="number">37</span>] )</span><br><span class="line">    &#123;</span><br><span class="line">        ySpeed -= <span class="number">1</span><span class="comment">;</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ( currPressKey[<span class="number">39</span>] )</span><br><span class="line">    &#123;</span><br><span class="line">        ySpeed += <span class="number">1</span><span class="comment">;</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ( currPressKey[<span class="number">38</span>] )</span><br><span class="line">    &#123;</span><br><span class="line">        xSpeed -= <span class="number">1</span><span class="comment">;</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ( currPressKey[<span class="number">40</span>] )</span><br><span class="line">    &#123;</span><br><span class="line">        xSpeed += <span class="number">1</span><span class="comment">;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><a href="https://github.com/pepsigit/WebGL/blob/master/lesson_5.html" target="_blank" rel="external">源码</a></p>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2016/06/07/WebGL-平行光和环境光/" class="prev" data-title="[WebGL]平行光和环境光"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2016/06/06/WebGL-纹理载入/" class="next" data-title="[WebGL]纹理载入"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [LeetCode]1.Two-Sum |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[LeetCode]1.Two-Sum</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2017-05-09</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/LeetCode/">LeetCode</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <p><br></p>
+<h2 id="题目地址"><a href="#题目地址" class="headerlink" title="题目地址"></a><a href="https://leetcode.com/problems/two-sum/#/description" target="_blank" rel="external">题目地址</a></h2><hr>
+<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">vector&lt;<span class="built_in">int</span>&gt; twoSum(vector&lt;<span class="built_in">int</span>&gt;&amp; nums, <span class="built_in">int</span> target) </span><br><span class="line">&#123;</span><br><span class="line">    vector&lt;<span class="built_in">int</span>&gt; <span class="literal">result</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>( <span class="number">0</span> &gt;= nums.size() )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">result</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">int</span> _subNum;</span><br><span class="line">    vector&lt;<span class="built_in">int</span>&gt;::<span class="keyword">iterator</span> _subNumIndex;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>( <span class="built_in">int</span> i = <span class="number">0</span>; i &lt; nums.size(); ++i )</span><br><span class="line">    &#123;</span><br><span class="line">        _subNum = target - nums[ i ];</span><br><span class="line"></span><br><span class="line">        _subNumIndex = find( nums.begin(), nums.<span class="keyword">end</span>(), _subNum );</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>( i == ( _subNumIndex - nums.begin() ) )</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>( _subNumIndex != nums.<span class="keyword">end</span>() )</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="literal">result</span>.push_back( i );</span><br><span class="line">            <span class="literal">result</span>.push_back( _subNumIndex - nums.begin() );</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">result</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">result</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2017/05/09/LeetCode-2-Add-Two-Numbers/" class="prev" data-title="[LeetCode]2.Add-Two-Numbers"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2017/04/22/Unity-Time/" class="next" data-title="[Unity]Time"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

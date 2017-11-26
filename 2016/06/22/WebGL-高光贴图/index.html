@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [WebGL]高光贴图 |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[WebGL]高光贴图</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2016-06-22</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/WebGL/">WebGL</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/WebGL/17.gif" alt=""></p>
+<hr>
+<a id="more"></a>
+<font color="#8470FF"><strong>一张纹理有R,G, B, A四个通道，在shader中, 每个通道都是一个float类型的标量值, 但并没有限定我们一定要将纹理数据当做颜色来对待。我们了了解到，材质的反光度（shinness）也是一个float类型标量值，所以我们可以通过纹理来将物体表面的反光度属性赋给每一个对应的像素，就像我们使用纹理为像素赋颜色一样。</strong></font>
+
+<hr>
+<font color="#FF00FF"><strong>如果开启高光贴图，我们会从高光贴图中取出对应的反光数值，就像从颜色纹理中取出颜色一样。因为我们假设RGB通道的反光度相同，因此在这里我们只取高光贴图纹理的R通道数据，实际上，你从任何一个通道读取，结果都是一样的。</strong></font>
+
+<figure class="highlight glsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 是否开启高光贴图</span></span><br><span class="line"><span class="keyword">if</span>( uUseSpecularMap )</span><br><span class="line">&#123;</span><br><span class="line">    shininess = <span class="built_in">texture2D</span>( uSpecularMap, <span class="type">vec2</span>( vCoord.s, vCoord.t ) ).r * <span class="number">255.0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>( <span class="number">255.0</span> &gt; shininess )</span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">vec3</span> v = <span class="built_in">normalize</span>( <span class="type">vec3</span>( <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span> ) - vPosition.xyz );</span><br><span class="line">    <span class="type">vec3</span> r = <span class="built_in">reflect</span>( -lightingDirection, <span class="built_in">normalize</span>( vTransformNormal ) );</span><br><span class="line">    specularLightingWeight = <span class="built_in">pow</span>( <span class="built_in">max</span>( <span class="built_in">dot</span>( v, r ), <span class="number">0.0</span> ), shininess );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">float</span> directionalLightingWeight = <span class="built_in">max</span>( <span class="built_in">dot</span>( <span class="built_in">normalize</span>( vTransformNormal ), lightingDirection ), <span class="number">0.0</span> );</span><br><span class="line">lightingWeight = uAmbientColor</span><br><span class="line">                + uPointLightingDiffuseColor * directionalLightingWeight</span><br><span class="line">                + uPointLightingSpecularColor * specularLightingWeight;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><a href="https://github.com/pepsigit/WebGL/blob/master/lesson_14.html" target="_blank" rel="external">源码</a></p>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2016/06/23/WebGL-渲染到纹理/" class="prev" data-title="[WebGL]渲染到纹理"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2016/06/22/WebGL-镜面高光和载入JSON模型/" class="next" data-title="[WebGL]镜面高光和载入JSON模型"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

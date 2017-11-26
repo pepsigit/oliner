@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [WebGL]深度缓存、透明度和混合 |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[WebGL]深度缓存、透明度和混合</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2016-06-12</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/WebGL/">WebGL</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <hr>
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/WebGL/6.gif" alt=""></p>
+<a id="more"></a>
+<hr>
+<blockquote>
+<p><a href="http://blog.csdn.net/wangqinghao/article/details/10083665" target="_blank" rel="external">深度缓冲区原理以及为什么要用它</a></p>
+</blockquote>
+<hr>
+<ul>
+<li><strong><code>drawScene()</code></strong></li>
+</ul>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">function drawScene()</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 是否开始混合</span></span><br><span class="line">    <span class="keyword">var</span> isAlphaLevel = document.getElementById(<span class="string">"blending"</span>).checked;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>( isAlphaLevel )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">gl</span>.disable( <span class="keyword">gl</span>.DEPTH_TEXT );</span><br><span class="line">        <span class="keyword">gl</span>.enable( <span class="keyword">gl</span>.BLEND );</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 混合效果函数</span></span><br><span class="line">        <span class="keyword">gl</span>.blendFunc( <span class="keyword">gl</span>.SRC_ALPHA, <span class="keyword">gl</span>.<span class="keyword">ONE</span> );</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">gl</span>.uniform1f( shaderProgram.uAlpha, parseFloat( document.getElementById(<span class="string">"alpha-level"</span>).value ) );</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">gl</span>.disable( <span class="keyword">gl</span>.BLEND );</span><br><span class="line">        <span class="keyword">gl</span>.enable( <span class="keyword">gl</span>.DEPTH_TEXT );</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> isLighting = ...</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li><strong>在<code>&lt;body&gt;</code>标签中添加可控制的混合等级数值</strong></li>
+</ul>
+<figure class="highlight django"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">body</span> <span class="attr">onload</span>=<span class="string">"WebGLStart();"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">canvas</span> <span class="attr">...</span></span><br><span class="line">    </span><br><span class="line">    &lt;<span class="attr">input</span> <span class="attr">type</span>=<span class="string">"checkbox"</span> <span class="attr">id</span>=<span class="string">"blending"</span> <span class="attr">checked</span> /&gt;</span> 开始混合<span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">table</span> <span class="attr">style</span>=<span class="string">"border: 0; padding: 10.px;"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>Alpha Level：<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">id</span>=<span class="string">"alpha-level"</span> <span class="attr">value</span>=<span class="string">"0.5"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li><strong><code>shader</code></strong></li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 片段着色器 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">id</span>=<span class="string">"shader-fs"</span> <span class="attr">type</span>=<span class="string">"shader/fs"</span>&gt;</span><span class="actionscript"></span><br><span class="line"></span><br><span class="line">    precision mediump float;</span><br><span class="line"></span><br><span class="line">    varying vec2 vCoord;</span><br><span class="line">    varying vec3 vLightingWeighting;</span><br><span class="line"></span><br><span class="line">    uniform sampler2D uSampler;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// alpha</span></span><br><span class="line">    uniform float uAlpha;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> main( <span class="keyword">void</span> )</span><br><span class="line">    &#123;</span><br><span class="line">        vec4 textureColor = texture2D( uSampler, vec2( vCoord.s, vCoord.t ) );</span><br><span class="line">        </span><br><span class="line">        gl_FragColor = vec4( textureColor.rgb * vLightingWeighting, textureColor.a * uAlpha );</span><br><span class="line">    &#125;</span><br><span class="line"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p><a href="https://github.com/pepsigit/WebGL/blob/master/lesson_7.html" target="_blank" rel="external">源码</a></p>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2016/06/12/WebGL-多物体运动/" class="prev" data-title="[WebGL]多物体运动"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2016/06/07/WebGL-平行光和环境光/" class="next" data-title="[WebGL]平行光和环境光"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

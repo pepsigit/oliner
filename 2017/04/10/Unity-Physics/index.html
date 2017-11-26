@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [Unity]Physics |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[Unity]Physics</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2017-04-10</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Unity/">Unity</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <p><br></p>
+<h2 id="Rigidbody"><a href="#Rigidbody" class="headerlink" title="Rigidbody"></a>Rigidbody</h2><p><code>刚体</code></p>
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/unity_tech/18_rigidbody.png" alt=""></p>
+<ul>
+<li><h3 id="Mass-质量"><a href="#Mass-质量" class="headerlink" title="Mass : 质量"></a>Mass : 质量</h3><ul>
+<li><h4 id="质量越大，惯性越大。官方建议物体质量之间最好不要相差100倍。防止2个物体碰撞后，产生过大的速度，影响性能。"><a href="#质量越大，惯性越大。官方建议物体质量之间最好不要相差100倍。防止2个物体碰撞后，产生过大的速度，影响性能。" class="headerlink" title="质量越大，惯性越大。官方建议物体质量之间最好不要相差100倍。防止2个物体碰撞后，产生过大的速度，影响性能。"></a>质量越大，惯性越大。官方建议物体质量之间最好不要相差100倍。防止2个物体碰撞后，产生过大的速度，影响性能。</h4></li>
+</ul>
+</li>
+<li><h3 id="Drag-阻力"><a href="#Drag-阻力" class="headerlink" title="Drag : 阻力"></a>Drag : 阻力</h3><ul>
+<li><h4 id="指的是空气阻力。物体受到这个力的作用，数值越大，移动越困难。设置为无限时，物理受到外力，立即移动。"><a href="#指的是空气阻力。物体受到这个力的作用，数值越大，移动越困难。设置为无限时，物理受到外力，立即移动。" class="headerlink" title="指的是空气阻力。物体受到这个力的作用，数值越大，移动越困难。设置为无限时，物理受到外力，立即移动。"></a>指的是空气阻力。物体受到这个力的作用，数值越大，移动越困难。设置为无限时，物理受到外力，立即移动。</h4></li>
+</ul>
+</li>
+<li><h3 id="Angular-Drag-角阻力"><a href="#Angular-Drag-角阻力" class="headerlink" title="Angular Drag : 角阻力"></a>Angular Drag : 角阻力</h3><ul>
+<li><h4 id="指的是空气阻力。物体受到这个力的作用，数值越大，旋转越困难。设置为无限时，物理受到外力，立即旋转。"><a href="#指的是空气阻力。物体受到这个力的作用，数值越大，旋转越困难。设置为无限时，物理受到外力，立即旋转。" class="headerlink" title="指的是空气阻力。物体受到这个力的作用，数值越大，旋转越困难。设置为无限时，物理受到外力，立即旋转。"></a>指的是空气阻力。物体受到这个力的作用，数值越大，旋转越困难。设置为无限时，物理受到外力，立即旋转。</h4></li>
+</ul>
+</li>
+<li><h3 id="Use-Gravity-重力是否启用"><a href="#Use-Gravity-重力是否启用" class="headerlink" title="Use Gravity : 重力是否启用"></a>Use Gravity : 重力是否启用</h3><ul>
+<li><h4 id="启用：物体受到重力影响。"><a href="#启用：物体受到重力影响。" class="headerlink" title="启用：物体受到重力影响。"></a>启用：物体受到重力影响。</h4></li>
+</ul>
+</li>
+<li><h3 id="Is-Kinematic-运动学是否启动"><a href="#Is-Kinematic-运动学是否启动" class="headerlink" title="Is Kinematic : 运动学是否启动"></a>Is Kinematic : 运动学是否启动</h3><ul>
+<li><h4 id="启用-运动学刚体不受力、碰撞或关节控制，完全由动画或代码Transform驱动，但运动学刚体可以通过碰撞或关节影响其他刚体的运动。非运动学刚体则受力、碰撞或关节控制。"><a href="#启用-运动学刚体不受力、碰撞或关节控制，完全由动画或代码Transform驱动，但运动学刚体可以通过碰撞或关节影响其他刚体的运动。非运动学刚体则受力、碰撞或关节控制。" class="headerlink" title="启用 : 运动学刚体不受力、碰撞或关节控制，完全由动画或代码Transform驱动，但运动学刚体可以通过碰撞或关节影响其他刚体的运动。非运动学刚体则受力、碰撞或关节控制。"></a>启用 : 运动学刚体不受力、碰撞或关节控制，完全由动画或代码<code>Transform</code>驱动，但运动学刚体可以通过碰撞或关节影响其他刚体的运动。非运动学刚体则受力、碰撞或关节控制。</h4></li>
+</ul>
+</li>
+<li><h3 id="Interplate-差值计算类型"><a href="#Interplate-差值计算类型" class="headerlink" title="Interplate : 差值计算类型"></a>Interplate : 差值计算类型</h3><ul>
+<li><h4 id="None-不使用差值"><a href="#None-不使用差值" class="headerlink" title="None : 不使用差值"></a>None : 不使用差值</h4></li>
+<li><h4 id="Interpolate-根据上一帧来平滑移动"><a href="#Interpolate-根据上一帧来平滑移动" class="headerlink" title="Interpolate : 根据上一帧来平滑移动"></a>Interpolate : 根据上一帧来平滑移动</h4></li>
+<li><h4 id="Extrapolate-推算下一帧物体的位置来平滑移动"><a href="#Extrapolate-推算下一帧物体的位置来平滑移动" class="headerlink" title="Extrapolate : 推算下一帧物体的位置来平滑移动"></a>Extrapolate : 推算下一帧物体的位置来平滑移动</h4></li>
+</ul>
+</li>
+<li><h3 id="Collision-Detection-碰撞检测方式"><a href="#Collision-Detection-碰撞检测方式" class="headerlink" title="Collision Detection : 碰撞检测方式"></a>Collision Detection : 碰撞检测方式</h3><ul>
+<li><h4 id="Discrete（离散）-默认的碰撞检测方式。若当物体A运动很快的时候，有可能前一帧还在B物体的前面，后一帧就在B物体后面了，这种情况下不会触发碰撞事件，所以如果需要检测这种情况，那就必须使用后两种检测方式。"><a href="#Discrete（离散）-默认的碰撞检测方式。若当物体A运动很快的时候，有可能前一帧还在B物体的前面，后一帧就在B物体后面了，这种情况下不会触发碰撞事件，所以如果需要检测这种情况，那就必须使用后两种检测方式。" class="headerlink" title="Discrete（离散）: 默认的碰撞检测方式。若当物体A运动很快的时候，有可能前一帧还在B物体的前面，后一帧就在B物体后面了，这种情况下不会触发碰撞事件，所以如果需要检测这种情况，那就必须使用后两种检测方式。"></a>Discrete（离散）: 默认的碰撞检测方式。若当物体A运动很快的时候，有可能前一帧还在B物体的前面，后一帧就在B物体后面了，这种情况下不会触发碰撞事件，所以如果需要检测这种情况，那就必须使用后两种检测方式。</h4></li>
+<li><h4 id="Continuous（连续）-这种方式可以与有静态网格碰撞器的游戏对象进行碰撞检测。"><a href="#Continuous（连续）-这种方式可以与有静态网格碰撞器的游戏对象进行碰撞检测。" class="headerlink" title="Continuous（连续）: 这种方式可以与有静态网格碰撞器的游戏对象进行碰撞检测。"></a>Continuous（连续）: 这种方式可以与有静态网格碰撞器的游戏对象进行碰撞检测。</h4></li>
+<li><h4 id="Continuous-Dynamic（动态连续）-这种方式可以与所有设置了Continuous或Continuous-Dynamic方式的游戏对象进行碰撞检测。"><a href="#Continuous-Dynamic（动态连续）-这种方式可以与所有设置了Continuous或Continuous-Dynamic方式的游戏对象进行碰撞检测。" class="headerlink" title="Continuous Dynamic（动态连续）: 这种方式可以与所有设置了Continuous或Continuous Dynamic方式的游戏对象进行碰撞检测。"></a>Continuous Dynamic（动态连续）: 这种方式可以与所有设置了<code>Continuous</code>或<code>Continuous Dynamic</code>方式的游戏对象进行碰撞检测。</h4></li>
+</ul>
+</li>
+<li><h3 id="Freeze-Position-Rotation（冻结位置-旋转）"><a href="#Freeze-Position-Rotation（冻结位置-旋转）" class="headerlink" title="Freeze Position/Rotation（冻结位置/旋转）:"></a>Freeze Position/Rotation（冻结位置/旋转）:</h3><ul>
+<li><h4 id="可以对物体在X、Y、Z三个轴上的位置-旋转进行锁定，即使受到相应的力也不会改变，但可以通过脚本来修改。"><a href="#可以对物体在X、Y、Z三个轴上的位置-旋转进行锁定，即使受到相应的力也不会改变，但可以通过脚本来修改。" class="headerlink" title="可以对物体在X、Y、Z三个轴上的位置/旋转进行锁定，即使受到相应的力也不会改变，但可以通过脚本来修改。"></a>可以对物体在<code>X</code>、<code>Y</code>、<code>Z</code>三个轴上的位置/旋转进行锁定，即使受到相应的力也不会改变，但可以通过脚本来修改。</h4></li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">变量名</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">bool useGravity</td>
+<td style="text-align:left">是否启用重力影响</td>
+</tr>
+<tr>
+<td style="text-align:left">bool isKinematic</td>
+<td style="text-align:left">是否启用重力学</td>
+</tr>
+<tr>
+<td style="text-align:left">bool freezeRotation</td>
+<td style="text-align:left">是否冻结旋转</td>
+</tr>
+<tr>
+<td style="text-align:left">bool detectCollisions</td>
+<td style="text-align:left">是否启用碰撞检测</td>
+</tr>
+<tr>
+<td style="text-align:left">float drag</td>
+<td style="text-align:left">物体阻力</td>
+</tr>
+<tr>
+<td style="text-align:left">float angularDrag</td>
+<td style="text-align:left">物体角阻力</td>
+</tr>
+<tr>
+<td style="text-align:left">float mass</td>
+<td style="text-align:left">物体质量</td>
+</tr>
+<tr>
+<td style="text-align:left">float3 velocity</td>
+<td style="text-align:left">速度向量</td>
+</tr>
+<tr>
+<td style="text-align:left">float3 angularVelocity</td>
+<td style="text-align:left">角速度向量</td>
+</tr>
+<tr>
+<td style="text-align:left">Vector3 position</td>
+<td style="text-align:left">刚体位置</td>
+</tr>
+<tr>
+<td style="text-align:left">Vector3 centerOfMass</td>
+<td style="text-align:left">刚体重心</td>
+</tr>
+<tr>
+<td style="text-align:left">Vector3 worldCenterOfMass (readonly)</td>
+<td style="text-align:left">世界坐标系中刚体重心</td>
+</tr>
+<tr>
+<td style="text-align:left">Quaternion rotation</td>
+<td style="text-align:left">刚体旋转</td>
+</tr>
+<tr>
+<td style="text-align:left">RigidbodyInterpolation interpolation</td>
+<td style="text-align:left">差值计算方式</td>
+</tr>
+<tr>
+<td style="text-align:left">CollisionDetectionMode collisionDetectionMode</td>
+<td style="text-align:left">刚体的碰撞检测模式</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<ul>
+<li><h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><ul>
+<li><p><code>void AddForce ()</code> : 添加一个力到刚体</p>
+<ul>
+<li><p><code>param</code> : </p>
+<ul>
+<li><p><code>force ( Vector3 )</code> : 力</p>
+</li>
+<li><p><code>ForceMode ( Enum )</code> : </p>
+<ul>
+<li><p><code>ForceMode.Force</code> : 添加一个可持续力到刚体，使用质量参数。</p>
+</li>
+<li><p><code>ForceMode.Acceleration</code> : 添加一个可持续加速度到刚体，忽略质量参数。</p>
+</li>
+<li><p><code>ForceMode.Impulse</code> : 添加一个瞬间冲击力到刚体，使用质量参数。</p>
+</li>
+<li><p><code>ForceMode.VelocityChange</code> : 添加一个瞬间速度变化给刚体，忽略质量参数。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p><code>void AddRelativeForce ()</code> : 添加一个力到刚体，相对于本地坐标</p>
+<ul>
+<li><p><code>param</code> :</p>
+<ul>
+<li><p><code>force ( Vector3 )</code> : 力</p>
+</li>
+<li><p><code>ForceMode</code> : 同上</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p><code>void MovePosition ()</code> : 移动刚体【到】位置</p>
+<ul>
+<li><p><code>param</code> :</p>
+<ul>
+<li><code>position ( Vector3 )</code> : 位置点</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p><code>void AddTorque ()</code> : 添加一个转矩到刚体</p>
+<ul>
+<li><p><code>param</code> :</p>
+<ul>
+<li><p><code>torque ( Vector3 )</code> : 刚体绕此轴旋转，长度为转速</p>
+</li>
+<li><p><code>ForceMode</code> : 同上</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p><code>void AddRelativeTorque ()</code> : 添加一个转矩到刚体，相对于本地坐标</p>
+<ul>
+<li><p><code>param</code> :</p>
+<ul>
+<li><p><code>torque ( Vector3 )</code> : 刚体绕此轴旋转，长度为转速</p>
+</li>
+<li><p><code>ForceMode</code> : 同上</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p><code>void MoveRotation ()</code> : 旋转刚体【到】位置</p>
+<ul>
+<li><p><code>param</code> :</p>
+<ul>
+<li><code>rot ( Quaternion )</code> : 新角度</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p><code>void AddForceAtPosition ()</code> : 在物体表面施加力</p>
+<ul>
+<li><p><code>param</code> :</p>
+<ul>
+<li><p><code>force ( Vector3 )</code> : 力</p>
+</li>
+<li><p><code>position ( Vector3 )</code> : 位置点</p>
+</li>
+<li><p><code>ForceMode</code> : 同上</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p><code>void AddExplosionForce ()</code> : 添加一个爆炸力到刚体</p>
+<ul>
+<li><p><code>param</code> :</p>
+<ul>
+<li><p><code>explosionForce ( float )</code> : 爆破力大小</p>
+</li>
+<li><p><code>explosionPosition ( Vector3 )</code> : 爆炸位置</p>
+</li>
+<li><p><code>explosionRadius ( float )</code> : 爆炸半径，0为无穷大</p>
+</li>
+<li><p><code>upwardsModifier ( float )</code> : 可以理解为爆炸产生的向上冲击波的衰减值。值越大，威力越小</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p><code>Vector3 ClosestPointOnBounds ()</code> : 返回刚体距离某点的最近的点</p>
+<ul>
+<li><p><code>param</code> :</p>
+<ul>
+<li><code>position ( Vector3 )</code> : 目标点</li>
+</ul>
+</li>
+<li><p><code>return</code> ：</p>
+<ul>
+<li><code>Vector3</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p><code>Vector3 GetRelativePointVelocity ()</code> : 获取刚体上的点相对本地坐标系的速度</p>
+<ul>
+<li><p><code>param</code> :</p>
+<ul>
+<li><code>relativePoint ( Vector3 )</code> : 刚体上一点</li>
+</ul>
+</li>
+<li><p><code>return</code> :</p>
+<ul>
+<li><code>Vector3</code> : 获取的速度有考虑刚体的角速度</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p><code>Vector3 GetPointVelocity ()</code> : 获取刚体上的点相对世界坐标系的速度</p>
+<ul>
+<li><p><code>param</code> :</p>
+<ul>
+<li><code>worldPoint ( Vector3 )</code> : 刚体上一点</li>
+</ul>
+</li>
+<li><p><code>return</code> :</p>
+<ul>
+<li><code>Vector3</code> : 获取的速度有考虑刚体的角速度</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><code>void Sleep ()</code> : 强制一个刚体休眠至少一帧</li>
+</ul>
+<hr>
+<ul>
+<li><p><code>bool IsSleeping ()</code> : 判断刚体是否在休眠</p>
+<ul>
+<li><p><code>return</code> :</p>
+<ul>
+<li><code>bool</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><code>void WakeUp ()</code> : 强制唤醒一个刚体</li>
+</ul>
+<hr>
+<ul>
+<li><p><code>bool SweepTest ()</code> : 碰撞扫描，返回是否将要与物体发生碰撞</p>
+<ul>
+<li><p><code>param</code> :</p>
+<ul>
+<li><p><code>direction ( Vector3 )</code> : 扫描方向</p>
+</li>
+<li><p><code>hitInfo ( out RaycastHit )</code> : 如果将要发生碰撞(即返回true），<code>hitInfo</code>将包含更多碰撞信息</p>
+</li>
+<li><p><code>distance ( float )</code> : 扫描长度</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p><code>RaycastHit[] SweepTestAll ()</code> : 碰撞扫描，返回所有碰撞信息</p>
+<ul>
+<li><p><code>param</code> :</p>
+<ul>
+<li><p><code>direction ( Vector3 )</code> : 扫描方向</p>
+</li>
+<li><p><code>distance ( float )</code> : 扫描长度</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+<hr>
+<blockquote>
+<p>Tips:</p>
+</blockquote>
+<ul>
+<li><h4 id="在使用刚体来控制物体运动时，可以通过添加力的方式来操作对象，这与直接操作Transform相比，视觉上有很大的不同。"><a href="#在使用刚体来控制物体运动时，可以通过添加力的方式来操作对象，这与直接操作Transform相比，视觉上有很大的不同。" class="headerlink" title="在使用刚体来控制物体运动时，可以通过添加力的方式来操作对象，这与直接操作Transform相比，视觉上有很大的不同。"></a>在使用刚体来控制物体运动时，可以通过<code>添加力</code>的方式来操作对象，这与直接操作<code>Transform</code>相比，视觉上有很大的不同。</h4></li>
+<li><h4 id="同时以物理方式和Tranform方式操作物体，会导致碰撞及其相关运算问题。"><a href="#同时以物理方式和Tranform方式操作物体，会导致碰撞及其相关运算问题。" class="headerlink" title="同时以物理方式和Tranform方式操作物体，会导致碰撞及其相关运算问题。"></a>同时以物理方式和<code>Tranform</code>方式操作物体，会导致碰撞及其相关运算问题。</h4></li>
+<li><h4 id="父子级"><a href="#父子级" class="headerlink" title="父子级 :"></a>父子级 :</h4><ul>
+<li><h5 id="父-刚-子-无"><a href="#父-刚-子-无" class="headerlink" title="父(刚)子(无) :"></a>父(刚)子(无) :</h5><ul>
+<li><p>移动父物体，父子会做物理运动，重心为两者组成的包围盒重心。</p>
+</li>
+<li><p>移动子物体，会更新重心，拉动父物体，并做物理运动。</p>
+</li>
+</ul>
+</li>
+<li><h5 id="父-无-子-刚"><a href="#父-无-子-刚" class="headerlink" title="父(无)子(刚) :"></a>父(无)子(刚) :</h5><ul>
+<li><p>移动父物体，子物体跟着移动，但是子物体是半独立的，自身会受到物理影响。</p>
+</li>
+<li><p>移动子物体，子物体自身会做物理运动，对父物体无影响。</p>
+</li>
+</ul>
+</li>
+<li><h5 id="父-刚-子-刚"><a href="#父-刚-子-刚" class="headerlink" title="父(刚)子(刚) :"></a>父(刚)子(刚) :</h5><ul>
+<li><p>移动父物体，子物体跟着移动，但自身会受到物理影响。</p>
+</li>
+<li><p>移动子物体，子物体自身会做物理运动，对父物体无影响。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><h4 id="脚本控制"><a href="#脚本控制" class="headerlink" title="脚本控制 :"></a>脚本控制 :</h4><ul>
+<li><h5 id="使用物理引擎控制刚体时，不要直接操作Transform。"><a href="#使用物理引擎控制刚体时，不要直接操作Transform。" class="headerlink" title="使用物理引擎控制刚体时，不要直接操作Transform。"></a>使用物理引擎控制刚体时，不要直接操作<code>Transform</code>。</h5></li>
+</ul>
+</li>
+<li><h4 id="动画"><a href="#动画" class="headerlink" title="动画 :"></a>动画 :</h4><ul>
+<li><h5 id="有时候需要纸娃娃效果，需要在动画与物理控制之间进行切换。当我们勾选Is-Kinematic后，刚体为运动学刚体，它将不再受到外力影响。这时只能通过Transform方式来操作对象，但是运动学刚体还会影响其他刚体，但他自己不会再受物理引擎控制。"><a href="#有时候需要纸娃娃效果，需要在动画与物理控制之间进行切换。当我们勾选Is-Kinematic后，刚体为运动学刚体，它将不再受到外力影响。这时只能通过Transform方式来操作对象，但是运动学刚体还会影响其他刚体，但他自己不会再受物理引擎控制。" class="headerlink" title="有时候需要纸娃娃效果，需要在动画与物理控制之间进行切换。当我们勾选Is Kinematic后，刚体为运动学刚体，它将不再受到外力影响。这时只能通过Transform方式来操作对象，但是运动学刚体还会影响其他刚体，但他自己不会再受物理引擎控制。"></a>有时候需要纸娃娃效果，需要在动画与物理控制之间进行切换。当我们勾选<code>Is Kinematic</code>后，刚体为<code>运动学刚体</code>，它将不再受到外力影响。这时只能通过<code>Transform</code>方式来操作对象，但是<code>运动学刚体</code>还会影响其他刚体，但他自己不会再受物理引擎控制。</h5></li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+<hr>
+<hr>
+<h2 id="Character-Controller"><a href="#Character-Controller" class="headerlink" title="Character Controller"></a>Character Controller</h2><p><code>角色控制器</code></p>
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/unity_tech/19_charactercontroller.png" alt=""></p>
+<ul>
+<li><h3 id="Slope-Limit-坡度限制"><a href="#Slope-Limit-坡度限制" class="headerlink" title="Slope Limit : 坡度限制"></a>Slope Limit : 坡度限制</h3><ul>
+<li><h4 id="只能攀爬-lt-此参数值的坡度"><a href="#只能攀爬-lt-此参数值的坡度" class="headerlink" title="只能攀爬&lt;=此参数值的坡度"></a>只能攀爬<code>&lt;=</code>此参数值的坡度</h4></li>
+</ul>
+</li>
+<li><h3 id="Step-Offset-台阶高度"><a href="#Step-Offset-台阶高度" class="headerlink" title="Step Offset : 台阶高度"></a>Step Offset : 台阶高度</h3><ul>
+<li><h4 id="可以迈上的最高的台阶高度"><a href="#可以迈上的最高的台阶高度" class="headerlink" title="可以迈上的最高的台阶高度"></a>可以迈上的最高的台阶高度</h4></li>
+</ul>
+</li>
+<li><h3 id="Skin-Width-皮肤厚度"><a href="#Skin-Width-皮肤厚度" class="headerlink" title="Skin Width : 皮肤厚度"></a>Skin Width : 皮肤厚度</h3><ul>
+<li><h4 id="参数决定了两个碰撞体可以相互参入的深度，较大的参数值会产生抖动的现象，较小的参数值会导致所控制的游戏对象被卡住，较为合理的设定是，该参数值为radius值得10"><a href="#参数决定了两个碰撞体可以相互参入的深度，较大的参数值会产生抖动的现象，较小的参数值会导致所控制的游戏对象被卡住，较为合理的设定是，该参数值为radius值得10" class="headerlink" title="参数决定了两个碰撞体可以相互参入的深度，较大的参数值会产生抖动的现象，较小的参数值会导致所控制的游戏对象被卡住，较为合理的设定是，该参数值为radius值得10%"></a>参数决定了两个碰撞体可以相互参入的深度，较大的参数值会产生抖动的现象，较小的参数值会导致所控制的游戏对象被卡住，较为合理的设定是，该参数值为<code>radius</code>值得10%</h4></li>
+</ul>
+</li>
+<li><h3 id="Min-Move-Distance-最小移动距离"><a href="#Min-Move-Distance-最小移动距离" class="headerlink" title="Min Move Distance : 最小移动距离"></a>Min Move Distance : 最小移动距离</h3><ul>
+<li><h4 id="如果所控制的角色对象移动的距离小于该值，则游戏对象将不会移动这可以避免抖动，大多数情况下将该值设为0"><a href="#如果所控制的角色对象移动的距离小于该值，则游戏对象将不会移动这可以避免抖动，大多数情况下将该值设为0" class="headerlink" title="如果所控制的角色对象移动的距离小于该值，则游戏对象将不会移动这可以避免抖动，大多数情况下将该值设为0"></a>如果所控制的角色对象移动的距离小于该值，则游戏对象将不会移动这可以避免抖动，大多数情况下将该值设为0</h4></li>
+</ul>
+</li>
+<li><h3 id="Center-碰撞体中心"><a href="#Center-碰撞体中心" class="headerlink" title="Center : 碰撞体中心"></a>Center : 碰撞体中心</h3><ul>
+<li><h4 id="碰撞体在世界坐标中的位置，并不影响所控制的角色对象的中心坐标"><a href="#碰撞体在世界坐标中的位置，并不影响所控制的角色对象的中心坐标" class="headerlink" title="碰撞体在世界坐标中的位置，并不影响所控制的角色对象的中心坐标"></a>碰撞体在世界坐标中的位置，并不影响所控制的角色对象的中心坐标</h4></li>
+</ul>
+</li>
+<li><h3 id="Radius-半径"><a href="#Radius-半径" class="headerlink" title="Radius : 半径"></a>Radius : 半径</h3><ul>
+<li><h4 id="胶囊体碰撞的长度半径，同时该项也决定了碰撞体的宽度"><a href="#胶囊体碰撞的长度半径，同时该项也决定了碰撞体的宽度" class="headerlink" title="胶囊体碰撞的长度半径，同时该项也决定了碰撞体的宽度"></a>胶囊体碰撞的长度半径，同时该项也决定了碰撞体的宽度</h4></li>
+</ul>
+</li>
+<li><h3 id="Height-高度"><a href="#Height-高度" class="headerlink" title="Height : 高度"></a>Height : 高度</h3><ul>
+<li><h4 id="胶囊体碰撞体的高度，改变此值将会使碰撞体沿着Y轴的正负连个方向的伸缩"><a href="#胶囊体碰撞体的高度，改变此值将会使碰撞体沿着Y轴的正负连个方向的伸缩" class="headerlink" title="胶囊体碰撞体的高度，改变此值将会使碰撞体沿着Y轴的正负连个方向的伸缩"></a>胶囊体碰撞体的高度，改变此值将会使碰撞体沿着Y轴的正负连个方向的伸缩</h4></li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><h3 id="函数-1"><a href="#函数-1" class="headerlink" title="函数"></a>函数</h3><ul>
+<li><p><code>CollisionFlags Move ()</code> : 移动</p>
+<ul>
+<li><p><code>param</code> :</p>
+<ul>
+<li><code>motion ( Vector3 )</code> : 移动方向增量</li>
+</ul>
+</li>
+<li><p><code>return</code> :</p>
+<ul>
+<li><code>CollisionFlags</code> : 碰撞标识</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p><code>bool SimpleMove ()</code> : 移动</p>
+<ul>
+<li><p><code>param</code> : </p>
+<ul>
+<li><code>motion ( Vector3 )</code> : 移动方向增量</li>
+</ul>
+</li>
+<li><p><code>return</code> :</p>
+<ul>
+<li><code>bool</code> : 是否接触地面</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p><code>void OnControllerColliderHit ()</code> : 碰撞检测</p>
+<ul>
+<li><p><code>param</code> :</p>
+<ul>
+<li><code>hit ( ControllerColliderHit )[非自定义传值]</code> : 碰撞信息</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><h3 id="Move-和-SimpleMove-的区别"><a href="#Move-和-SimpleMove-的区别" class="headerlink" title="Move 和 SimpleMove 的区别"></a><code>Move</code> 和 <code>SimpleMove</code> 的区别</h3><ul>
+<li><h3 id="Move"><a href="#Move" class="headerlink" title="Move :"></a><code>Move</code> :</h3><ul>
+<li><h4 id="角色移动只受到碰撞的约束"><a href="#角色移动只受到碰撞的约束" class="headerlink" title="角色移动只受到碰撞的约束"></a>角色移动只受到碰撞的约束</h4></li>
+<li><h4 id="角色遇到碰撞时将会沿着碰撞盒滑动"><a href="#角色遇到碰撞时将会沿着碰撞盒滑动" class="headerlink" title="角色遇到碰撞时将会沿着碰撞盒滑动"></a>角色遇到碰撞时将会沿着碰撞盒滑动</h4></li>
+<li><h4 id="返回值是对移动过程中遇到的碰撞信息的汇总"><a href="#返回值是对移动过程中遇到的碰撞信息的汇总" class="headerlink" title="返回值是对移动过程中遇到的碰撞信息的汇总"></a>返回值是对移动过程中遇到的碰撞信息的汇总</h4></li>
+<li><h4 id="函数并不使用重力"><a href="#函数并不使用重力" class="headerlink" title="函数并不使用重力"></a>函数并不使用重力</h4></li>
+</ul>
+</li>
+<li><h3 id="SimpleMove"><a href="#SimpleMove" class="headerlink" title="SimpleMove :"></a><code>SimpleMove</code> :</h3><ul>
+<li><h4 id="Y轴的速度将会被忽略"><a href="#Y轴的速度将会被忽略" class="headerlink" title="Y轴的速度将会被忽略"></a>Y轴的速度将会被忽略</h4></li>
+<li><h4 id="速度单位是米每秒"><a href="#速度单位是米每秒" class="headerlink" title="速度单位是米每秒"></a>速度单位是米每秒</h4></li>
+<li><h4 id="重力自动生效"><a href="#重力自动生效" class="headerlink" title="重力自动生效"></a>重力自动生效</h4></li>
+<li><h4 id="返回值是角色是否着地"><a href="#返回值是角色是否着地" class="headerlink" title="返回值是角色是否着地"></a>返回值是角色是否着地</h4></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+<hr>
+<hr>
+<h2 id="PhysicsManager"><a href="#PhysicsManager" class="headerlink" title="PhysicsManager"></a>PhysicsManager</h2><p><code>物理管理器</code></p>
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/unity_tech/23_physicsmgr.png" alt=""></p>
+<ul>
+<li><h3 id="Gravity-重力"><a href="#Gravity-重力" class="headerlink" title="Gravity : 重力"></a><code>Gravity</code> : 重力</h3><ul>
+<li><h4 id="重力应用于所有刚体，一般重力仅在Y轴起作用（y轴负方向是向下）。单位是-m-s2"><a href="#重力应用于所有刚体，一般重力仅在Y轴起作用（y轴负方向是向下）。单位是-m-s2" class="headerlink" title="重力应用于所有刚体，一般重力仅在Y轴起作用（y轴负方向是向下）。单位是 m/s2"></a>重力应用于所有刚体，一般重力仅在Y轴起作用（y轴负方向是向下）。单位是 m/s<sup>2</sup></h4></li>
+</ul>
+</li>
+<li><h3 id="Default-Material-默认材质"><a href="#Default-Material-默认材质" class="headerlink" title="Default Material : 默认材质"></a><code>Default Material</code> : 默认材质</h3><ul>
+<li><h4 id="如果一个碰撞体没有设置物理材质的话，将会设置为默认材质"><a href="#如果一个碰撞体没有设置物理材质的话，将会设置为默认材质" class="headerlink" title="如果一个碰撞体没有设置物理材质的话，将会设置为默认材质"></a>如果一个碰撞体没有设置物理材质的话，将会设置为默认材质</h4></li>
+</ul>
+</li>
+<li><h3 id="Bounce-Threshold-反弹阈值"><a href="#Bounce-Threshold-反弹阈值" class="headerlink" title="Bounce Threshold : 反弹阈值"></a><code>Bounce Threshold</code> : 反弹阈值</h3><ul>
+<li><h4 id="如果2个碰撞体的相对速度低于该值，那么将不会反弹。该值也用于减少抖动，所以不建议设置为很低的值"><a href="#如果2个碰撞体的相对速度低于该值，那么将不会反弹。该值也用于减少抖动，所以不建议设置为很低的值" class="headerlink" title="如果2个碰撞体的相对速度低于该值，那么将不会反弹。该值也用于减少抖动，所以不建议设置为很低的值"></a>如果2个碰撞体的相对速度低于该值，那么将不会反弹。该值也用于减少抖动，所以不建议设置为很低的值</h4></li>
+</ul>
+</li>
+<li><h3 id="Sleep-Threshold-静止阈值"><a href="#Sleep-Threshold-静止阈值" class="headerlink" title="Sleep Threshold : 静止阈值"></a><code>Sleep Threshold</code> : 静止阈值</h3><ul>
+<li><h4 id="速度低于此值，意为静止"><a href="#速度低于此值，意为静止" class="headerlink" title="速度低于此值，意为静止"></a>速度低于此值，意为静止</h4></li>
+</ul>
+</li>
+<li><h3 id="Default-Contact-Offset-默认碰撞检测距离"><a href="#Default-Contact-Offset-默认碰撞检测距离" class="headerlink" title="Default Contact Offset : 默认碰撞检测距离"></a><code>Default Contact Offset</code> : 默认碰撞检测距离</h3></li>
+<li><h3 id="Solver-Iteration-Count-求解迭代次数"><a href="#Solver-Iteration-Count-求解迭代次数" class="headerlink" title="Solver Iteration Count : 求解迭代次数"></a><code>Solver Iteration Count</code> : 求解迭代次数</h3><ul>
+<li><h4 id="决定了关节和链接的计算精度。一般设置为7就可以适用于大多数情况"><a href="#决定了关节和链接的计算精度。一般设置为7就可以适用于大多数情况" class="headerlink" title="决定了关节和链接的计算精度。一般设置为7就可以适用于大多数情况"></a>决定了关节和链接的计算精度。一般设置为7就可以适用于大多数情况</h4></li>
+</ul>
+</li>
+<li><h3 id="Queries-Hit-Triggers-命中触发"><a href="#Queries-Hit-Triggers-命中触发" class="headerlink" title="Queries Hit Triggers : 命中触发"></a><code>Queries Hit Triggers</code> : 命中触发</h3></li>
+<li><h3 id="Enable-Adaptive-Force-自适应力"><a href="#Enable-Adaptive-Force-自适应力" class="headerlink" title="Enable Adaptive Force : 自适应力"></a><code>Enable Adaptive Force</code> : 自适应力</h3></li>
+<li><h3 id="Layer-Collision-Matrix-层之间碰撞检测矩阵"><a href="#Layer-Collision-Matrix-层之间碰撞检测矩阵" class="headerlink" title="Layer Collision Matrix : 层之间碰撞检测矩阵"></a><code>Layer Collision Matrix</code> : 层之间碰撞检测矩阵</h3></li>
+</ul>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2017/04/18/Lua-仿实现C-常量数组/" class="prev" data-title="[Lua]仿实现C++常量数组"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2017/04/01/Unity-Mesh/" class="next" data-title="[Unity]Mesh"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [Unity]资源内存的踪迹 |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[Unity]资源内存的踪迹</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2017-02-28</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Unity/">Unity</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <h4 id="今天就研究研究资源内存来来往往的踪迹。"><a href="#今天就研究研究资源内存来来往往的踪迹。" class="headerlink" title="今天就研究研究资源内存来来往往的踪迹。"></a>今天就研究研究资源内存来来往往的踪迹。</h4><hr>
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/unity_tech/1_menu.png" alt=""></p>
+<ul>
+<li><h3 id="先介绍下功能菜单："><a href="#先介绍下功能菜单：" class="headerlink" title="先介绍下功能菜单："></a>先介绍下功能菜单：</h3><ul>
+<li><h5 id="加载资源包"><a href="#加载资源包" class="headerlink" title="加载资源包"></a>加载资源包</h5></li>
+<li><h5 id="加载资源"><a href="#加载资源" class="headerlink" title="加载资源"></a>加载资源</h5></li>
+<li><h5 id="实例化资源"><a href="#实例化资源" class="headerlink" title="实例化资源"></a>实例化资源</h5></li>
+<li><h5 id="销毁资源"><a href="#销毁资源" class="headerlink" title="销毁资源"></a>销毁资源</h5></li>
+<li><h5 id="卸载资源（false）"><a href="#卸载资源（false）" class="headerlink" title="卸载资源（false）"></a>卸载资源（false）</h5></li>
+<li><h5 id="卸载资源（true）"><a href="#卸载资源（true）" class="headerlink" title="卸载资源（true）"></a>卸载资源（true）</h5></li>
+<li><h5 id="卸载无引用资源（保留资源引用）"><a href="#卸载无引用资源（保留资源引用）" class="headerlink" title="卸载无引用资源（保留资源引用）"></a>卸载无引用资源（保留资源引用）</h5></li>
+<li><h5 id="卸载无引用资源（移除资源引用）"><a href="#卸载无引用资源（移除资源引用）" class="headerlink" title="卸载无引用资源（移除资源引用）"></a>卸载无引用资源（移除资源引用）</h5></li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+<hr>
+<ul>
+<li><h3 id="首先来看加载资源包"><a href="#首先来看加载资源包" class="headerlink" title="首先来看加载资源包"></a>首先来看加载资源包</h3></li>
+</ul>
+<h5 id="当我们刚启动Game时，Profilter面板："><a href="#当我们刚启动Game时，Profilter面板：" class="headerlink" title="当我们刚启动Game时，Profilter面板："></a>当我们刚启动Game时，Profilter面板：</h5><p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/unity_tech/2_before_loadAssetBundle.png" alt=""></p>
+<p><br></p>
+<h5 id="当我们加载资源包后，Profilter面板，多了一个AssetBundle，这就是我们加载的资源包："><a href="#当我们加载资源包后，Profilter面板，多了一个AssetBundle，这就是我们加载的资源包：" class="headerlink" title="当我们加载资源包后，Profilter面板，多了一个AssetBundle，这就是我们加载的资源包："></a>当我们加载资源包后，Profilter面板，多了一个AssetBundle，这就是我们加载的资源包：</h5><p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/unity_tech/3_load_AssetBundle.png" alt=""></p>
+<p><br></p>
+<h5 id="当我们调用-Unload-false-或者-Unload-true-时，资源包内存被释放，恢复到初始状态。"><a href="#当我们调用-Unload-false-或者-Unload-true-时，资源包内存被释放，恢复到初始状态。" class="headerlink" title="当我们调用 Unload(false) 或者 Unload(true) 时，资源包内存被释放，恢复到初始状态。"></a>当我们调用 Unload(false) 或者 Unload(true) 时，资源包内存被释放，恢复到初始状态。</h5><p><br></p>
+<hr>
+<ul>
+<li><h3 id="加载资源包中的资源"><a href="#加载资源包中的资源" class="headerlink" title="加载资源包中的资源"></a>加载资源包中的资源</h3></li>
+</ul>
+<h5 id="我只将官方的第三人称的-Prefab-打成了资源包。在我们加载资源前（内存中已加载资源包），Profilter面板："><a href="#我只将官方的第三人称的-Prefab-打成了资源包。在我们加载资源前（内存中已加载资源包），Profilter面板：" class="headerlink" title="我只将官方的第三人称的 Prefab 打成了资源包。在我们加载资源前（内存中已加载资源包），Profilter面板："></a>我只将官方的第三人称的 Prefab 打成了资源包。在我们加载资源前（内存中已加载资源包），Profilter面板：</h5><p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/unity_tech/4_before_load_Asset.png" alt=""></p>
+<p><br></p>
+<h5 id="在我们加载资源后（内存中已加载资源包），Profilter面板："><a href="#在我们加载资源后（内存中已加载资源包），Profilter面板：" class="headerlink" title="在我们加载资源后（内存中已加载资源包），Profilter面板："></a>在我们加载资源后（内存中已加载资源包），Profilter面板：</h5><p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/unity_tech/5_load_Asset.png" alt=""></p>
+<h5 id="我们可以看到-Assets-增加了-（-322-146-）176-项。"><a href="#我们可以看到-Assets-增加了-（-322-146-）176-项。" class="headerlink" title="我们可以看到 Assets 增加了 （ 322 - 146 = ）176 项。"></a>我们可以看到 Assets 增加了 （ 322 - 146 = ）176 项。</h5><blockquote>
+<p>Texture(2)、Shader(1)、Mesh(2)、Transform(84)、GameObject(84)、SkinnedMeshRenderer(2)、Material(1)。一共176项。</p>
+</blockquote>
+<p><br></p>
+<hr>
+<ul>
+<li><h3 id="实例化资源-1"><a href="#实例化资源-1" class="headerlink" title="实例化资源"></a>实例化资源</h3></li>
+</ul>
+<h5 id="现在让我们来实例化资源，让他现在在场景中。之前的Profilter面板："><a href="#现在让我们来实例化资源，让他现在在场景中。之前的Profilter面板：" class="headerlink" title="现在让我们来实例化资源，让他现在在场景中。之前的Profilter面板："></a>现在让我们来实例化资源，让他现在在场景中。之前的Profilter面板：</h5><p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/unity_tech/6_before_instantiate.png" alt=""></p>
+<p><br></p>
+<h5 id="当我们实例化资源后，场景中显示，Profilter面板："><a href="#当我们实例化资源后，场景中显示，Profilter面板：" class="headerlink" title="当我们实例化资源后，场景中显示，Profilter面板："></a>当我们实例化资源后，场景中显示，Profilter面板：</h5><p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/unity_tech/7_instantiate.png" alt=""></p>
+<p><br></p>
+<h5 id="查看-Scene-Memory，增加了-170-项。"><a href="#查看-Scene-Memory，增加了-170-项。" class="headerlink" title="查看 Scene Memory，增加了 170 项。"></a>查看 Scene Memory，增加了 170 项。</h5><blockquote>
+<p>Transform(84)、GameObject(84)、SkinnedMeshRenderer(2)，一共170项。Transform和GameObject中的默认2项是主照相机和平行光。</p>
+</blockquote>
+<p><br></p>
+<hr>
+<ul>
+<li><h3 id="销毁对象"><a href="#销毁对象" class="headerlink" title="销毁对象"></a>销毁对象</h3></li>
+</ul>
+<h5 id="当我们Destroy刚刚实例化的资源后，可见，只是Scene-Memory恢复了当初的-20默认项。而我们加载的资源包（Not-Saved-AssetBundle）、资源-Asset-还在，这也证明了我这篇帖子最后引用的文章里面说的，实例化一个对象是“引用-复制”的过程，我们Destroy的只是复制过来的GameObject、Transform，然后对象身上的Shader、Material、Texture等只是对资源的引用，不妨客官你可以试一下，使用DestroyImmediate-你加载的资源-true-试一下，你的资源会彻底失效。"><a href="#当我们Destroy刚刚实例化的资源后，可见，只是Scene-Memory恢复了当初的-20默认项。而我们加载的资源包（Not-Saved-AssetBundle）、资源-Asset-还在，这也证明了我这篇帖子最后引用的文章里面说的，实例化一个对象是“引用-复制”的过程，我们Destroy的只是复制过来的GameObject、Transform，然后对象身上的Shader、Material、Texture等只是对资源的引用，不妨客官你可以试一下，使用DestroyImmediate-你加载的资源-true-试一下，你的资源会彻底失效。" class="headerlink" title="当我们Destroy刚刚实例化的资源后，可见，只是Scene Memory恢复了当初的 20默认项。而我们加载的资源包（Not Saved/AssetBundle）、资源(Asset)还在，这也证明了我这篇帖子最后引用的文章里面说的，实例化一个对象是“引用+复制”的过程，我们Destroy的只是复制过来的GameObject、Transform，然后对象身上的Shader、Material、Texture等只是对资源的引用，不妨客官你可以试一下，使用DestroyImmediate(你加载的资源, true)试一下，你的资源会彻底失效。"></a>当我们<code>Destroy</code>刚刚实例化的资源后，可见，只是<code>Scene Memory</code>恢复了当初的 20默认项。而我们加载的资源包（Not Saved/AssetBundle）、资源(Asset)还在，这也证明了<a href="http://oliner.cn/2017/02/27/Unity-AssetBundle/">我这篇帖子</a>最后引用的文章里面说的，实例化一个对象是“引用+复制”的过程，我们<code>Destroy</code>的只是复制过来的<code>GameObject</code>、<code>Transform</code>，然后对象身上的<code>Shader</code>、<code>Material</code>、<code>Texture</code>等只是对资源的引用，不妨客官你可以试一下，使用<code>DestroyImmediate(你加载的资源, true)</code>试一下，你的资源会彻底失效。</h5><p><br></p>
+<hr>
+<ul>
+<li><h3 id="Assetbundle-Unload-false"><a href="#Assetbundle-Unload-false" class="headerlink" title="Assetbundle Unload(false)"></a>Assetbundle Unload(false)</h3></li>
+</ul>
+<h5 id="这个是卸载我们加载的资源包，就是Not-Saved-AssetBundle。"><a href="#这个是卸载我们加载的资源包，就是Not-Saved-AssetBundle。" class="headerlink" title="这个是卸载我们加载的资源包，就是Not Saved/AssetBundle。"></a>这个是卸载我们加载的资源包，就是<code>Not Saved/AssetBundle</code>。</h5><p><br></p>
+<hr>
+<ul>
+<li><h3 id="Assetbundle-Unload-true"><a href="#Assetbundle-Unload-true" class="headerlink" title="Assetbundle Unload( true )"></a>Assetbundle Unload( true )</h3></li>
+</ul>
+<h5 id="当我们按照顺序实例化一个对象时-Load-AssetBundle-gt-Load-Asset-gt-Instantiate-，调用-true-以后，会发现对象消失，但是对象的GameObject还在，Profilter-恢复到初始状态，这是把我们加载的资源包，加载的资源全部消除。请慎用。"><a href="#当我们按照顺序实例化一个对象时-Load-AssetBundle-gt-Load-Asset-gt-Instantiate-，调用-true-以后，会发现对象消失，但是对象的GameObject还在，Profilter-恢复到初始状态，这是把我们加载的资源包，加载的资源全部消除。请慎用。" class="headerlink" title="当我们按照顺序实例化一个对象时(Load AssetBundle -&gt; Load Asset -&gt; Instantiate )，调用 (true) 以后，会发现对象消失，但是对象的GameObject还在，Profilter 恢复到初始状态，这是把我们加载的资源包，加载的资源全部消除。请慎用。"></a>当我们按照顺序实例化一个对象时(Load AssetBundle -&gt; Load Asset -&gt; Instantiate )，调用 <code>(true)</code> 以后，会发现对象消失，但是对象的<code>GameObject</code>还在，Profilter 恢复到初始状态，这是把我们加载的资源包，加载的资源全部消除。请慎用。</h5><p><br></p>
+<hr>
+<ul>
+<li><h3 id="销毁对象后，无用资源怎么还在？"><a href="#销毁对象后，无用资源怎么还在？" class="headerlink" title="销毁对象后，无用资源怎么还在？"></a>销毁对象后，无用资源怎么还在？</h3></li>
+</ul>
+<h5 id="当我们按照顺序实例化一个对象后，销毁它，调用UnloadUnusedAssets-后，Profilter面板无变化，why？因为我们在加载资源包之后，我们会加载资源，然后，当我们使用变量保存加载的资源，而后我们使用这个变量实例化对象时，这个变量是对资源的引用，虽然我们把实例化对象销毁了，但是我们对资源的引用还在，所以，我们要卸载对资源的引用，再调用UnloadUnusedAssets-，Profilter面板恢复到初始状态。"><a href="#当我们按照顺序实例化一个对象后，销毁它，调用UnloadUnusedAssets-后，Profilter面板无变化，why？因为我们在加载资源包之后，我们会加载资源，然后，当我们使用变量保存加载的资源，而后我们使用这个变量实例化对象时，这个变量是对资源的引用，虽然我们把实例化对象销毁了，但是我们对资源的引用还在，所以，我们要卸载对资源的引用，再调用UnloadUnusedAssets-，Profilter面板恢复到初始状态。" class="headerlink" title="当我们按照顺序实例化一个对象后，销毁它，调用UnloadUnusedAssets()后，Profilter面板无变化，why？因为我们在加载资源包之后，我们会加载资源，然后，当我们使用变量保存加载的资源，而后我们使用这个变量实例化对象时，这个变量是对资源的引用，虽然我们把实例化对象销毁了，但是我们对资源的引用还在，所以，我们要卸载对资源的引用，再调用UnloadUnusedAssets()，Profilter面板恢复到初始状态。"></a>当我们按照顺序实例化一个对象后，销毁它，调用<code>UnloadUnusedAssets()</code>后，Profilter面板无变化，why？因为我们在加载资源包之后，我们会加载资源，然后，当我们使用变量保存加载的资源，而后我们使用这个变量实例化对象时，这个变量是对资源的引用，虽然我们把实例化对象销毁了，但是我们对资源的引用还在，所以，我们要卸载对资源的引用，再调用<code>UnloadUnusedAssets()</code>，Profilter面板恢复到初始状态。</h5><p><br></p>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2017/03/06/Unity-Assets目录下的各文件夹/" class="prev" data-title="[Unity]Assets目录下的各文件夹"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2017/02/28/Unity-资源知识体系总览/" class="next" data-title="[Unity]资源知识体系总览"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

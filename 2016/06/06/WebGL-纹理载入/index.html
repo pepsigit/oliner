@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [WebGL]纹理载入 |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[WebGL]纹理载入</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2016-06-06</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/WebGL/">WebGL</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <hr>
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/WebGL/4.gif" alt=""></p>
+<a id="more"></a>
+<hr>
+<p><strong>首先我们删除与三角锥有关的代码.</strong></p>
+<p><strong>Deleting… OK.</strong></p>
+<hr>
+<ul>
+<li><strong><code>WebGLStart()</code></strong></li>
+</ul>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">function</span> <span class="selector-tag">WebGLStart</span>()</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 增加初始化纹理接口</span></span><br><span class="line">    <span class="selector-tag">initTexture</span>();</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li><strong><code>initTexture()</code></strong></li>
+</ul>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 纹理变量</span></span><br><span class="line">var <span class="built_in">texture</span>;</span><br><span class="line"></span><br><span class="line">function initTexture()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 创建一个纹理对象</span></span><br><span class="line">    <span class="built_in">texture</span> = gl.createTexture();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 自定义`image`属性</span></span><br><span class="line">    <span class="built_in">texture</span>.<span class="built_in">image</span> = <span class="keyword">new</span> Image();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 回调函数</span></span><br><span class="line">    <span class="comment">// 图片在完全被载入后调用</span></span><br><span class="line">    <span class="built_in">texture</span>.<span class="built_in">image</span>.onload = function()&#123;</span><br><span class="line">        handleLoadedTexture( <span class="built_in">texture</span> );</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 图片的`src`属性, 完成后，图片将被异步加载</span></span><br><span class="line">    <span class="comment">// 立即执行并返回, 而一个后台线程将会从服务器上将图片载入</span></span><br><span class="line">    <span class="built_in">texture</span>.<span class="built_in">image</span>.src = <span class="string">"nehe.gif"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li><strong><code>handleLoadedTexture( texture )</code></strong></li>
+</ul>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">function handleLoadedTexture( texture )</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 绑定当前使用的纹理对象</span></span><br><span class="line">    <span class="keyword">gl</span>.bindTexture( <span class="keyword">gl</span>.TEXTURE_2D, texture );</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 由于坐标系问题, 直接贴图的图像是颠倒的, 用这个来调整坐标系, 做一个垂直翻转.</span></span><br><span class="line">    <span class="keyword">gl</span>.pixelStorei( <span class="keyword">gl</span>.UNPACK_FLIP_Y_WEBGL, true );</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// @param target            目标纹理, 必须是 gl.TEXTURE_2D</span></span><br><span class="line">    <span class="comment">// @param level             细节级别</span></span><br><span class="line">    <span class="comment">// @param internalformat    纹理中的颜色组件</span></span><br><span class="line">    <span class="comment">// @param format            像素数据的颜色格式</span></span><br><span class="line">    <span class="comment">// @param type              像素数据的数据类型</span></span><br><span class="line">    <span class="comment">// @param pixels            图像数据</span></span><br><span class="line">    <span class="keyword">gl</span>.texImage2D( <span class="keyword">gl</span>.TEXTURE_2D, 0, <span class="keyword">gl</span>.RGBA, <span class="keyword">gl</span>.RGBA, <span class="keyword">gl</span>.UNSIGNED_BYTE, texture.image );</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 纹理过滤 API</span></span><br><span class="line">    <span class="comment">// @param gl.TEXTURE_2D                                 操作 2D 纹理</span></span><br><span class="line">    <span class="comment">// @param gl.TEXTURE_MAG_FILTER / gl.TEXTURE_MIN_FILTER 放大 / 缩小过滤</span></span><br><span class="line">    <span class="comment">// @param gl.NEAREST /                                  对最接近当前多边形的解析度的两个层级贴图进行采样,然后用这两个值进行线性插值. /</span></span><br><span class="line">    <span class="comment">//        gl.LINEAR                                     线性过滤, 使用距离当前渲染像素中心最近的4个纹素加权平均值.</span></span><br><span class="line">    <span class="keyword">gl</span>.texParameteri( <span class="keyword">gl</span>.TEXTURE_2D, <span class="keyword">gl</span>.TEXTURE_MAG_FILTER, <span class="keyword">gl</span>.NEAREST );</span><br><span class="line">    <span class="keyword">gl</span>.texParameteri( <span class="keyword">gl</span>.TEXTURE_2D, <span class="keyword">gl</span>.TEXTURE_MIN_FILTER, <span class="keyword">gl</span>.NEAREST );</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">gl</span>.bindTexture( <span class="keyword">gl</span>.TEXTURE_2D, null );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>我们不再需要立方体顶点颜色信息, 将之删除.</strong></p>
+<p><strong>添加纹理坐标信息.</strong></p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 纹理坐标 Buffer</span></span><br><span class="line"><span class="keyword">var</span> cubeTextureCoordBuffer;</span><br><span class="line"></span><br><span class="line">function initBuffer()</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    cubeTextureCoordBuffer = <span class="keyword">gl</span>.createBuffer();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">gl</span>.bindBuffer( <span class="keyword">gl</span>.ARRAY_BUFFER, cubeTextureCoordBuffer );</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> textureCoords = [</span><br><span class="line">    </span><br><span class="line">        <span class="comment">// Front face</span></span><br><span class="line">        0.0, 0.0,</span><br><span class="line">        1.0, 0.0,</span><br><span class="line">        1.0, 1.0,</span><br><span class="line">        0.0, 1.0,</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Back face</span></span><br><span class="line">        1.0, 0.0,</span><br><span class="line">        1.0, 1.0,</span><br><span class="line">        0.0, 1.0,</span><br><span class="line">        0.0, 0.0,</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Top face</span></span><br><span class="line">        0.0, 1.0,</span><br><span class="line">        0.0, 0.0,</span><br><span class="line">        1.0, 0.0,</span><br><span class="line">        1.0, 1.0,</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Bottom face</span></span><br><span class="line">        1.0, 1.0,</span><br><span class="line">        0.0, 1.0,</span><br><span class="line">        0.0, 0.0,</span><br><span class="line">        1.0, 0.0,</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Right face</span></span><br><span class="line">        1.0, 0.0,</span><br><span class="line">        1.0, 1.0,</span><br><span class="line">        0.0, 1.0,</span><br><span class="line">        0.0, 0.0,</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Left face</span></span><br><span class="line">        0.0, 0.0,</span><br><span class="line">        1.0, 0.0,</span><br><span class="line">        1.0, 1.0,</span><br><span class="line">        0.0, 1.0,</span><br><span class="line">    ];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">gl</span>.bufferData( <span class="keyword">gl</span>.ARRAY_BUFFER, new Float32Array( textureCoords), <span class="keyword">gl</span>.STATIC_DRAW );</span><br><span class="line">    </span><br><span class="line">    cubeTextureCoordBuffer.numItems = 24;</span><br><span class="line">    cubeTextureCoordBuffer.itemSize = 2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>在每个数组对象中增加了一个新的顶点属性，每个顶点上这个属性有两个值。纹理坐标指定的是在笛卡尔<code>x, y</code>坐标系中顶点位于纹理中的位置。为了实现纹理坐标，我们把纹理的宽和高都看成<code>1.0</code>，这样<code>( 0, 0 )</code>就是左下角，<code>( 1, 1 )</code>就是右上角。而从这样的假想转换到纹理图片的真实分辨率的工作，都是由WebGL来完成的。</strong></p>
+</blockquote>
+<hr>
+<p><strong>接下来我们改变立方体的旋转方式和启用纹理.</strong></p>
+<figure class="highlight hsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">var xRot = <span class="number">0</span><span class="comment">;</span></span><br><span class="line">var yRot = <span class="number">0</span><span class="comment">;</span></span><br><span class="line">var zRot = <span class="number">0</span><span class="comment">;</span></span><br><span class="line"></span><br><span class="line">function drawScene()</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    mvMatrix.rotX( OAK.SPACE_LOCAL, xRot, true )<span class="comment">;</span></span><br><span class="line">    mvMatrix.rotY( OAK.SPACE_LOCAL, yRot, true )<span class="comment">;</span></span><br><span class="line">    mvMatrix.rotZ( OAK.SPACE_LOCAL, zRot, true )<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 启用纹理</span></span><br><span class="line">    gl.activeTexture( gl.TEXTURE0 )<span class="comment">;</span></span><br><span class="line">    gl.bindTexture( gl.TEXTURE_2D, texture )<span class="comment">;</span></span><br><span class="line">    gl.uniform1i( shaderProgram.uSample, <span class="number">0</span> )<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    setMatrixUniforms()<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong><code>WebGL</code>可以在调用像<code>gl.drawElements</code>这种函数中处理最多32个纹理对象，从<code>TEXTURE0</code>到<code>TEXTURE31</code>，这些纹理被一一标记。前两行代码所做的就是将我们刚刚载入的纹理指定为0号纹理，在第三行代码中我们将0这个值推送到着色器的<code>uniform</code>变量中（和其他我们用于处理矩阵的uniform变量一样，都是从<code>initShader</code>函数中的着色器<code>program</code>对象中提取出来的），告诉着色器我们要使用0号纹理。</strong></p>
+</blockquote>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">initShader</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    shaderProgram.uSample = gl.getUniformLocation( shaderProgram, <span class="string">"uSample"</span> );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>接下来在<code>shader</code>程序中添加顶点纹理坐标属性和<code>uniform</code>变量.</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 顶点着色器 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">id</span>=<span class="string">"shader-vs"</span> <span class="attr">type</span>=<span class="string">"shader/vs"</span>&gt;</span><span class="actionscript"></span><br><span class="line">    attribute vec3 aPosition;</span><br><span class="line">    attribute vec2 aCoord;</span><br><span class="line"></span><br><span class="line">    uniform mat4 uMVMatrix;</span><br><span class="line">    uniform mat4 uPMatrix;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 顶点纹理坐标属性</span></span><br><span class="line">    varying vec2 vCoord;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> main( <span class="keyword">void</span> )</span><br><span class="line">    &#123;</span><br><span class="line">        gl_Position = uPMatrix * uMVMatrix * vec4( aPosition, <span class="number">1.0</span> );</span><br><span class="line">        vCoord = aCoord;</span><br><span class="line">    &#125;</span><br><span class="line"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 片段着色器 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">id</span>=<span class="string">"shader-fs"</span> <span class="attr">type</span>=<span class="string">"shader/fs"</span>&gt;</span><span class="actionscript"></span><br><span class="line"></span><br><span class="line">        precision mediump float;</span><br><span class="line"></span><br><span class="line">        varying vec2 vCoord;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 纹理图</span></span><br><span class="line">        uniform sampler2D uSampler;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">void</span> main( <span class="keyword">void</span> )</span><br><span class="line">        &#123;</span><br><span class="line">            gl_FragColor = texture2D( uSampler, vec2( vCoord.s, vCoord.t ) );</span><br><span class="line">        &#125;</span><br><span class="line"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>在<code>animate()</code>中变更各轴旋转的角度.</strong></p>
+<ul>
+<li><strong><code>animate()</code></strong></li>
+</ul>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> animate()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">...</span></span><br><span class="line">    </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">...</span></span><br><span class="line">        </span><br><span class="line">        xRot -= ( <span class="number">75.0</span> * subTime ) / <span class="number">1000.0</span>;</span><br><span class="line">        yRot -= ( <span class="number">75.0</span> * subTime ) / <span class="number">1000.0</span>;</span><br><span class="line">        zRot -= ( <span class="number">75.0</span> * subTime ) / <span class="number">1000.0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><a href="https://github.com/pepsigit/WebGL/blob/master/lesson_4.html" target="_blank" rel="external">源码</a></p>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2016/06/06/WebGL-键盘输入和纹理过滤/" class="prev" data-title="[WebGL]键盘输入和纹理过滤"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2016/06/02/WebGL-三角锥和正方体/" class="next" data-title="[WebGL]三角锥和正方体"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

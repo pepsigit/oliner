@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [Unity]AssetDatabase |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[Unity]AssetDatabase</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2017-02-25</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Unity/">Unity</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <hr>
+<p><br></p>
+<ul>
+<li><h3 id="意义"><a href="#意义" class="headerlink" title="意义"></a><font color="">意义</font></h3><ul>
+<li><h4 id="自定义扩展编译器，提供给策划和美术使用。"><a href="#自定义扩展编译器，提供给策划和美术使用。" class="headerlink" title="自定义扩展编译器，提供给策划和美术使用。"></a><font color="">自定义扩展编译器，提供给策划和美术使用。</font></h4></li>
+<li><h4 id="编辑器模式模拟游戏运行。"><a href="#编辑器模式模拟游戏运行。" class="headerlink" title="编辑器模式模拟游戏运行。"></a><font color="">编辑器模式模拟游戏运行。</font></h4></li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><br></p>
+<ul>
+<li><h3 id="编辑器内加载，效率高，速度快。"><a href="#编辑器内加载，效率高，速度快。" class="headerlink" title="编辑器内加载，效率高，速度快。"></a><font color="">编辑器内加载，效率高，速度快。</font></h3></li>
+</ul>
+<hr>
+<p><br></p>
+<ul>
+<li><h3 id="加载-AssetDatabase-LoadAssetAtPath"><a href="#加载-AssetDatabase-LoadAssetAtPath" class="headerlink" title="加载 : AssetDatabase.LoadAssetAtPath()"></a><font color="">加载 : <a href="https://docs.unity3d.com/ScriptReference/AssetDatabase.LoadAssetAtPath.html" target="_blank" rel="external">AssetDatabase.LoadAssetAtPath()</a></font></h3></li>
+</ul>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#if UNITY_EDITOR</span></span><br><span class="line">    </span><br><span class="line">    <span class="type">Material</span> mat = <span class="type">AssetDatabase</span>.<span class="type">LoadAssetAtPath</span>(<span class="string">"Asset/xxx/xxx.xxx"</span>, <span class="class"><span class="keyword">type</span>(<span class="type">Material</span>) ) as <span class="type">Material</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#endif</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p><br></p>
+<ul>
+<li><h3 id="卸载-Resource-UnloadAsset"><a href="#卸载-Resource-UnloadAsset" class="headerlink" title="卸载 : Resource.UnloadAsset()"></a><font color="">卸载 : <a href="https://docs.unity3d.com/ScriptReference/Resources.UnloadAsset.html" target="_blank" rel="external">Resource.UnloadAsset()</a></font></h3></li>
+</ul>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#if UNITY_EDITOR</span></span><br><span class="line">    </span><br><span class="line">    //<span class="type">Material</span> mat = <span class="type">AssetDatabase</span>.<span class="type">LoadAssetAtPath</span>(<span class="string">"Asset/xxx/xxx.xxx"</span>, <span class="class"><span class="keyword">type</span>(<span class="type">Material</span>) ) as <span class="type">Material</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="type">Resource</span>.<span class="type">UnloadAsset</span>( mat );</span><br><span class="line"></span><br><span class="line"><span class="meta">#endif</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p><br></p>
+<ul>
+<li><h3 id="创建-AssetDatabase-CreateAsset"><a href="#创建-AssetDatabase-CreateAsset" class="headerlink" title="创建 : AssetDatabase.CreateAsset()"></a><font color="">创建 : <a href="https://docs.unity3d.com/ScriptReference/AssetDatabase.CreateAsset.html" target="_blank" rel="external">AssetDatabase.CreateAsset()</a></font></h3></li>
+</ul>
+<figure class="highlight hsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">if</span> UNITY_EDITOR</span></span><br><span class="line">    </span><br><span class="line">    AssetDatabase.CreateAsset( mat, <span class="string">"Asset/xxx/xxx.xxx"</span>)<span class="comment">;</span></span><br><span class="line">    AssetDatabase.Refresh()<span class="comment">;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<hr>
+<p><br></p>
+<ul>
+<li><h3 id="修改并保存"><a href="#修改并保存" class="headerlink" title="修改并保存"></a><font color="">修改并保存</font></h3></li>
+</ul>
+<figure class="highlight hsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">if</span> UNITY_EDITOR</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">//Material mat = AssetDatabase.LoadAssetAtPath("Asset/xxx/xxx.xxx", type(Material) ) as Material;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//modify</span></span><br><span class="line">    mat.<span class="keyword">color</span> = <span class="keyword">Color</span>.blue<span class="comment">;</span></span><br><span class="line">    EditorUtility.SetDirty( mat )<span class="comment">;</span></span><br><span class="line">    AssetDatabase.SaveAssets()<span class="comment">;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2017/02/26/Unity-Resources/" class="prev" data-title="[Unity]Resources"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2017/02/24/Unity-资源类型和资源的管理方式/" class="next" data-title="[Unity]资源类型和资源的管理方式"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>

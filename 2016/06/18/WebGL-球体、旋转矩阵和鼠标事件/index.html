@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    
+    <meta name="author" content="oliner">
+    
+    
+    <meta name="description" content="oliner.cn">
+    
+    
+    <title>
+        
+        [WebGL]球体、旋转矩阵和鼠标事件 |
+        
+        oliner</title>
+    
+    <link rel="stylesheet" href="/stylesheets/style.min.css">
+    
+</head>
+<body>
+
+<span id="top"> </span>
+
+<aside id="sidebar" >
+    <div id="sidebar-overlay">
+        <div id="sidebar-inner-wrap">
+            <nav id="site-nav">
+                <ul class="list-unstyled">
+                    
+                    
+                    <li><a href="/">首页</a></li>
+                    
+                    
+                    
+                    <li><a href="/archives">文章</a></li>
+                    
+                    
+                    
+                    <li><a href="/tags">标签</a></li>
+                    
+                    
+                    
+                    <li><a href="/about">关于</a></li>
+                    
+                    
+                </ul>
+            </nav>
+            <div id="site-intro">
+                <p>
+                    
+                    oliner
+                    
+                    
+                    <small>.cn</small>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        
+        <a href="https://unsplash.com" target="_blank" id="image-source" class="align-left hidden-xs"
+           data-content="Photo from unsplash.com">i</a>
+        
+    </div>
+</aside>
+
+<main id="main-container">
+    <div id="main-inner-wrap">
+        <div id="page-content">
+            
+
+            <article id="article-post" class="post">
+    <div class="post-inner-wrap">
+        
+        <h1 id="page-title">[WebGL]球体、旋转矩阵和鼠标事件</h1>
+
+        <ul class="post-meta list-inline">
+            <li>时间：<time>2016-06-18</time></li>
+            
+            <li>
+                <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/WebGL/">WebGL</a></li></ul>
+            </li>
+            
+        </ul>
+        
+
+        <div class="content">
+            <p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/WebGL/10.gif" alt=""></p>
+<a id="more"></a>
+<ul>
+<li><strong><code>WebGLStart()</code></strong></li>
+</ul>
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">function WebGLStart()</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    // 为了友好交互, 在整个界面允许`抬起`, `移动`事件. 因为鼠标会移动到 canvas 外, `抬起`以后, 如果未收到`抬起`事件, 球体还是在旋转.</span><br><span class="line">    canvas.onmousedown = handleMouseDown<span class="comment">;</span></span><br><span class="line">    document.onmouseup = handleMouseUp<span class="comment">;</span></span><br><span class="line">    document.onmousemove = handleMouseMove<span class="comment">;</span></span><br><span class="line">    </span><br><span class="line">    tick()<span class="comment">;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li><strong><code>drawScene()</code></strong></li>
+</ul>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">drawScene</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    mvMatrix = okMat4Mul( mvMatrix, moonRotationMatrix );</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>moonRotationMatrix</code>: <strong>月球的当前旋转矩阵. 在绘制月球前, 需要将当前旋转矩阵应用到当前的模型-视图矩阵.</strong></p>
+<hr>
+<ul>
+<li><strong><font color="red">建立顶点位置、法线、纹理坐标和顶点索引</font></strong></li>
+</ul>
+<p><strong><code>initBuffer()</code></strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> moonVertexPositionBuffer;</span><br><span class="line"><span class="keyword">var</span> moonVertexTextureCoordBuffer;</span><br><span class="line"><span class="keyword">var</span> moonVertexNormalBuffer;</span><br><span class="line"><span class="keyword">var</span> moonVertexIndexBuffer;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> radius;</span><br><span class="line"><span class="keyword">var</span> latitudeBands;</span><br><span class="line"><span class="keyword">var</span> longitude;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">initBuffer</span>(<span class="params"></span>)</span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="comment">// 纬度等分</span></span><br><span class="line">    latitudeBands = <span class="built_in">parseInt</span>( <span class="built_in">document</span>.getElementById(<span class="string">"latitudeBands"</span>).value );</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 经度等分</span></span><br><span class="line">    longitude = <span class="built_in">parseInt</span>( <span class="built_in">document</span>.getElementById(<span class="string">"longitude"</span>).value );</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 半径</span></span><br><span class="line">    radius = <span class="built_in">document</span>.getElementById(<span class="string">"moonRadius"</span>).value;</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/WebGL/sphere-latitude.png" alt=""></p>
+<font color="#E9967A"><br>对球体按照 <code>X-Y</code> 平面切开，并对平面等分，虚线就是纬线，平面圆心连接任一条纬线，可以得到连线与 <code>Y-轴</code> 的夹角 <code>θ</code>，假设半径为<code>1</code>，所以坐标：<code>X = sin( θ )</code>、 <code>Y = cos( θ )</code>.<br><br>从平面 <code>Y-轴正方向</code> 到 <code>Y-轴负方向</code>，形成一个半圆，弧度是 <code>π</code>，所以将纬线等分 <code>n</code> 份，弧度分别为： <code>π/n</code>、<code>2π/n</code>、<code>3π/n</code>、<code>4π/n</code>、<code>5π/n</code>、.. 、<code>nπ/n</code>.<br><br>第<code>m</code>条纬线的<code>X</code>坐标是<code>sin( mπ / n )</code>.<br>第<code>m</code>条纬线的<code>Y</code>坐标是<code>cos( mπ / n )</code><br><br></font>
+
+<hr>
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/WebGL/sphere-longitude.png" alt=""></p>
+<font color="#E9967A"><br>同理，对球体按照第<code>m</code>条纬线所在的 <code>X-Z</code> 平面切开，并对平面等分，圆上的点是经线与第<code>m</code>条纬线的交点，平面圆心连接圆表面任一点，可以得到连线与 <code>X-轴</code> 的夹角 <code>φ</code>，已得知 <code>半径 = sin( mπ / n )</code>，<br><br>经线一圈是<code>360°</code>，所以弧度是<code>2π</code>，若将一圈<code>j</code>等分，则：<code>X = sin( mπ / n ) * cos( i * ( 2 * π ) / j )</code>、<code>Y = sin( mπ / n ) * sin( i * ( 2 * π ) / j )</code>，其中<code>i = 1, 2, 3, ... , j - 1, j</code>.<br></font>
+
+<font color="#00CED1"><br>半径为<code>r</code>的球体表面任一点<code>P</code>坐标为：<br><code>x = r * cosθ * cosφ</code><br><code>y = r * cosθ</code><br><code>z = r * cosθ * sinφ</code><br></font>
+
+<hr>
+<font color="#8B0000"><br>法线就是一个直勾勾指向表面外部的一个长度为1的向量.<br>在按照上面的公式运算中，在与半径相乘之前，先把结果储存一下，作为法线向量.<br></font>
+
+<hr>
+<font color="#FF00FF"><br>纹理坐标对您来说已经不陌生了.<br></font>
+
+<hr>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">function initBuffer()</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    var vertexPositions     = [];</span><br><span class="line">    var vertexTextureCoords = [];</span><br><span class="line">    var vertexNormals       = [];</span><br><span class="line"></span><br><span class="line">    /<span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span> 顶点位置信息 <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span>/</span><br><span class="line">    /<span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span> 纹理坐标信息 <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span>/</span><br><span class="line">    /<span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span>   法线信息   <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span>/</span><br><span class="line"></span><br><span class="line">    for( var latNum = 0; latNum <span class="variable">&lt;= latitudeBands; latNum++ )</span><br><span class="line">    &#123;</span><br><span class="line">        // 纬线上任一点与圆心的连线 和 Y-轴正方向 的夹角</span><br><span class="line">        // 从上到下是半圈, 所以弧度值是 Math.PI</span><br><span class="line">        var theta = latNum * ( Math.PI / latitudeBands );</span><br><span class="line"></span><br><span class="line">        var sinTheta = Math.sin( theta );</span><br><span class="line">        var cosTheta = Math.cos( theta );</span><br><span class="line"></span><br><span class="line">        for( var lonNum = 0; lonNum &lt;= longitude; lonNum++ )</span><br><span class="line">        &#123;</span><br><span class="line">            // 经线一圈是360°, 所以弧度制是 ( 2 * Math.PI )</span><br><span class="line">            var phi = lonNum * ( 2 * Math.PI / longitude );</span><br><span class="line">            var sinPhi = Math.sin( phi );</span><br><span class="line">            var cosPhi = Math.cos( phi );</span><br><span class="line"></span><br><span class="line">            var x = sinTheta * cosPhi;</span><br><span class="line">            var y = cosTheta;</span><br><span class="line">            var z = sinTheta * sinPhi;</span><br><span class="line">            var u = 1 - ( lonNum / longitude );</span><br><span class="line">            var v = 1 - ( latNum / latitudeBands );</span><br><span class="line"></span><br><span class="line">            vertexNormals.push( x );</span><br><span class="line">            vertexNormals.push( y );</span><br><span class="line">            vertexNormals.push( z );</span><br><span class="line"></span><br><span class="line">            vertexTextureCoords.push( u );</span><br><span class="line">            vertexTextureCoords.push( v );</span><br><span class="line"></span><br><span class="line">            vertexPositions.push( ( radius * x ) );</span><br><span class="line">            vertexPositions.push( ( radius * y ) );</span><br><span class="line">            vertexPositions.push( ( radius * z ) );</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p><img src="https://raw.githubusercontent.com/pepsigit/Pictures/master/WebGL/sphere-triangle-stitching.png" alt=""></p>
+<font color="#8470FF"><br>按照上图所示，循环遍历所有顶点。<br></font>
+
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">function initBuffer()</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    /<span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span> 索引信息 <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span>/</span><br><span class="line"></span><br><span class="line">    var indexData = [];</span><br><span class="line"></span><br><span class="line">    for( var latNum = 0; latNum <span class="variable">&lt; latitudeBands; latNum++ )</span><br><span class="line">    &#123;</span><br><span class="line">        for( var lonNum = 0; lonNum &lt; longitude; lonNum++ )</span><br><span class="line">        &#123;</span><br><span class="line">            var first = ( latNum * ( longitude + 1 ) ) + lonNum;</span><br><span class="line">            var second = first + longitude + 1;</span><br><span class="line"></span><br><span class="line">            indexData.push( first );</span><br><span class="line">            indexData.push( second );</span><br><span class="line">            indexData.push( first + 1 );</span><br><span class="line"></span><br><span class="line">            indexData.push( second );</span><br><span class="line">            indexData.push( second + 1 );</span><br><span class="line">            indexData.push( first + 1 );</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">            </span><br><span class="line">    ...</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>这里将一些数值参数化了，所以有改变的时候，会重新<code>initBuffer()</code></strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">drawScene</span>(<span class="params"></span>)</span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="comment">// 更改半径</span></span><br><span class="line">    <span class="keyword">if</span>( ( <span class="built_in">document</span>.getElementById(<span class="string">"moonRadius"</span>).value       != radius ) ||</span><br><span class="line">        ( <span class="built_in">document</span>.getElementById(<span class="string">"latitudeBands"</span>).value    != radius ) ||</span><br><span class="line">        ( <span class="built_in">document</span>.getElementById(<span class="string">"longitude"</span>).value        != radius ) )</span><br><span class="line">    &#123;</span><br><span class="line">        initBuffer();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li><strong>最后是鼠标相应事件</strong></li>
+</ul>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// canvas 内鼠标按下确认位</span></span><br><span class="line"><span class="keyword">var</span> mouseDown = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> lastMouseX = <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">var</span> lastMouseY = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="function">function <span class="title">handleMouseDown</span>(<span class="params"> <span class="keyword">event</span> </span>)</span><br><span class="line"></span>&#123;</span><br><span class="line">    mouseDown = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">    lastMouseX = <span class="keyword">event</span>.clientX;</span><br><span class="line">    lastMouseY = <span class="keyword">event</span>.clientY;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">function <span class="title">handleMouseUp</span>(<span class="params"> <span class="keyword">event</span> </span>)</span><br><span class="line"></span>&#123;</span><br><span class="line">    mouseDown = <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">function <span class="title">handleMouseMove</span>(<span class="params"> <span class="keyword">event</span> </span>)</span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>( ! mouseDown )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> newX = <span class="keyword">event</span>.clientX;</span><br><span class="line">    <span class="keyword">var</span> newY = <span class="keyword">event</span>.clientY;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> newMoonRotation = <span class="keyword">new</span> okMat4();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> deltaX = newX - lastMouseX;</span><br><span class="line">    newMoonRotation.rotY( OAK.SPACE_LOCAL, deltaX / <span class="number">10</span>, <span class="keyword">true</span> );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> deltaY = newY - lastMouseY;</span><br><span class="line">    newMoonRotation.rotX( OAK.SPACE_LOCAL, deltaY / <span class="number">10</span>, <span class="keyword">true</span> );</span><br><span class="line"></span><br><span class="line">    moonRotationMatrix = okMat4Mul( newMoonRotation, moonRotationMatrix );</span><br><span class="line"></span><br><span class="line">    lastMouseX = newX;</span><br><span class="line">    lastMouseY = newY;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href="https://github.com/pepsigit/WebGL/blob/master/lesson_10.html" target="_blank" rel="external">源码</a></p>
+
+        </div>
+    </div>
+</article>
+
+<nav id="article-nav">
+    <ul class="list-unstyled">
+        <li>
+            
+            <a href="/2016/06/19/WebGL-点光源/" class="prev" data-title="[WebGL]点光源"></a>
+            
+        </li>
+        <li>
+            
+            <a href="/2016/06/16/WebGL-载入世界以及相机/" class="next" data-title="[WebGL]载入世界以及相机"></a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+        </div>
+        <footer id="mastfoot">
+            <p>
+                Powered by <a href="http://www.hexo.io" target="_blank">Hexo</a> 
+            </p>
+
+            
+            <p>Since 2016</p>
+            
+        </footer>
+    </div>
+</main>
+
+<script>
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar.getAttribute('style')) {
+        sidebar.setAttribute('style', 'background-image: url(/images/sidebar-bg/' + Math.floor(Math.random() * parseInt('16')) + '.jpg)');
+    }
+</script>
+
+</body>
+</html>
